@@ -1,0 +1,40 @@
+/* .aw-record:hover {
+    background-color: lightgray;
+} */
+.demo-constraint {
+    display: inline-block; padding: 3px; border: 1px solid;margin: 2px;
+}
+.aw-record.aw-selected {
+    background-color: #FFC107 !important;    
+}
+#list .aw-record {
+    /* border: 1px solid grey; */
+    /* margin: 2px; */
+}
+.aw-view-selection .active {
+    /* background-color: grey; */
+}
+.demo-column-header {
+    color : grey;
+    font-size : 14px;
+    cursor: pointer;
+}
+.demo-column-header .asc:before {
+    content : 't'
+}
+.demo-column-header .desc:before {
+    content : 't'
+}
+.demo-column-header:hover {
+    color : green;
+}
+
+  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }

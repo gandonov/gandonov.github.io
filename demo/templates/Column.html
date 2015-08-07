@@ -1,0 +1,50 @@
+
+<%
+var props = ['Available','First Name','Last Name','Price','Product','Quantity','Ship Date'];
+
+try{
+if(data && data.length > 0)
+{
+%>
+    <table class="centered hoverable"><tbody>
+    <th>
+    <tr>
+    <% if(checkboxSelection){%>
+    <td></td>
+    <% } %>
+<% 
+    for(var i =0, l = props.length; i < l; i++){
+%>                
+    <td><h4 class='demo-column-header'  data-column='<%=props[i]%>' title='click to sort on <%=props[i]%>'><%=props[i]%></h4></td>
+<%
+    }
+%>
+    </tr>
+    </th>
+<% 
+    for(var i =0, l = data.length; i < l; i++){
+%>
+    <tr  class='aw-record' data-id='<%=data[i]["id"]%>'>
+    <% if(checkboxSelection){%>
+    <td>
+
+    <input id='cb_<%=data[i]["id"]%>' data-id='<%=data[i]["id"]%>' type='checkbox' class='aw-checkbox' <%=markedRecordsMap[data[i]["id"]] ? " checked" : "" %>><label for='cb_<%=data[i]["id"]%>'></label></td>
+    <% } %>
+<% 
+    for(var j =0, l1 = props.length; j < l1; j++){
+%>
+    <td><%=data[i][props[j]] %></td>
+<%
+    }
+%>
+    </tr>
+<%
+    }
+%>
+    </tbody></table>
+<% 
+}
+} catch(e){
+    console.log('data not available.');
+}
+%>

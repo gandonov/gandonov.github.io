@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Demo Site</title>
+    
+    <link href="demo.css" rel="stylesheet" type="text/css" />
+    <link href="css/materialize.css" rel="stylesheet" type="text/css" />   
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+    <script src="jquery.js" type="text/javascript"></script>
+    <script src="underscore.js" type="text/javascript"></script>
+    <script src="backbone.js" type="text/javascript"></script>
+
+    <script src="materialize.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="../framework/js/pagination.js"></script>
+    <script type="text/javascript" src="../framework/js/0_AWFramework.js"></script>
+    <script type="text/javascript" src="../framework/js/abstractConstraintModel.js"></script>
+    <script type="text/javascript" src="../framework/js/1_baseView.js"></script>
+    <script type="text/javascript" src="../framework/js/source.js"></script>    
+    <script type="text/javascript" src="../framework/js/abstractConstraintPanel.js"></script>
+    <script type="text/javascript" src="../framework/js/paginationPanel.js"></script>
+    <script type="text/javascript" src="../framework/js/abstractViewer.js"></script>   
+    <script type="text/javascript" src="../framework/js/viewSelectionPanel.js"></script>
+    <script type="text/javascript" src="../framework/js/abstractRecordSelectionPanel.js"></script>
+    <script type="text/javascript" src="../framework/js/sourceView.js"></script>
+
+    <script type="text/javascript" src="demo.js"></script>
+    
+</head>
+<body>
+<main>
+<div class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper amber darken-3">
+            <div id="viewSelectionPanelEl"></div>
+            <a id='' class="brand-logo center">AWFramework with Materialize</a>
+            <div id='favoriteRecordSelectionPanelEl' class='right'></div>
+            <div id='recordSelectionPanelEl' class='right'></div>
+
+        </div>
+    </nav>
+</div>
+    <div class='row'>
+        <div class='col s8'>
+
+            <div class='col s12'>
+              <div class='col s6'>Selection method:</div>
+              <div class='col s6'>
+                  <div class="switch">
+                    <label>
+                       mouse drag (experimental)
+                      <input id='changeSelectionMethod' type="checkbox" checked>
+                      <span class="lever"></span>
+                      checkbox
+                    </label>
+                  </div>
+              </div>
+            </div>
+
+            <div class='col s12'>
+                <div id='fname' class="input-field col s6">
+                  <input id="fname_input" type="text" class="validate">
+                  <label for="fname_input">First Name</label>
+                </div>
+                <div id='lname' class="input-field col s6">
+                  <input id="lname_input" type="text" class="validate">
+                  <label for="lname_input">Last Name</label>
+                </div>
+            </div>
+
+            <div class='col s6' id='ePagination'></div>
+            <div class='col s6 hide' id='sortConstraint'>
+                <div class="row"></div>
+                <div class="right">
+                    <a id='sortBtn' class='btn-flat waves-effect'><i id='sort' class="material-icons">arrow_drop_up sort</i></a>
+                    <label>sorted by Product</label>
+                    <a id='close' class='btn-flat waves-effect'><i class="material-icons">close</i></a>
+                </div>
+            </div>           
+            <div class='col s12' id='everything' ></div>            
+        </div>
+        <div class='col s4'>
+            <p>CSS Layout created with <a href="http://materializecss.com">Materialize</a>, an amazing css framework </p>
+            <p>Click here for the latest <a href="http://materializecss.com">AWFramework</a> build.</p>
+            
+            <div id='favorites' ></div>
+            <div id='fPagination'></div>
+        </div>
+    </div>
+</main>
+ <footer class="red lighten-1 page-footer">
+      <div class="red lighten-1 footer-copyright">
+        <div class="red lighten-1 container">
+        <a class="grey-text text-lighten-4 right" id='message'>More Links</a>
+        </div>
+      </div>
+    </footer>    
+</body>
+  
+</html>

@@ -1,0 +1,37 @@
+
+<%
+var props = ['Available','First Name','Last Name','Price','Product','Quantity','Ship Date'];
+
+try{
+if(data && data.length > 0)
+{
+    for(var i =0, l = data.length; i < l; i++){
+%>
+    <div class='col s6'>
+
+    <div class='card white hoverable aw-record' data-id='<%=data[i]["id"]%>'>
+    <div class='col s12'>
+    
+    <div class='aw-checkbox-specific'>
+       <input id='lcb_<%=data[i]["id"]%>' data-id='<%=data[i]["id"]%>' type='checkbox' class='aw-checkbox' <%=markedRecordsMap[data[i]["id"]] ? " checked" : "" %>>
+       <label for='lcb_<%=data[i]["id"]%>'><%=data[i]["First Name"]%>, <%=data[i]["Last Name"]%></label>
+    </div>
+    <img src='http://api.randomuser.me/portraits/thumb/women/<%=data[i]["id"]%>.jpg' class='circle'>
+
+<% 
+    for(var j =3, l1 = props.length; j < l1; j++){
+%>
+    <div><%=props[j] + ' ' %>: <%=data[i][props[j]] %></div>
+<%
+    }
+%>
+    </div>
+    </div>
+    </div>
+<%
+    }
+}
+} catch(e){
+    console.log('data not available.');
+}
+%>
