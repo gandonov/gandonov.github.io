@@ -9,11 +9,11 @@ if(data && data.length > 0)
 %>
     <div class='col s6'>
 
-    <div class='card white hoverable aw-record' data-id='<%=data[i]["id"]%>'>
+    <div class='card white hoverable fw-record' data-id='<%=data[i]["id"]%>'>
     <div class='col s12'>
     
-    <div class='aw-checkbox-specific'>
-       <input id='lcb_<%=data[i]["id"]%>' data-id='<%=data[i]["id"]%>' type='checkbox' class='aw-checkbox' <%=markedRecordsMap[data[i]["id"]] ? " checked" : "" %>>
+    <div class='fw-checkbox-specific'>
+       <input id='lcb_<%=data[i]["id"]%>' data-id='<%=data[i]["id"]%>' type='checkbox' class='fw-checkbox' <%=markedRecordsMap[data[i]["id"]] ? " checked" : "" %>>
        <label for='lcb_<%=data[i]["id"]%>'><%=data[i]["First Name"]%>, <%=data[i]["Last Name"]%></label>
     </div>
     <img src='http://api.randomuser.me/portraits/thumb/women/<%=data[i]["id"]%>.jpg' class='circle'>

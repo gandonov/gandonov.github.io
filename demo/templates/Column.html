@@ -24,11 +24,11 @@ if(data && data.length > 0)
 <% 
     for(var i =0, l = data.length; i < l; i++){
 %>
-    <tr  class='aw-record' data-id='<%=data[i]["id"]%>'>
+    <tr  class='fw-record' data-id='<%=data[i]["id"]%>'>
     <% if(checkboxSelection){%>
     <td>
 
-    <input id='cb_<%=data[i]["id"]%>' data-id='<%=data[i]["id"]%>' type='checkbox' class='aw-checkbox' <%=markedRecordsMap[data[i]["id"]] ? " checked" : "" %>><label for='cb_<%=data[i]["id"]%>'></label></td>
+    <input id='cb_<%=data[i]["id"]%>' data-id='<%=data[i]["id"]%>' type='checkbox' class='fw-checkbox' <%=markedRecordsMap[data[i]["id"]] ? " checked" : "" %>><label for='cb_<%=data[i]["id"]%>'></label></td>
     <% } %>
 <% 
     for(var j =0, l1 = props.length; j < l1; j++){

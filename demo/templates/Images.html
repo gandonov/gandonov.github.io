@@ -7,12 +7,12 @@ if(data && data.length > 0)
 {
     for(var i =0, l = data.length; i < l; i++){
 %>
-    <div class=' aw-record col s4 ' data-id='<%=data[i]["id"]%>'>
+    <div class=' fw-record col s4 ' data-id='<%=data[i]["id"]%>'>
         <div class='hoverable card center'>
             
             <img src='http://api.randomuser.me/portraits/thumb/women/<%=data[i]["id"]%>.jpg'>
-            <div class='aw-checkbox-specific truncate'>
-                <input id='icb_<%=data[i]["id"]%>' data-id='<%=data[i]["id"]%>' type='checkbox' class='aw-checkbox' <%=markedRecordsMap[data[i]["id"]] ? " checked" : "" %>>
+            <div class='fw-checkbox-specific truncate'>
+                <input id='icb_<%=data[i]["id"]%>' data-id='<%=data[i]["id"]%>' type='checkbox' class='fw-checkbox' <%=markedRecordsMap[data[i]["id"]] ? " checked" : "" %>>
                 <label for='icb_<%=data[i]["id"]%>'><%=data[i]["First Name"]%></label>
             </div>
         </div>

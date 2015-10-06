@@ -9,7 +9,7 @@ $( document ).ready(function() {
     // for framework to work properly
     // Here is an example of minimalistic constraintModel:
     
-    DemoConstraintModel = AWFramework.AbstractConstraintModel.extend({
+    DemoConstraintModel = Framework.AbstractConstraintModel.extend({
         
         // MUST override getUrl() even if constraintType is POST. 
         // this method should produce URL that adequately describes search constraint.
@@ -63,7 +63,7 @@ $( document ).ready(function() {
             this.pageSize = 100;
             this.pageNumber = 0;
 
-            AWFramework.AbstractConstraintModel.prototype.initialize.call(this, options);
+            Framework.AbstractConstraintModel.prototype.initialize.call(this, options);
         },
 
         // This Method MUST not modify 'this' and return new constraintModel that would be intersection of 'this' and 'other'
@@ -108,7 +108,7 @@ $( document ).ready(function() {
 
     //Step two: Setup your source
 
-    DataSource = AWFramework.RestSource.extend({
+    DataSource = Framework.RestSource.extend({
         constraintType : "GET", 
 
         ConstraintModelPrototype : DemoConstraintModel, // important to provide proper ConstraintModelPrototype
@@ -198,7 +198,7 @@ $( document ).ready(function() {
     dataSource2 = new DataSource2();
     //Step three: Let's add some constraintPanels:
 
-    Field1ConstraintPanel = AWFramework.AbstractConstraintPanel.extend({
+    Field1ConstraintPanel = Framework.AbstractConstraintPanel.extend({
 
         // backbone events:
         events : {
@@ -242,7 +242,7 @@ $( document ).ready(function() {
         }
     });
 
-    SortByConstraintPanel = AWFramework.AbstractConstraintPanel.extend({
+    SortByConstraintPanel = Framework.AbstractConstraintPanel.extend({
         
         events : {
             'click #close' : 'remove',
@@ -290,11 +290,11 @@ $( document ).ready(function() {
     });
 
     // let's add another constraintPanel -- pagination
-    DemoPaginationPanel = AWFramework.PaginationPanel.extend({
+    DemoPaginationPanel = Framework.PaginationPanel.extend({
         DEFAULT_ITEMS_PER_PAGE : 10,
         template : 'templates/PaginationPanel.html',
         initialize : function(options){
-            AWFramework.PaginationPanel.prototype.initialize.call(this, options);	    
+            Framework.PaginationPanel.prototype.initialize.call(this, options);	    
         }
     });
 
@@ -320,14 +320,14 @@ $( document ).ready(function() {
 
     // let's create couple simple viewers:
 
-    DemoColumnView = AWFramework.AbstractViewer.extend({
+    DemoColumnView = Framework.AbstractViewer.extend({
         
         // leveraging underscore template to seprate html and javascript
         template: 'templates/Column.html',
         
         events: _.extend({
             'click .demo-column-header': 'onColumnClick',
-        }, AWFramework.AbstractViewer.prototype.events), 
+        }, Framework.AbstractViewer.prototype.events), 
 
         onColumnClick : function(e){
             var $td = $(e.currentTarget);
@@ -337,7 +337,7 @@ $( document ).ready(function() {
 
         },      
         _afterShow : function(){
-            AWFramework.AbstractViewer.prototype._afterShow.call(this);
+            Framework.AbstractViewer.prototype._afterShow.call(this);
             
             var constraintModel = this.parent.source.constraintModel;
             var sort = constraintModel.getSort();
@@ -367,13 +367,13 @@ $( document ).ready(function() {
 
 
     });
-    DemoListView = AWFramework.AbstractViewer.extend({
+    DemoListView = Framework.AbstractViewer.extend({
         indicator : ' <a><i class="material-icons">view_module</i></a>',
         template: 'templates/List.html',
         name : 'list',
 
     });
-    DemoImagesView = AWFramework.AbstractViewer.extend({
+    DemoImagesView = Framework.AbstractViewer.extend({
         template: 'templates/Images.html',
         name : 'images'
     });
@@ -381,7 +381,7 @@ $( document ).ready(function() {
     //$('body').prepend($actionMenu);
 
     // Let's create simple record selection panel prototype:
-    DemoRecordSelectionPanel = AWFramework.AbstractRecordSelectionPanel.extend({
+    DemoRecordSelectionPanel = Framework.AbstractRecordSelectionPanel.extend({
         template: 'templates/RecordSelectionPanel.html',        
 
         menus : [        
@@ -427,7 +427,7 @@ $( document ).ready(function() {
     });
 
     // now let's create our Viewer Holder, aka SourceView:
-    DemoSourceView = AWFramework.SourceView.extend({
+    DemoSourceView = Framework.SourceView.extend({
 	    recordSelectionPanelEl : "#recordSelectionPanelEl",
         viewSelectionPanelEl : '#viewSelectionPanelEl',
         checkboxSelection : true,
