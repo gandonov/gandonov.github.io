@@ -172,7 +172,7 @@ Framework.SourceView = Framework.BaseView.extend({
 		this.$el.append('<div id="viewerProgressBar" class="progress" style="display:none;margin-bottom: -6px;margin-top: 2px;"><div class="indeterminate"></div></div>')
 		this.$el.append($holder);
 		for(var i = this.viewers.length-1; i >=0; i--){
-			var $viewerDiv = $('<div style="height: 100%;" id="'+this.viewers[i].prototype.name+'" class="record_viewer" draggable="true"></div>');
+			var $viewerDiv = $('<div style="height: 100%;" id="'+this.viewers[i].prototype.name+'" class="record_viewer"></div>');
 			$holder.append($viewerDiv);
 			this[this.viewers[i].prototype.name].setElement($viewerDiv);//.renderView();			
 		}

@@ -1,0 +1,49 @@
+<%
+try{
+if(data && data.length > 0)
+{
+console.log(data);    
+    var props = columns;
+%>
+<div class=''>
+<% 
+    for(var i =0, l = data.length; i < l; i++){
+        var listData = data[i].listData ? data[i].listData : {};
+        var d = data[i];
+%>
+
+<div class="row results-rows">
+  <div class="col-sm-1 hidden-xs">
+    <h5><%=d.offset%>.</h5>
+  </div>
+  <div class="col-xs-12 col-sm-11">
+    <h4 class="pull-left visible-xs">2)&nbsp;</h4>
+    <h4 id="searchresultsline1Id" data-toggletarget="collapseOne2"><%=d.line1%></h4>
+    <p id="searchresultsline2Id" data-toggletarget="collapseOne2"><em><%=d.line2%></em></p>
+    <p>
+      <% if(d.fieldMap && d.fieldMap.teaser){ %> 
+        <%=d.fieldMap.teaser%>
+      <% } %>
+    </p>
+    <div class="btn-group-horizontal">
+        <a class="btn btn-sm btn-default" href="https://devint1.beta.fdsys.gpo.gov/content/pkg/USCODE-2012-title18/pdf/USCODE-2012-title18-partI-chap55-sec1202.pdf">PDF </a>
+        <a class="btn btn-sm btn-default" href="https://devint1.beta.fdsys.gpo.gov/content/pkg/USCODE-2012-title18/html/USCODE-2012-title18-partI-chap55-sec1202.htm">Text </a>
+        <a class="btn btn-sm btn-default" href="https://devint1.beta.fdsys.gpo.gov/app/contentdetails/#contentDetails?packageId=USCODE-2012-title18&amp;granuleId=USCODE-2012-title18-partI-chap55-sec1202&amp;searchURL=https://devint1.beta.fdsys.gpo.gov/app/search/#search?st=money&amp;na=&amp;se=&amp;snavigator=&amp;ps=&amp;sr=&amp;sb">Details</a>
+        <a class="btn btn-sm btn-default" href="https://devint1.beta.fdsys.gpo.gov/share">Share </a>
+    </div>
+  </div>
+</div>
+
+<%
+    }
+%>
+</div>
+<% 
+}else { %>
+    <div class='center'><p>No results available.</p></div>
+<%}
+} catch(e){
+    console.log('data not available.' + e);
+%>
+<div class='center'><p>No results available.</p></div>
+<% } %>

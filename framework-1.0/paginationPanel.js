@@ -141,6 +141,9 @@ Framework.PaginationPanel = Framework.AbstractConstraintPanel.extend({
 
 Framework.ScrollPaginationPanel = Framework.PaginationPanel.extend({
 
+	events : {
+		'click #more' : '_more'
+	},
 	_checkVisible : function( elm ) {
 		var vpH = $(window).height(), // Viewport Height
 			st = $(window).scrollTop(), // Scroll Top
@@ -177,15 +180,24 @@ Framework.ScrollPaginationPanel = Framework.PaginationPanel.extend({
 
 			}.bind(this));
     },
+    _more : function(){
+		this.nextPage++;
+		this.onConstraintChange();
+		this._update();
+    },
 	_onVisible : function(){
+		if(this.$('#more').length > 0){
+			return;
+		}
 		if(this._checkVisible(this.el) && !this._requested){
 			this._requested = true;
-			this.nextPage++;
-			this.onConstraintChange();
-			this._update();
+			this._more();
 
 		}
 
+	},
+	update : function(){
+		//noop
 	},
 	reset : function(){
 		this._requested = false;

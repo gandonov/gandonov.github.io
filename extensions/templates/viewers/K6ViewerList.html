@@ -1,0 +1,86 @@
+<%
+try{
+if(data && data.length > 0)
+{
+    
+    var props = columns;
+%>
+<div class='row col s12'>
+<% 
+    for(var i =0, l = data.length; i < l; i++){
+        var listData = data[i].listData ? data[i].listData : {};
+%>
+
+<div class='col s12 card fr-record' data-id='<%=data[i][id]%>'>
+    <div class=' col s12 k6-list-title' >
+        <div class='row'></div>
+        <div class='fr-checkbox-specific' style='float: left;'>
+            <input id='cbl_<%=data[i][id]%>' data-id='<%=data[i][id]%>' type='checkbox' class='fr-checkbox' <%=markedRecordsMap[data[i][id]] ? " checked" : "" %>>
+            <label class='k6-checkbox fr-checkbox-specific' for='cbl_<%=data[i][id]%>'></label>
+        </div>
+        <div class='col s10'><%=listData.title%></div>
+
+        <div class='<%=(selectSingle ? 'single-service-icons' : 'service-icons')%>  grey-text right'>
+            <div style="width:<%=(actions.length*27)%>px;height: 0px;">
+            <%for(var k =0, l2 = actions.length; k<l2;k++) { %>
+            <% 
+            var an = actions[k];
+            var ad = "perform action";
+            if(an instanceof Object){
+                ad = an.description;
+                an = an.name;
+
+            }
+
+            %>
+                <i data-id='<%=data[i][id]%>' id="<%=an%>" class="k6-action material-icons" title="<%=ad%>"><%=an%></i> 
+            <% } %>
+            </div>
+        </div>
+
+
+    </div>
+    <div class=' col s12'>
+        <div class='col s2 fr-nopad'>
+                <img style='max-width:100%;max-height:140px' src="<%=listData.imgUrl%>">
+        </div>
+
+        <div class='col s10'>
+            <%if(listData.right){ for(var prop in listData.right){ if(!listData.right[prop])continue;%>
+                    <div class='col s2'>
+                        <span><b><%=prop%>:</b></span>
+                    </div>
+                    <div class='col s4'>
+                        <span class='right'><%=listData.right[prop]%></span>
+                    </div>
+            <% } }%>
+        </div>
+
+    </div>
+
+<div class='row'>
+    <div class='col s12'>
+            <label><%=listData.bottom%></label>
+    </div>
+
+
+</div>
+
+
+
+
+</div>
+
+<%
+    }
+%>
+</div>
+<% 
+}else { %>
+    <div class='center'><p>No results available.</p></div>
+<%}
+} catch(e){
+    console.log('data not available.' + e);
+%>
+<div class='center'><p>No results available.</p></div>
+<% } %>

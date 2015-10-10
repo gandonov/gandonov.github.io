@@ -1,0 +1,97 @@
+<%
+
+
+try{
+
+if(data && data.length > 0)
+{
+
+    var props = columns;
+%>
+
+<div class='<%=wrapperClass%>'>
+    <table class="<%=tableClass%>">
+<thead>
+    <tr class='fr-column-header-row'>
+
+    <th class='fr-checkbox-specific'></th>
+<% 
+    for(var i =0, l = props.length; i < l; i++){
+       var name = props[i];
+       if(columnHeaders[props[i]]){
+           name = columnHeaders[props[i]];
+       }
+%>                
+    <th class='demo-column-header'  data-column='<%=props[i]%>' title='click to sort on <%=props[i]%>'><%=name%></th>
+<%
+    }
+%>
+<td class='action-td-buffer' style='width:<%=(actions.length*20)%>px;'></td>
+    </tr>
+<% 
+    for(var i =0, l = data.length; i < l; i++){
+%>
+</thead>
+<tbody>
+    <tr  class='fr-record' data-id='<%=data[i][id]%>'>
+    <td class='fr-checkbox-specific'>
+        <input id='cb_<%=data[i][id]%>' data-id='<%=data[i][id]%>' type='checkbox' class='fr-checkbox' <%=markedRecordsMap[data[i][id]] ? " checked" : "" %>>
+        <label class='k6-checkbox fr-checkbox-specific' for='cb_<%=data[i][id]%>'></label>
+    </td>
+<% 
+    for(var j =0, l1 = props.length; j < l1; j++){
+        var prop = props[j];
+        var val = data[i][prop];
+        if(prop.indexOf('.') > 0){
+            var tokens = prop.split('.');
+            if(data[i][tokens[0]] && data[i][tokens[0]][tokens[1]]){
+                val = data[i][tokens[0]][tokens[1]];
+            }
+            
+        }
+
+        var fvalue = val ? val : "<label>-</label>";
+%>
+    <td class='k6-viewer-td'><span class='k6-viewer-cell'><%=fvalue %></span>
+
+    </td>
+<%
+    }
+%>
+
+<td class='<%=(selectSingle ? 'single-service-icons' : 'service-icons')%>  grey-text'>
+    <div style="width:<%=(actions.length*27)%>px;height: 10px;">
+    <%for(var k =0, l2 = actions.length; k<l2;k++) { %>
+    <% 
+    var an = actions[k];
+    var ad = "perform action";
+    if(an instanceof Object){
+        ad = an.description;
+        an = an.name;
+
+    }
+
+    %>
+        <i data-id='<%=data[i][id]%>' id="<%=an%>" class="k6-action material-icons" title="<%=ad%>"><%=an%></i> 
+    <% } %>
+    </div>
+</td>
+
+
+    </tr>
+<%
+    }
+%>
+    </tbody>
+    </table>
+</div>
+
+<% 
+}else { %>
+    <div class='center'><p>No results available.</p></div>
+<%}
+} catch(e){
+    console.log('data not available.' + e);
+%>
+<div class='center'><p>No results available.</p></div>
+<% } %>

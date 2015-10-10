@@ -1,0 +1,50 @@
+<% var data = _options.data; var title = _options.title ? _options.title : 'Detailed Information';  %>
+<% if(!data && _preloadData){ data = _preloadData;}; %>
+<div class='row '>
+    <div><h4 class='fr-modal-title center amber-text text-darken-4' id='modalTitle'><%=title%></h4></div>
+
+<div class='row col s12 modal-content-inner'>
+    <table class='striped compact'>
+<% for(var i in data){ var d = data[i];  %>
+
+<% if(d instanceof Array){ %>
+    <tr><td class='center' colspan=2><%=i%></td></tr>
+<% for(var j=0, l = d.length; j<l; j++){ %>
+    <tr><td colspan=2><%=j%>.
+    <% if(d[j] instanceof Object){ for(var prop in d[j]){ %>
+        <br>
+        <label><%=prop%></label>
+        <span class='right'><%=d[j][prop]%></span>
+
+    <% } %> 
+    <%} else {%>
+        <span class='right'><%=d[j]%></span>
+    <% } %>   
+    </td></tr>
+
+<% } %>
+<% } else if(d instanceof Object){ %>
+<tr><td colspan=2 class='center'><%=i%></td></tr>
+<% for(var prop in d){ %>
+        <tr>
+            <td><span style='padding-left:20px;'><%=prop%></span></td>
+            <td class='right'>
+                <span style='padding-right:20px;'><%=d[prop]%></span>
+            </td>
+        </tr>
+<% } %>
+
+<% } else  {%>
+        <tr>
+            <td><%=i%></td>
+            <td class='right'>
+                <%=d%>
+            </td>
+        </tr>
+    <% } %>
+<% } %>
+    </table>
+</div>
+
+
+</div>

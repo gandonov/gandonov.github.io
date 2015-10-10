@@ -1,0 +1,54 @@
+<%
+var data = _options.data;
+var mappings = {
+    'id' : 'id',
+    'type' : 'type',
+    'value' : 'value',
+    'name' : 'name'
+};
+if(_options.mappings){
+    mappings = _.extend(mappings,_options.mappings);
+};
+ 
+%>
+<div class="row col s12"></div>
+<% for(var i =0, l = data.length; i<l; i++){ var d = data[i]; var type = d[mappings['type']];%>
+    <% if(type == "BOOLEAN" || type == "SERVICE_ON_OFF") { %>
+<div class="row col s12">
+
+<span><%=d[mappings['name']]%></span>
+      <% var boolVal = true; %>
+      <% if(d[mappings['value']] == 'false' || !d[mappings['value']]) { boolVal = false} %>
+      <div class="switch right">
+        <label>
+          Off
+          <input id="<%=d[mappings['id']]%>" type="checkbox" <%=boolVal ? 'checked' : ''%>>
+          <span class="lever"></span>
+          On
+        </label>
+      </div>
+</div>
+    <% } else {  %>
+        <% if(d['validValues']){ %>
+            <div class='col s12'>
+                <label><%=d[mappings['name']]%></label>
+                <select id="<%=d[mappings['id']]%>" class="browser-default">
+                <% for(var j = 0, l1 = d['validValues'].length; j < l1; j++){ 
+                        var e = d['validValues'][j]; 
+                        var selected = (e == d[mappings['value']]);
+                %>
+                    <option value="<%=e%>" <%=(selected ? "selected" : "")%>><%=e%></option>
+              <% } %>
+                </select>
+            </div>
+        <% }else{ %>
+                <div class="row">
+                    <div class="input-field col s12">
+                      <input value="<%=d[mappings['value']]%>" id="<%=d[mappings['id']]%>" type="text" class="validate">
+                      <label class="active" for="<%=d[mappings['id']]%>"><%=d[mappings['name']]%></label>
+                    </div>
+                 </div>
+         <% } %>
+    <% } %>
+
+<% } %>

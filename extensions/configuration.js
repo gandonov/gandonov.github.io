@@ -1,0 +1,3 @@
+TemplatePaths = {
+    common : ''
+}

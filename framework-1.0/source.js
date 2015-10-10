@@ -44,6 +44,9 @@ Framework.RestSource = Backbone.View.extend({
 	},
     onConstraintPanelChanged : function(constraintPanel){
         var resetPagers = !(constraintPanel instanceof Framework.PaginationPanel);
+        if(resetPagers){
+        	this._cwrapperdata = null;
+        }
         var constraintModel = this._getConstaintModelFromPanels(resetPagers);
         this.setContstraints(constraintModel,constraintPanel);
     },

@@ -1,0 +1,15 @@
+<% var tabs =  _options.tabs; %>
+<div class='row'>
+    <div class='col s12'>
+        <ul class='tabs'>
+        <% for(var i = 0, l = tabs.length; i < l; i++){ %>
+            <li class='tab col s<%=Math.floor(12/l)%>'>
+                <a data-constr="<%=i%>" class='tab-view-toggle' href='#<%=tabs[i].href%>'><%=tabs[i].name%></a>
+            </li>
+        <% } %> 
+        </ul>
+    </div>
+<% for(var i = 0, l = tabs.length; i < l; i++){ %>
+    <div id='<%=tabs[i].href%>' class='col s12'></div>
+<% } %> 
+</div>
