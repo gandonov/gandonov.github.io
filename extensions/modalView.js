@@ -1,4 +1,4 @@
-AWModalView = Framework.BaseView.extend({
+ModalView = Framework.BaseView.extend({
     
     title : 'AWModalView',
     dismissible: true,
