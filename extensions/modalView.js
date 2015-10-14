@@ -1,6 +1,6 @@
 ModalView = Framework.BaseView.extend({
     
-    title : 'AWModalView',
+    title : 'ModalView',
     dismissible: true,
     in_duration : 200,
     out_duration : 200,
@@ -55,6 +55,7 @@ ModalView = Framework.BaseView.extend({
                 }else {
                     console.log('modal canceled, discarding callback');
                 }
+                this.beforeComplete();
                 $("#" + this.id).closeModal();
                 this.destroy();                    
             }.bind(this);
@@ -109,7 +110,7 @@ ModalView = Framework.BaseView.extend({
             modalHtml += '<div id="'+id+'" class="modal modal-small" >';
             
             
-            modalHtml += "<div class='navbar-fixed'><nav class='fr-nopad col m12 s12 amber darken-3'><div class='nav-wrapper'>";    
+            modalHtml += "<div class='navbar-fixed'><nav class='fw-nopad col m12 s12 amber darken-3'><div class='nav-wrapper'>";    
             modalHtml += this.smallButtons;
             modalHtml += "</div></nav></div>";
 
@@ -151,7 +152,7 @@ ModalView = Framework.BaseView.extend({
 
               }.bind(this), // Callback for Modal open
               complete: function(e) {
-                  $("body").removeClass("fr-modal-open");                  
+                  $("body").removeClass("fw-modal-open");                  
                  this.$trigger.remove();
                  this.$modalHolder.remove();
                  if(this.beforeComplete){
@@ -161,19 +162,19 @@ ModalView = Framework.BaseView.extend({
               }.bind(this) // Callback for Modal close
             }
         );
-        $("body").addClass("fr-modal-open");
+        $("body").addClass("fw-modal-open");
         this.$trigger.click();
     }
 
 });
 
-TestModal = AWModalView.extend({
+TestModal = ModalView.extend({
     title : 'Test Modal',
     template : 'templates/Test.html'
 
 });
 
-ProcessModal = AWModalView.extend({
+ProcessModal = ModalView.extend({
     buttons : '<a id="OKButton" class="hide waves-effect waves-green btn-flat">ok</a><a id="CancelButton" class=" modal-action modal-close waves-effect waves-green btn-flat">cancel</a>',
     in_duration : 0,
     out_duration : 0,
@@ -210,7 +211,7 @@ ProcessModal = AWModalView.extend({
         if(options.program){
             this.program = options.program;
         }
-        AWModalView.prototype.initialize.call(this, options);
+        ModalView.prototype.initialize.call(this, options);
     },
     render : function(){
         if(!this.indeterminate){
@@ -225,12 +226,12 @@ ProcessModal = AWModalView.extend({
 
 });
 
-AWLoginView =  AWModalView.extend({
+AWLoginView =  ModalView.extend({
     title : 'Sign In',
     template : 'templates/LoginModal.html',
     dismissible: false,
     initialize : function(options){
-        AWModalView.prototype.initialize.call(this, options);
+        ModalView.prototype.initialize.call(this, options);
     },
 
     validateAsync : function(callback, error){
@@ -239,7 +240,7 @@ AWLoginView =  AWModalView.extend({
        
         
         $.ajax({
-            url: "/fr-server/rest/user/details",
+            url: "/fw-server/rest/user/details",
             type:"GET",
             contentType: "application/json",
             processData : false,
@@ -294,11 +295,11 @@ AWLoginView =  AWModalView.extend({
 });
 
 
-RenamePrompt = AWModalView.extend({
+RenamePrompt = ModalView.extend({
     title : 'Rename',
     initialize : function(options){
         options = options ? options : {};
-        AWModalView.prototype.initialize.call(this, options);
+        ModalView.prototype.initialize.call(this, options);
         if(options.title){
             this.title = options.title;
         }
@@ -329,12 +330,12 @@ RenamePrompt = AWModalView.extend({
     }
 })
 
-AreYouSurePrompt = AWModalView.extend({
+AreYouSurePrompt = ModalView.extend({
     title : 'Are you Sure',
     description : 'Please, think about this for a minute. Do you really want to continue with this?',
     initialize : function(options){
         options = options ? options : {};
-        AWModalView.prototype.initialize.call(this, options);
+        ModalView.prototype.initialize.call(this, options);
         if(options.title){
             this.title = options.title;
         }
@@ -354,11 +355,11 @@ AreYouSurePrompt = AWModalView.extend({
 
 
 
-FilterPrompt = AWModalView.extend({
+FilterPrompt = ModalView.extend({
     title : 'Filter',
     template : 'templates/AWFilterPrompt.html',
     initialize : function(options){
-        AWModalView.prototype.initialize.call(this, options);
+        ModalView.prototype.initialize.call(this, options);
         this.column = options.column;
         this.value = options.value ? options.value : null;
         this.sort = options.sort ? options.sort : "none";

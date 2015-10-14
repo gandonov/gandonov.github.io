@@ -12,9 +12,9 @@ if(data && data.length > 0)
 <div class='<%=wrapperClass%>'>
     <table class="<%=tableClass%>">
 <thead>
-    <tr class='fr-column-header-row'>
+    <tr class='fw-column-header-row'>
 
-    <th class='fr-checkbox-specific'></th>
+    <th class='fw-checkbox-specific'></th>
 <% 
     for(var i =0, l = props.length; i < l; i++){
        var name = props[i];
@@ -33,10 +33,10 @@ if(data && data.length > 0)
 %>
 </thead>
 <tbody>
-    <tr  class='fr-record' data-id='<%=data[i][id]%>'>
-    <td class='fr-checkbox-specific'>
-        <input id='cb_<%=data[i][id]%>' data-id='<%=data[i][id]%>' type='checkbox' class='fr-checkbox' <%=markedRecordsMap[data[i][id]] ? " checked" : "" %>>
-        <label class='k6-checkbox fr-checkbox-specific' for='cb_<%=data[i][id]%>'></label>
+    <tr  class='fw-record' data-id='<%=data[i][id]%>'>
+    <td class='fw-checkbox-specific'>
+        <input id='cb_<%=data[i][id]%>' data-id='<%=data[i][id]%>' type='checkbox' class='fw-checkbox' <%=markedRecordsMap[data[i][id]] ? " checked" : "" %>>
+        <label class='k6-checkbox fw-checkbox-specific' for='cb_<%=data[i][id]%>'></label>
     </td>
 <% 
     for(var j =0, l1 = props.length; j < l1; j++){

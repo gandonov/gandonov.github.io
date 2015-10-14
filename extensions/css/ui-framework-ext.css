@@ -1,18 +1,18 @@
 
-/* .fr-record:hover {
+/* .fw-record:hover {
     background-color: lightgray;
 } */
 .demo-constraint {
     display: inline-block; padding: 3px; border: 1px solid;margin: 2px;
 }
-.fr-record.fr-selected {
+.fw-record.fw-selected {
     background-color: #FFC107 !important;    
 }
-#list .fr-record {
+#list .fw-record {
     /* border: 1px solid grey; */
     /* margin: 2px; */
 }
-.fr-view-selection .active {
+.fw-view-selection .active {
     /* background-color: grey; */
 }
 .demo-column-header {
@@ -302,11 +302,11 @@ table.compact th {
     padding-right: 10px !important;
 }
 
-.fr-search-query.input-field .prefix.active {
+.fw-search-query.input-field .prefix.active {
      color: #FFFFFF !important;
  }
 
-.fr-advanced-panel {
+.fw-advanced-panel {
     position: fixed;    
     width: 16.66667%;    
     /* min-width: 250px; */    
@@ -315,7 +315,7 @@ table.compact th {
     /* z-index: 999; */
 }
 
-.fr-advanced-panel-entry {
+.fw-advanced-panel-entry {
 /*     padding-left: 20px;
     padding-top: 5px;
     padding-right: 20px;
@@ -325,7 +325,7 @@ table.compact th {
     border : none !important;
 }
 
-.fr-advanced-panel-entry.active {
+.fw-advanced-panel-entry.active {
     margin-left: 5px;
 
 /*     padding-top: 7px;
@@ -334,7 +334,7 @@ table.compact th {
     color: rgb(0, 150, 136);
 }
 
-.fr-advanced-panel-entry.active span{
+.fw-advanced-panel-entry.active span{
   font-size: 24px;
 
   transform: translateX(20%);  
@@ -358,13 +358,13 @@ ul#mywareAccordion {
 
 }
 
-.fr-tree-folder {
+.fw-tree-folder {
   background-color: whitesmoke;
   cursor: pointer;
   padding-top: 5px;
   padding-right: 0px;
 }
-.fr-tree-label {
+.fw-tree-label {
     display: inline-block;
    -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -374,7 +374,7 @@ ul#mywareAccordion {
     user-select: none;
     /* width: 80%; */
 }
-.fr-tree-label.active {
+.fw-tree-label.active {
   color: #009688;
 }
 
@@ -402,66 +402,66 @@ ul#mywareAccordion {
   display : none;
 
 }
-.fr-record-entity:hover .star-holder-controls:hover {
+.fw-record-entity:hover .star-holder-controls:hover {
   color : #26a69a !important;
 }
-.fr-record-entity:hover .star-holder-controls {
+.fw-record-entity:hover .star-holder-controls {
   display: inline-block !important;
 
 }
-.fr-record-selection-row .mdi-navigation-close {
+.fw-record-selection-row .mdi-navigation-close {
   display: none;
 
 }
-.fr-record-selection-row:hover .mdi-navigation-close {
+.fw-record-selection-row:hover .mdi-navigation-close {
   display: inline-block !important;
 
 }
 
-.fr-filter-selection-row a {
+.fw-filter-selection-row a {
 /*   display: none; */
 opacity:0.2;
 
 }
-.fr-filter-selection-row a:hover {
+.fw-filter-selection-row a:hover {
   opacity: 1.0;
 }
 
-.fr-record-entity:hover .fr-card-record-title {
+.fw-record-entity:hover .fw-card-record-title {
   display: none;
 }
 
-.fr-card-controls {
+.fw-card-controls {
   display: none;
 }
-/* .fr-card-record-title:hove .fr-card-controls{
+/* .fw-card-record-title:hove .fw-card-controls{
   display: inline;
 } */
-/* .fr-card-control-container:hover .fr-card-record-title{
+/* .fw-card-control-container:hover .fw-card-record-title{
   display: none;
 }
-.fr-card-control-container:hover .fr-card-controls{
+.fw-card-control-container:hover .fw-card-controls{
    display: inline-block;
 } */
 
-.fr-favorite-delete {
+.fw-favorite-delete {
   cursor : pointer;
 }
 
-.fr-record {
+.fw-record {
   margin-bottom: 4px !important;
 }
-.fr-record:hover {
+.fw-record:hover {
   /* background-color: #B7CEC8; */
 }
 
-.fr-view-in-search {
+.fw-view-in-search {
   cursor : pointer
 }
-.fr-view-in-search.active {
+.fw-view-in-search.active {
   color: #009688;
 }
-.fr-tree-eye {
+.fw-tree-eye {
  padding-left: 5px;
 }
 
@@ -472,39 +472,39 @@ opacity:0.2;
     line-height: 200%;
 }
 
-.fr-facet-link {
+.fw-facet-link {
   cursor: pointer;
 }
 
-.fr-folder-next-label {
+.fw-folder-next-label {
   right: -7px;
   top: 12px;
   position: absolute !important;
 }
-a.fr-folder-next-label{
+a.fw-folder-next-label{
   top: 6px;
   right: -44px;
 
 }
-.fr-folder-count{
+.fw-folder-count{
     /* position: relative; */
     margin-top: -30px;
     margin-bottom: -11px;
 }
-.fr-folder-image-holder {
+.fw-folder-image-holder {
   /* background: green; */
   height: 100px;
   position: relative;
 }
 
 
-.fr-label:hover {
+.fw-label:hover {
     border: 2px solid yellow;
 }
 
 
 
-.fr-rectangle-label {
+.fw-rectangle-label {
   width : 20px !important;
   height : 20px !important;
 
@@ -514,7 +514,7 @@ a.fr-folder-next-label{
   color: white;
 }
 
-.fr-rectangle-trash {
+.fw-rectangle-trash {
     color: white;
     font-size: 17px;
     /* position: relative !important; */
@@ -522,7 +522,7 @@ a.fr-folder-next-label{
     top: 5px !important;
 }
 
-.fr-label {
+.fw-label {
 
 background-clip: padding-box !important;
 border-radius: 20px !important;
@@ -532,30 +532,30 @@ width: 40px !important;
 height: 40px !important;
 }
 
-.fr-label.s25{
+.fw-label.s25{
 background-color: rgba(253, 156, 115, 0.6);
 
 }
 
-.fr-label.s10{
+.fw-label.s10{
 
 }
 
-.fr-label.s0{
+.fw-label.s0{
 background-color: rgba(110, 204, 57, 0.6);
 }
-.fr-nopad {
+.fw-nopad {
   padding-left : 0px !important;
   padding-right : 0px !important;
 }
 
-.fr-record-actions {
+.fw-record-actions {
   float:right;
 }
-.fr-record-actions i{
+.fw-record-actions i{
   margin-right: 0px !important;
 }
-.fr-record-title {
+.fw-record-title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -569,15 +569,15 @@ background-color: rgba(110, 204, 57, 0.6);
   height: calc(100vh - 11rem);
 }
 
-/* .fr-card-thumbnail:hover {
+/* .fw-card-thumbnail:hover {
   overflow : visible !important;
 } */
 
-.fr-card-image{
+.fw-card-image{
  display:inline-block; position:relative; 
 }
 
-/* .fr-card-thumbnail:hover .fr-card-image {
+/* .fw-card-thumbnail:hover .fw-card-image {
   position: absolute;
   top:  0;
   left:  0;
@@ -585,13 +585,13 @@ background-color: rgba(110, 204, 57, 0.6);
 } */
 
 
-.fr-card-input.filled-in:not(:checked) + label:after {
+.fw-card-input.filled-in:not(:checked) + label:after {
 
     border: 2px solid white !important;
 
 }
 
-.fr-map-expander {
+.fw-map-expander {
     position: absolute;
     bottom: 0px;
     background-color: grey;
@@ -633,17 +633,17 @@ ul#test323 {
 .strip-image:hover {
     border: 2px solid white;
 }
-.fr-map-viewer {
+.fw-map-viewer {
   position: relative;
   top: calc(100% - 140px);
 }
 
-.fr-map-pagination {
+.fw-map-pagination {
   position: relative;
   top: calc(100% - 140px);
 }
 
-.fr-map-pagination-count {
+.fw-map-pagination-count {
     position: relative;
 
     top: -10px;
@@ -664,7 +664,7 @@ ul#test323 {
  padding: 5px 5px 3px 2px;
  background-color: rgba(255,255,255,.85);
 }
-.fr-map-show-world {
+.fw-map-show-world {
  position: absolute;
  top: 10px;
  left: 165px; 
@@ -679,12 +679,12 @@ ul#test323 {
 .area-hider.active:before {
    content: "Hide Area Markers";
 }
-.fr-map-infobox {
+.fw-map-infobox {
   position: absolute;
   top:0px;
   right:0px; 
 }
-.fr-checkbox-label {
+.fw-checkbox-label {
     position: absolute !important;
   
     left: 0px;
@@ -706,27 +706,27 @@ ul#test323 {
 
 }
 
-.fr-map-arrow{
+.fw-map-arrow{
   display: inline-block;
   vertical-align: top;
   margin-top: -9px;
 
 }
 
-.fr-map-arrow i {
+.fw-map-arrow i {
     cursor: pointer;
     color: white;
 }
-.fr-myware-filter-folder {
+.fw-myware-filter-folder {
   cursor: pointer;
 }
 
-.fr-myware-filter-folder:hover {
+.fw-myware-filter-folder:hover {
   color: #26a69a;
   font-weight:bold;
 
 }
-.fr-folder-more {
+.fw-folder-more {
   cursor: pointer;
 }
 .browse-folder-checkbox {
@@ -734,7 +734,7 @@ ul#test323 {
   top: 4px;
   left: 4px;
 }
-.fr-breadcrumb-div{
+.fw-breadcrumb-div{
   display: inline-block;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -742,7 +742,7 @@ ul#test323 {
   cursor: pointer;
 }
 
-.fr-breadcrumb-div:hover {
+.fw-breadcrumb-div:hover {
   color: #26a69a;
   font-weight:bold;
 }
@@ -751,20 +751,20 @@ div#timelineHolder {
     height: 9px;
 }
 
-a.fr-facet-link.collection-item {
+a.fw-facet-link.collection-item {
     padding: 0px;
     border: none;
 }
-.fr-facet-header {
+.fw-facet-header {
   padding: 2px !important;
   border: none !important;
 }
 
-.fr-folder-menu {
+.fw-folder-menu {
   position : relative !important;
   margin-bottom: -1000px;
 }
-.fr-map-record-zoom-icon {
+.fw-map-record-zoom-icon {
   position: absolute;
     top: -7px;
     right: 0px;
@@ -772,15 +772,15 @@ a.fr-facet-link.collection-item {
     font-size: 23px;
     display:none;
 }
-.strip-image:hover .fr-map-record-zoom-icon {
+.strip-image:hover .fw-map-record-zoom-icon {
   display: block !important;
 }
-.fr-map-record-zoom-icon:hover {
+.fw-map-record-zoom-icon:hover {
 
     color: #26a69a;
 
 }
-.fr-global-entity-remove-icon {
+.fw-global-entity-remove-icon {
   cursor: pointer;
   position: absolute;
   top: 0px;
@@ -788,7 +788,7 @@ a.fr-facet-link.collection-item {
   float: right;
 }
 
-/* body.fr-modal-open {
+/* body.fw-modal-open {
     overflow: hidden !important;
 } */
 
@@ -798,7 +798,7 @@ a.fr-facet-link.collection-item {
     padding-top: 20px;
 }
 
-.fr-favorite-delete{
+.fw-favorite-delete{
   cursor: pointer;
   position: absolute;
   top: 0px;
@@ -806,15 +806,15 @@ a.fr-facet-link.collection-item {
   display: none;
 }
 
-.fr-record:hover .fr-favorite-delete{
+.fw-record:hover .fw-favorite-delete{
   display: inline-block;
 }
 
-label.fr-myware-filter-folder.fr-myware-filter-folder-label {
+label.fw-myware-filter-folder.fw-myware-filter-folder-label {
     font-size: 1.1rem;
 }
 
-.fr-browse-image-arrows {
+.fw-browse-image-arrows {
     position: absolute;
     top: 24px;
     margin: 0px;
@@ -822,7 +822,7 @@ label.fr-myware-filter-folder.fr-myware-filter-folder-label {
     cursor:pointer;
 }
 
-.hoverable:hover .fr-browse-image-arrows {
+.hoverable:hover .fw-browse-image-arrows {
   display: block !important;
 }
 
@@ -844,7 +844,7 @@ label.fr-myware-filter-folder.fr-myware-filter-folder-label {
   display:block;
 }
 
-.fr-record .service-icons,.fr-record .single-service-icons{
+.fw-record .service-icons,.fw-record .single-service-icons{
   display:none;
   position: relative;
   right:0px;
@@ -852,12 +852,12 @@ label.fr-myware-filter-folder.fr-myware-filter-folder-label {
   /* top:0px; */
   float: right !important;
 }
-.fr-record:hover .service-icons{
+.fw-record:hover .service-icons{
   display:block;
 
   cursor:pointer;
 }
-.fr-record.fr-row-selected .single-service-icons{
+.fw-record.fw-row-selected .single-service-icons{
   display: block;
   cursor:pointer;
 }
@@ -865,7 +865,7 @@ label.fr-myware-filter-folder.fr-myware-filter-folder-label {
 .modal-content {
   padding-top:0px !important;
 }
-.fr-row-selected {
+.fw-row-selected {
   background-color: rgba(255, 143, 0, 0.17);
 }
 
@@ -980,7 +980,7 @@ input.header-search-input:focus {
   /* width: 25px; */
   height: 25px;
 }
-.fr-modal-title {
+.fw-modal-title {
   font-weight: 200;
   padding: 10px;
 }
@@ -1059,7 +1059,7 @@ input.header-search-input:focus {
   color: #26a69a !important;
 }
 
-.fr-viewport-toggle a {
+.fw-viewport-toggle a {
   cursor : pointer;
 
 }

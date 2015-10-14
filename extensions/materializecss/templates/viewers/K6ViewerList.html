@@ -11,12 +11,12 @@ if(data && data.length > 0)
         var listData = data[i].listData ? data[i].listData : {};
 %>
 
-<div class='col s12 card fr-record' data-id='<%=data[i][id]%>'>
+<div class='col s12 card fw-record' data-id='<%=data[i][id]%>'>
     <div class=' col s12 k6-list-title' >
         <div class='row'></div>
-        <div class='fr-checkbox-specific' style='float: left;'>
-            <input id='cbl_<%=data[i][id]%>' data-id='<%=data[i][id]%>' type='checkbox' class='fr-checkbox' <%=markedRecordsMap[data[i][id]] ? " checked" : "" %>>
-            <label class='k6-checkbox fr-checkbox-specific' for='cbl_<%=data[i][id]%>'></label>
+        <div class='fw-checkbox-specific' style='float: left;'>
+            <input id='cbl_<%=data[i][id]%>' data-id='<%=data[i][id]%>' type='checkbox' class='fw-checkbox' <%=markedRecordsMap[data[i][id]] ? " checked" : "" %>>
+            <label class='k6-checkbox fw-checkbox-specific' for='cbl_<%=data[i][id]%>'></label>
         </div>
         <div class='col s10'><%=listData.title%></div>
 
@@ -41,7 +41,7 @@ if(data && data.length > 0)
 
     </div>
     <div class=' col s12'>
-        <div class='col s2 fr-nopad'>
+        <div class='col s2 fw-nopad'>
                 <img style='max-width:100%;max-height:140px' src="<%=listData.imgUrl%>">
         </div>
 

@@ -1,6 +1,6 @@
 MassActionSelectionPanel = Framework.AbstractRecordSelectionPanel.extend({ 
     massActionType : "POST",
-    massActionUrl : '/fr-server/rest/product/action/mass/',   
+    massActionUrl : '/fw-server/rest/product/action/mass/',   
     massAction : function(action, m, callback){
         var url = this.massActionUrl + action;
         var list = [];

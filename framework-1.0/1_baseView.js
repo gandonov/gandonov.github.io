@@ -24,6 +24,55 @@ Framework.BaseView = Backbone.View.extend({
 		this.viewsSack.push(this[variableName]);
 		return this[variableName];
 	},
+
+	getParameter : function(parameter){
+		var hash= location.hash;
+		if(hash.length == 0){
+			return null;
+		};
+		var params = hash.substr(1).split('&');
+		for(var i = 0, l = params.length; i < l;i++){
+			var tokens = params[i].split('=');
+			if(tokens[0] == parameter){
+				return tokens[1];
+			}
+		}
+		return null;
+	},
+	setParameter : function(parameter, value){
+		var hash= location.hash;
+		if(hash.length == 0){
+			hash = '#';
+		};
+		var params = hash.substr(1).split('&');
+		if(params[0] == ''){
+			params = [];
+		}
+		var replaced = false;
+		for(var i = 0, l = params.length; i < l;i++){
+			var tokens = params[i].split('=');
+			if(tokens[0] == parameter){
+				if(!value){
+					params[i] = '';
+				}else {
+					params[i] = parameter + '=' + value;
+				}
+				replaced = true;
+				break;
+			}
+		}
+		if(!replaced && value){
+			params.push(parameter + '=' + value);
+		}
+		var noEmpty = [];
+		for(var i = 0, l = params.length; i < l;i++){
+			if(params[i]){
+				noEmpty.push(params[i]);
+			}
+		}
+		location.hash = '#' + noEmpty.join('&');
+	},
+
 	_killChildren : function(){
     	if(this.viewsSack){
 			for(var i = this.viewsSack.length-1; i >=0; i--){
@@ -55,6 +104,9 @@ Framework.BaseView = Backbone.View.extend({
 	},
     	
 	renderView : function(callback, data){
+		if(this.loadingMessage){
+			this.$el.html(this.loadingMessage);
+		}
 		var success = function(html, preloadData) {
 			if(this.cacheView){
 				this.cachedHtml = html;
@@ -129,8 +181,6 @@ Framework.BaseView = Backbone.View.extend({
     {
     	// recursive destruction of all chidlren.
     	this._killChildren();
-//     	if(this.cid !='view43'){
-
 		this.undelegateEvents();
 		this.$el.removeData().unbind(); 
 		if(this.doNotKillDiv){
@@ -140,7 +190,6 @@ Framework.BaseView = Backbone.View.extend({
 			this.remove();
 		}
 		this.trigger('destroy');  	
-//     	}
-	
+
     }
 });

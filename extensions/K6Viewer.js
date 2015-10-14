@@ -45,7 +45,7 @@ K6ConstraintModel = Framework.AbstractConstraintModel.extend({
         this.pageNumber = 0;
     },
     getUrl : function(){
-        //http://10.1.2.38/fr-server/rest/product/pageable/list?filterscount=0&groupscount=0&sortdatafield=libraryName&sortorder=asc&pagenum=0&pagesize=10&recordstartindex=0&recordendindex=10
+        //http://10.1.2.38/fw-server/rest/product/pageable/list?filterscount=0&groupscount=0&sortdatafield=libraryName&sortorder=asc&pagenum=0&pagesize=10&recordstartindex=0&recordendindex=10
         var str = "page=" + (this.getPageNumber()) + "&size=" + this.getPageSize();
         if(this.constraints && !$.isEmptyObject(this.constraints)){
             str += "&constraints=" + JSON.stringify(this.constraints);           
@@ -119,11 +119,11 @@ K6Viewer = Framework.AbstractViewer.extend({
     }, Framework.AbstractViewer.prototype.events),
 
     previous : function(e){
-        var $row = this.$('.fr-row-selected');
+        var $row = this.$('.fw-row-selected');
         $row.prev().trigger('mousedown');
     },
     next : function(e){
-        var $row = this.$('.fr-row-selected');
+        var $row = this.$('.fw-row-selected');
         $row.next().trigger('mousedown');
     },
     onAction : function(e){
@@ -211,11 +211,11 @@ K6Viewer = Framework.AbstractViewer.extend({
             }
         }
         if(this.parent.noHeader){
-            this.$('.fr-column-header-row').remove();
+            this.$('.fw-column-header-row').remove();
         }
         if(this.parent._selectFirst){
             this.parent._selectFirst = false;
-            $(this.$('.fr-record')[0]).trigger('mousedown');
+            $(this.$('.fw-record')[0]).trigger('mousedown');
         }
     }
 });
