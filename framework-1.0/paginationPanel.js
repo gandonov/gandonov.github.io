@@ -202,12 +202,16 @@ Framework.ScrollPaginationPanel = Framework.PaginationPanel.extend({
 	reset : function(){
 		this._requested = false;
 		this.nextPage = 0;
-		this._$done.hide();
+		if(this._$done){
+			this._$done.hide();			
+		}
+
 		this.$el.show();
 	},
 	render : function(){
-			this.$el.before('<div style="width:100%;height:40px;color:green;display:none;">Done.</div>');
+			this.$el.before('<div style="width:100%;height:40px;color:green;display:none;"></div>');
 			this._$done = this.$el.prev();
+			this._update();
 	},
 	PAGE_SIZE : 8,
 	nextPage : 0

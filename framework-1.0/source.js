@@ -10,6 +10,7 @@ Framework.RestSource = Backbone.View.extend({
     	this.cache = {};
     	this.countcache = {};
     	this.preParseCache = {};
+    	this._loading = {};
     	this.noCache = false;
     },
     subscribe : function(constraintPanel){
@@ -113,17 +114,23 @@ Framework.RestSource = Backbone.View.extend({
         	this.count = this.countcache[url];
         }
         if(this.cache[url] == null || (this._lastPayload && this._lastPayload != this.payload)){
-            if(this._loading){
+            if(this._loading[url]){
                 if(!this.callbackQueues[url]){
                    this.callbackQueues[url] = []; 
                 }
                 this.callbackQueues[url].push(callback);
                 return;
             }
-            this._loading = true;
+            this._loading[url] = true;
             this.callbackQueues[url] = []; // override or create new queue
             this.callbackQueues[url].push(callback); // add this callback to the queue
-        
+        	if(this._xhr){
+        		if(this._xhr.url){
+        			this.callbackQueues[url] = this.callbackQueues[this._xhr.url].concat(this.callbackQueues[url]);
+        			delete this.callbackQueues[this._xhr.url];
+        		}
+        		this._xhr.abort();
+        	}
             this._xhr = $.ajax({
                     headers: {
                         Accept: "application/json"
@@ -149,7 +156,7 @@ Framework.RestSource = Backbone.View.extend({
                             data = this.parse(data);
                         }
                         var postParse = function(data){
-                        	this._loading = false;
+                        	this._loading[url] = false;
                         	if(this._contineous){
                         		if(!this._cwrapperdata){
                         			this._cwrapperdata = [];
@@ -182,15 +189,19 @@ Framework.RestSource = Backbone.View.extend({
                         
                     }.bind(this),
                     error : function(error){
-                    	this._loading = false;
-                        if(errorcallback){
-							errorcallback(error);
-						}else {
-							console.log('error:');
-							console.log(error);
-						}
+                    	this._loading[url] = false;
+                        if(error.statusText != "abort"){
+							 if(errorcallback){
+								errorcallback(error);
+							}else {
+								console.log('error:');
+								console.log(error);
+							}                      	
+                        }
+
                     }.bind(this)
             });
+            this._xhr.url = url;
 
         }else {
 // 			if(this.setCount){
