@@ -112,6 +112,7 @@ Framework.BaseView = Backbone.View.extend({
 				this.cachedHtml = html;
 			}
 			data = data ? data : {};
+			data._this = this;
 			data._options = this._options;
 			this._preloadData = preloadData;
 			data._preloadData = preloadData;
