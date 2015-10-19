@@ -175,6 +175,7 @@ Framework.RestSource = Backbone.View.extend({
                             for(var i = 0, l =  this.callbackQueues[url].length; i < l; i++){
                                  this.callbackQueues[url][i](data);
                             }
+                            this.callbackQueues[url] = [];
                             
                         }.bind(this);
                         if(this['parseAsync__' + path]){

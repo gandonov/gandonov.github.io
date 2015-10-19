@@ -1,12 +1,12 @@
 Framework.BaseView = Backbone.View.extend({ 
 	template : null,
-
 	isRendered : false,
 	instantiateView : function(variableName, Constructor, options){
 		options = options ? options : {};
 		this.cacheView = options.cacheView;
 		this.cacheView = true;
 		this.cachedHtml = null;
+
 		if(!this.viewsSack){
 			this.viewsSack = [];
 		}
@@ -87,6 +87,13 @@ Framework.BaseView = Backbone.View.extend({
 	initialize: function(options) { 
 		options || (options = {});
 		this._options = options;
+
+		if(this.parameterSchema){
+			for(var i in this.parameterSchema){
+				this[this.parameterSchema[i]] = this.getParameter(i);
+			}
+		}
+
 		_.bindAll(this, 'render', 'destroy'); 
 
 		var _this = this; 
