@@ -6,22 +6,10 @@ Framework.BaseView = Backbone.View.extend({
 		this.cacheView = options.cacheView;
 		this.cacheView = true;
 		this.cachedHtml = null;
-
-		if(!this.viewsSack){
-			this.viewsSack = [];
-		}
-		this[variableName] = new Constructor(options);
-
-		this[variableName]._position = this.viewsSack.length;
+		this[variableName] = new Constructor(options);		
+		this.viewsSack[this[variableName].cid] = this[variableName];
 		this[variableName]._parent = this;
 		this[variableName]._varname = variableName;
-		this.listenTo(this[variableName], 'destroy', function(view){
-			if(variableName && this[variableName]){
-				this.viewsSack.splice(this[variableName]._position, 1);
-				delete this[variableName];				
-			}
-		}.bind(this));
-		this.viewsSack.push(this[variableName]);
 		return this[variableName];
 	},
 
@@ -74,17 +62,16 @@ Framework.BaseView = Backbone.View.extend({
 	},
 
 	_killChildren : function(){
-    	if(this.viewsSack){
-			for(var i = this.viewsSack.length-1; i >=0; i--){
-				this.viewsSack[i].destroy();
-			}    		
-    	}
+		for(var i in this.viewsSack){
+			this.viewsSack[i].destroy();
+		}
 	},
 	events : {},
 	noOp : function(){
     	console.log('event block in child class');
     },
 	initialize: function(options) { 
+		this.viewsSack = {};
 		options || (options = {});
 		this._options = options;
 
@@ -182,6 +169,7 @@ Framework.BaseView = Backbone.View.extend({
 	_beforeRender : function(){
 
 	},
+
 	_beforeDestroy : function(){
 		// do all extra clean up here
 	},
@@ -190,6 +178,9 @@ Framework.BaseView = Backbone.View.extend({
     	// recursive destruction of all chidlren.
     	this._killChildren();
 		this.undelegateEvents();
+		if(this._parent.viewsSack[this.cid]){
+			delete this._parent.viewsSack[this.cid];
+		}
 		this.$el.removeData().unbind(); 
 		if(this.doNotKillDiv){
 			this.$el.empty();
@@ -197,7 +188,7 @@ Framework.BaseView = Backbone.View.extend({
 		}else {
 			this.remove();
 		}
-		this.trigger('destroy');  	
+		this.trigger('destroy', this);  	
 
     }
 });

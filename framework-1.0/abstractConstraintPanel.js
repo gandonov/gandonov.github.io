@@ -3,6 +3,7 @@ Framework.AbstractConstraintPanel = Framework.BaseView.extend({
     constraintModel : null,
 
     initialize : function(options){
+        Framework.BaseView.prototype.initialize.call(this, options);
         // subscribe to source
         this.source = options.source;
         this.source.subscribe(this);
@@ -23,9 +24,10 @@ Framework.AbstractConstraintPanel = Framework.BaseView.extend({
         this.trigger('constraintPanel:changed', this);        
     },
     render : function(){
-       // this.$el.html('Abstract Panel');
-    },
 
+    },
+    
+    
     destroy : function(){
         this.source.unsubscribe(this);
         Framework.BaseView.prototype.destroy.call(this);
@@ -33,6 +35,7 @@ Framework.AbstractConstraintPanel = Framework.BaseView.extend({
 
 });
 
+// utility class
 Framework.ProxyConstraintPanel = Framework.AbstractConstraintPanel.extend({
     initialize : function(options){
         this.from = options.from;
