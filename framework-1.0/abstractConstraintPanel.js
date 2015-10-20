@@ -1,34 +1,34 @@
 Framework.AbstractConstraintPanel = Framework.BaseView.extend({
     
-    constraintModel : null,
-
-    initialize : function(options){
+    constraintModel: null,
+    
+    initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
         // subscribe to source
         this.source = options.source;
         this.source.subscribe(this);
     },
     
-    putConstraintModel : function(constraintModel){
+    putConstraintModel: function(constraintModel) {
         throw "putConstraintModel must be implemented";
     },
-
-    getConstraintModel : function(){
-    	if(!this.constraintModel){
-    		this.constraintModel = new this.source.ConstraintModelPrototype();
-    	}
+    
+    getConstraintModel: function() {
+        if (!this.constraintModel) {
+            this.constraintModel = new this.source.ConstraintModelPrototype();
+        }
         return this.constraintModel;
     },
-
-    onConstraintChange : function(){
-        this.trigger('constraintPanel:changed', this);        
+    
+    onConstraintChange: function() {
+        this.trigger('constraintPanel:changed', this);
     },
-    render : function(){
-
+    render: function() {
+    
     },
     
     
-    destroy : function(){
+    destroy: function() {
         this.source.unsubscribe(this);
         Framework.BaseView.prototype.destroy.call(this);
     }
@@ -37,17 +37,17 @@ Framework.AbstractConstraintPanel = Framework.BaseView.extend({
 
 // utility class
 Framework.ProxyConstraintPanel = Framework.AbstractConstraintPanel.extend({
-    initialize : function(options){
+    initialize: function(options) {
         this.from = options.from;
         Framework.AbstractConstraintPanel.prototype.initialize.call(this, options);
         this.listenTo(this.from, 'source:constraintChange', this.onFromChange);
     },
-
-    onFromChange : function(constraintPanel){
+    
+    onFromChange: function(constraintPanel) {
         this.onConstraintChange();
     },
-
-    getConstraintModel : function(){
-		return this.from.constraintModel;
+    
+    getConstraintModel: function() {
+        return this.from.constraintModel;
     }
 });

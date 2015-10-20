@@ -3,9 +3,6 @@ Framework.BaseView = Backbone.View.extend({
 	isRendered : false,
 	instantiateView : function(variableName, Constructor, options){
 		options = options ? options : {};
-		this.cacheView = options.cacheView;
-		this.cacheView = true;
-		this.cachedHtml = null;
 		this[variableName] = new Constructor(options);		
 		this.viewsSack[this[variableName].cid] = this[variableName];
 		this[variableName]._parent = this;
@@ -66,10 +63,7 @@ Framework.BaseView = Backbone.View.extend({
 			this.viewsSack[i].destroy();
 		}
 	},
-	events : {},
-	noOp : function(){
-    	console.log('event block in child class');
-    },
+	
 	initialize: function(options) { 
 		this.viewsSack = {};
 		options || (options = {});
@@ -102,9 +96,7 @@ Framework.BaseView = Backbone.View.extend({
 			this.$el.html(this.loadingMessage);
 		}
 		var success = function(html, preloadData) {
-			if(this.cacheView){
-				this.cachedHtml = html;
-			}
+
 			data = data ? data : {};
 			data._this = this;
 			data._options = this._options;
@@ -117,20 +109,23 @@ Framework.BaseView = Backbone.View.extend({
 			}
 		}.bind(this);
 		if(this.template != null){
-			if(this.cachedHtml){
+			if(Framework.templateCache[this.template]){
 
 				if(this.preloadDataAsync){
 					this.preloadDataAsync(function(data){
-						success(this.cachedHtml, data);
+						success(Framework.templateCache[this.template], data);
 					}, function(){
 						success("ERROR in preloadDataAsync", {});
 					});
 				}else{
-					success(this.cachedHtml, {});
+					success(Framework.templateCache[this.template], {});
 				}
-				
+
 			}else {
 				var ajaxSuccess = function(response){
+					if(Framework.CACHE_TEMPLATES){
+						Framework.templateCache[this.template] = response;
+					}
 					if(this.preloadDataAsync){
 						this.preloadDataAsync(function(data){
 							success(response, data);
