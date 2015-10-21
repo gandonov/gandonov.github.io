@@ -38,66 +38,7 @@ Framework.AbstractViewer = Framework.AbstractConstraintPanel.extend({
 		}	
 	},	
 
-
-
-/*
-
-grid.on("dragover", function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-
-		});		 		
-
-		grid.on("dragenter", function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-
-		});
-		var that = this;
-		grid.on('drop',  function(e){
-			if(e.originalEvent.dataTransfer){
-				if(e.originalEvent.dataTransfer.files.length) {
-					e.preventDefault();
-					e.stopPropagation();
-					that.upload(e.originalEvent.dataTransfer.files);
-				}   
-			}
-    	});
-    upload : function(files) {
-		var that = this;
-		console.log(files);
-		var formData = new FormData();
-		
-		for (var i = 0; i < files.length; i++) {
-			  var file = files[i];
-			  // Add the file to the request.
-			  formData.append('files[]', file, file.name);
-		}
-		
-		var xhr = new XMLHttpRequest();
-		var grid = this.$('#source_files');
-		grid.jqxGrid('showloadelement');
-		xhr.open('POST', CONFIG.baseHostURL + "/rest/product/sourceFiles/" + this.product.uuid, true);
-		
-		xhr.onload = function () {
-		  if (xhr.status === 200) {
-			// File(s) uploaded.
-			grid.jqxGrid('hideloadelement');
-			grid.jqxGrid({source : that.dataAdapter })
-		  } else {
-			grid.html("Something went wrong with your files: " + xhr.status);
-		  }
-		};
-		xhr.send(formData);
-
-	},
-
-*/
-
-
-
 	onKeyup : function(e){
-		console.log('onKeyup');	
 	},
 	_$select : function($e, record, ctrlKey){
 		this.$('.fw-record').removeClass('fw-row-selected');
@@ -292,7 +233,6 @@ grid.on("dragover", function(e) {
 	},
 
 	afterShow : function(records) {
-
 	},
 
 	beforeShow : function(records) {
@@ -339,8 +279,6 @@ grid.on("dragover", function(e) {
 			  e.call(_this,b);
 			  return _this;
 		});
-
-		
 	},
 
 	afterRender : function() {
