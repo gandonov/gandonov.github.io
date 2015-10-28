@@ -78,7 +78,7 @@ ModalView = Framework.BaseView.extend({
     buttons : '<a id="OKButton" class="waves-effect waves-green btn-flat">ok</a><a id="CancelButton" class=" modal-action modal-close waves-effect waves-green btn-flat">cancel</a>',
 
     _fullScreen : function(){
-        return Framework.checkEnvironment() == 'small';
+        return false;
     },
     smallButtons : '<ul class="left"><li><a id="CancelButton" class="modal-action modal-close"><i class="mdi-navigation-close"></i></a></li></ul>' + 
     '<ul class="right"><li><a id="OKButton" class="">OK</a></li></ul>',
