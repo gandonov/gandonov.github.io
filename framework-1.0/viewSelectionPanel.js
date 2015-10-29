@@ -1,3 +1,8 @@
+ /**
+ * Model for ListBox
+ *
+ * @constructor <-- add this to remove the warning
+ */
 Framework.ViewSelectionPanel = Framework.BaseView.extend({
 
 	initialize : function(options) {
@@ -13,7 +18,7 @@ Framework.ViewSelectionPanel = Framework.BaseView.extend({
 
 	},
 	events : {
-		"click .view-toggle" : 'onViewToggle',
+		"click .view-toggle" : 'onViewToggle'
 	},
 	onViewToggle : function(e){
 		var $el = $(e.currentTarget);
@@ -23,6 +28,6 @@ Framework.ViewSelectionPanel = Framework.BaseView.extend({
 
 	render : function() {
 
-	},
+	}
 
 });

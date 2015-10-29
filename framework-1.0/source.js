@@ -59,14 +59,14 @@ Framework.RestSource = Backbone.View.extend({
     arrayStructure : {
         "root" : "/array",
         "auxA" : "/array/{%id%}/auxA",
-        "auxA->data" : "/array/{%id%}/auxA/data",
+        "auxA->data" : "/array/{%id%}/auxA/data"
     },
     rootStructure : {
         "root" : "/records",
         "auxA" : "/records/{%id%}/auxA",
         "auxB" : "/records/{%id%}/auxB",
         "auxA->data" : "/records/{%id%}/auxA/data",
-        "array[arrayStructure]" : "/records/{%id%}/array",        
+        "array[arrayStructure]" : "/records/{%id%}/array"      
     },
 
     clearCache : function(){

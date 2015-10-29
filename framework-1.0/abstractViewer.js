@@ -337,5 +337,5 @@ Framework.AbstractViewer = Framework.AbstractConstraintPanel.extend({
             selectionMethod: this.parent.selectionMethod
         });
     
-    },
+    }
 });

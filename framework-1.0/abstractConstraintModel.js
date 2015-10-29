@@ -36,7 +36,7 @@ Framework.AbstractConstraintModel = Backbone.View.extend({
     },
     getRecordOffset : function(){
         return ((this.pageNumber -1) * this.pageSize) + 1;
-    },
+    }
     
 });
 

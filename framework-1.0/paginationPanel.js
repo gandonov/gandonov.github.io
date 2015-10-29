@@ -1,6 +1,3 @@
-
-
-
 Framework.PaginationPanel = Framework.AbstractConstraintPanel.extend({
 	
 	DEFAULT_ITEMS_PER_PAGE_LIST : [10,20,30,50,100,1000],
@@ -11,7 +8,7 @@ Framework.PaginationPanel = Framework.AbstractConstraintPanel.extend({
 	events :{
 		"click [id^='pageSize_']" : 'onPageSize',
 		"click #nextPage" : "onNextPage",
-		"click #previousPage" : "onPreviousPage",
+		"click #previousPage" : "onPreviousPage"
 	},
 	onPageSize : function(event){
 		var value = event.currentTarget.id.split('_')[1];
