@@ -14,7 +14,7 @@ Framework.RestSource = Backbone.View.extend({
     	this.preParseCache = {};
     	this._loading = {};
     	this.noCache = false;
-    	if(this.url == null){
+    	if(!this.url){
     		throw "this.url must be defined";
     	}
     },
@@ -78,11 +78,15 @@ Framework.RestSource = Backbone.View.extend({
         }    	
     },
 
+    getCount : function(){
+    	return this.count;
+    },
+
     get : function(callback, errorcallback){
     	this.getAll(callback, errorcallback);
     },
     
-    getAll : function(callback, errorcallback){
+    getAll : function(path,callback, errorcallback){
         var constraintUrl = "";
 		this.constraintModel = this._getConstaintModelFromPanels();
         if(this.constraintModel && this.constraintType == "GET"){
@@ -129,8 +133,8 @@ Framework.RestSource = Backbone.View.extend({
                     	if(this.setCount){
                     		this.setCount(data);
                     	}
-                        if(this['parse__' + path]){
-                        	this['parse__' + path](data);
+                        if(this['parse__' + this.url]){
+                        	this['parse__' + this.url](data);
                         }else
                         if(this.parse){
                             data = this.parse(data);
@@ -158,8 +162,8 @@ Framework.RestSource = Backbone.View.extend({
                             this.callbackQueues[url] = [];
                             
                         }.bind(this);
-                        if(this['parseAsync__' + path]){
-                        	this['parse__' + path](data);
+                        if(this['parseAsync__' + this.url]){
+                        	this['parse__' + this.url](data);
                         }else if(this.parseAsync){
                             this.parseAsync(data, function(result){
                                 postParse(result);
