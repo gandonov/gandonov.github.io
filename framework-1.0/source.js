@@ -1,6 +1,8 @@
 Framework.RestSource = Backbone.View.extend({
     dataType : "json",
     constraintType : "POST",
+    url : null,
+
     ConstraintModelPrototype : Framework.AbstractConstraintModel,
 
     initialize : function(){
@@ -12,6 +14,9 @@ Framework.RestSource = Backbone.View.extend({
     	this.preParseCache = {};
     	this._loading = {};
     	this.noCache = false;
+    	if(this.url == null){
+    		throw "this.url must be defined";
+    	}
     },
     subscribe : function(constraintPanel){
         this.constraintPanels[constraintPanel.cid] = constraintPanel;
@@ -52,23 +57,6 @@ Framework.RestSource = Backbone.View.extend({
         this.setContstraints(constraintModel,constraintPanel);
     },
 
-    getCount : function(){
-    	return this.count;
-    },
-
-    arrayStructure : {
-        "root" : "/array",
-        "auxA" : "/array/{%id%}/auxA",
-        "auxA->data" : "/array/{%id%}/auxA/data"
-    },
-    rootStructure : {
-        "root" : "/records",
-        "auxA" : "/records/{%id%}/auxA",
-        "auxB" : "/records/{%id%}/auxB",
-        "auxA->data" : "/records/{%id%}/auxA/data",
-        "array[arrayStructure]" : "/records/{%id%}/array"      
-    },
-
     clearCache : function(){
     	this.cache = {};
     },
@@ -89,27 +77,19 @@ Framework.RestSource = Backbone.View.extend({
             this.constraintUrl = this.constraintModel.getUrl();
         }    	
     },
-    // usage
 
-    // source.getById('array/auxA->data', callback ,32, 11);
-    // this will:
-    // 1.) see if rootStructure is fetched, if not fetch it.
-    // 2.) see if arrayStructure is fetched for 32, if not fetch it.
-    // 3.) see if auxA for 11 is fetched, if not fetch it.
-    // 4.) see if data is fetched, if not fetch it.
-
-    // null, or path to root of structure
-
-    getAll : function(path, callback, errorcallback, arg1, arg2, arg3, arg4, arg5, arg6){
+    get : function(callback, errorcallback){
+    	this.getAll(callback, errorcallback);
+    },
+    
+    getAll : function(callback, errorcallback){
         var constraintUrl = "";
-       // if(!this.constraintModel){
-			this.constraintModel = this._getConstaintModelFromPanels();
-      //  }
+		this.constraintModel = this._getConstaintModelFromPanels();
         if(this.constraintModel && this.constraintType == "GET"){
             constraintUrl = "?" + this.constraintModel.getUrl();
         }
 
-        var url = this._getUrl(path, arg1, arg2, arg3, arg4, arg5, arg6) + constraintUrl;
+        var url = this.url + constraintUrl;
         if(this.countcache[url]){
         	this.count = this.countcache[url];
         }
@@ -205,48 +185,16 @@ Framework.RestSource = Backbone.View.extend({
             this._xhr.url = url;
 
         }else {
-// 			if(this.setCount){
-// 				this.setCount(this.preParseCache[url]);
-// 			}
-			
             callback(this.cache[url]);
         }
 
     },
-
     destroy : function(){
     	console.log('destroying source');
     },
-
-    deleteAll : function(path, callback){
-
-    },
-    deepDelete : function(path, callback){
-
-    },
-
-    refresh : function(path, arg1, arg2, arg3, arg4, arg5, arg6){
-        var url = this._getUrl(path, arg1, arg2, arg3, arg4, arg5, arg6);
+    refresh : function(){
         this.cache = {};
         this.trigger('source:refresh');
     }, 
-    _getUrl : function(path, arg1, arg2, arg3, arg4, arg5, arg6) {
-        var url = "";
-        if(!path || path == ""){
-            url = this.rootStructure["root"];
-            return url;
-        }
-        if(this.rootStructure[path]){
-            var compiled = this.rootStructure[path];
-            if(arg1){
-                compiled = compiled.replace('{%id%}', arg1);
-            }
-			if(arg2){
-                compiled = compiled.replace('{%id1%}', arg2);
-            }
-            return compiled;
-        }
-        return url;
-    }
 
 });

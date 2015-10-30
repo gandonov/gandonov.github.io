@@ -1,3 +1,14 @@
+/**
+ * AbstractConstraintPanel. All constraint panels must inherit from it. 
+   Instantiate this class to apply constraints on the RestSource via GET or POST methods, by changing it's constraintModel.getUrl() output. 
+ * 
+ * @example
+DataSource = new Framework.RestSource.extend({
+    
+});
+ * @constructor
+ * @export
+ */
 Framework.AbstractConstraintPanel = Framework.BaseView.extend({
     
     constraintModel: null,

@@ -210,7 +210,7 @@ Framework.BaseView.prototype.setParameter = function(parameter, value) {
     location.hash = '#' + noEmpty.join('&');
 };
 /** Destroys view. Removes all handles from parent, removes all rendered DOM elements (including this.$el)
-  * If there any xhr in progress created by this.getJSON, they will be aborted. Backbone events are undelegated.
+* If there any xhr in progress created by this.getJSON, they will be aborted. Backbone events are undelegated.
 * @todo Option not to remove parent div
 * @fires Framework.BaseView#destroy
 * @export {function()} */
@@ -231,7 +231,21 @@ Framework.BaseView.prototype.destroy = function() {
     this.trigger('destroy', this);
 };
 
-/** @export {*} */
+/** 
+* Renders View into desired DOM element (provided it is set prior with backbone's setElement(el) )
+* Define template field with the path to your html template and it will be rendered then
+* If you do not define template field, this method will not render template but goes directly to render()
+* (render() executes last, regradless of whether the template is present or not )
+* @example
+MyView = Framework.BaseView.extend({
+   template : 'templates/MyView.html' 
+});
+
+var myView = new MyView();
+myView.setElement($('#myElement')).renderView();
+
+@export {*} */
+
 Framework.BaseView.prototype.renderView = function(callback, data) {
     if (this.loadingMessage) {
         this.$el.html(this.loadingMessage);
@@ -333,8 +347,6 @@ MyView = Framework.BaseView.extend({
 });
 
 */
-
-
 Framework.BaseView.prototype.preloadDataAsync = function(callback, error) {
     callback({});
 };
