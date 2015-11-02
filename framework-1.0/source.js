@@ -28,13 +28,12 @@ source.get(function(data){
  */
 Framework.RestSource = Backbone.View.extend({
     dataType : "json",
-    constraintType : "POST",
     url : null,
 
-    ConstraintModelPrototype : Framework.AbstractConstraintModel,
+
 
     initialize : function(){
-    	this.constraintModel = new this.ConstraintModelPrototype();
+    	this.constraintModel = new this['ConstraintModelPrototype']();
     	this.constraintPanels = {};
     	this.callbackQueues = {};
     	this.cache = {};
@@ -65,14 +64,14 @@ Framework.RestSource = Backbone.View.extend({
 		}
 	},
 	_getConstaintModelFromPanels : function(resetPagers){
-        var constraintModel = new this.ConstraintModelPrototype();
+        var constraintModel = new this['ConstraintModelPrototype']();
         for(var i in this.constraintPanels){
             var cp = this.constraintPanels[i];
             if(resetPagers && cp instanceof Framework.PaginationPanel){
 				this._cwrapperdata = null;
                 cp.reset();
             }
-           constraintModel = constraintModel.intersection(cp.getConstraintModel());
+           constraintModel = constraintModel.intersection(cp['getConstraintModel']());
         }    
         return constraintModel;		
 	},
@@ -99,10 +98,11 @@ Framework.RestSource = Backbone.View.extend({
 
     setConstraintModel : function(constraintModel){
         this.constraintModel = constraintModel;
-        if(this.constraintType == "POST"){
-            this.payload = JSON.stringify(constraintModel.attributes);
+        if(this['ConstraintModelPrototype'].prototype.type == "POST"){
+        	//TODO, there is no getBody yet
+            this.payload = JSON.stringify(constraintModel.getBody());
         }else {
-            this.constraintUrl = this.constraintModel.getUrl();
+            this.constraintUrl = this.constraintModel['getUrl']();
         }    	
     },
 
@@ -114,8 +114,8 @@ Framework.RestSource = Backbone.View.extend({
     getAll : function(path,callback, errorcallback){
         var constraintUrl = "";
 		this.constraintModel = this._getConstaintModelFromPanels();
-        if(this.constraintModel && this.constraintType == "GET"){
-            constraintUrl = "?" + this.constraintModel.getUrl();
+        if(this.constraintModel && this['ConstraintModelPrototype'].prototype.type == "GET"){
+            constraintUrl = "?" + this.constraintModel['getUrl']();
         }
 
         var url = this.url + constraintUrl;
@@ -227,12 +227,21 @@ Framework.RestSource = Backbone.View.extend({
     }
 
 });
-
+/** @export */
 Framework.RestSource.prototype.getConstraintModel = function(){
 	return this.constraintModel;
 };
 
+
+Framework.RestSource.prototype['ConstraintModelPrototype'] = Framework.AbstractConstraintModel;
+
 /** 
+First (if not done so prior), RestSource will collect all Constraint Models from subscribed ConstaintPanels. <br>
+Then, this.constraintModel will be created by taking an intersection of all the constraint models.
+Then, this.constraintModel.getUrl is called to construct the second part of the server request url that contains search constraints.
+Then, RestSource issues ajax call and queues corresponding callbacks
+Once Response is received, either callbacks or errorcallbacks are called.
+
 @param {function} callback function call upon successful response from server.
 @param {function} errorcallback function that handles error response from server.
 @example

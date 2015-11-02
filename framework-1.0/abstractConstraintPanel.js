@@ -10,55 +10,48 @@ DataSource = new Framework.RestSource.extend({
  * @export
  */
 Framework.AbstractConstraintPanel = Framework.BaseView.extend({
-    
-    constraintModel: null,
-    
+        
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
         // subscribe to source
         this.source = options.source;
         this.source.subscribe(this);
     },
-    
-    putConstraintModel: function(constraintModel) {
-        throw "putConstraintModel must be implemented";
-    },
-    
-    getConstraintModel: function() {
-        if (!this.constraintModel) {
-            this.constraintModel = new this.source.ConstraintModelPrototype();
-        }
-        return this.constraintModel;
-    },
-    
+
     onConstraintChange: function() {
         this.trigger('constraintPanel:changed', this);
     },
-    render: function() {
-    
-    },
-    
-    
+
     destroy: function() {
         this.source.unsubscribe(this);
         Framework.BaseView.prototype.destroy.call(this);
     }
-
 });
 
-// utility class
-Framework.ProxyConstraintPanel = Framework.AbstractConstraintPanel.extend({
-    initialize: function(options) {
-        this.from = options.from;
-        Framework.AbstractConstraintPanel.prototype.initialize.call(this, options);
-        this.listenTo(this.from, 'source:constraintChange', this.onFromChange);
-    },
-    
-    onFromChange: function(constraintPanel) {
-        this.onConstraintChange();
-    },
-    
-    getConstraintModel: function() {
-        return this.from.constraintModel;
+
+/** Override this method to return constraintModel with explicit constraint values depending on state of this constraintPanel 
+* @example
+
+MyConstraintPanel = Framework.AbstractConstraintPanel.extend({
+    getConstraintModel : function(){
+        var constraintModel = new this.source.ConstraintModelPrototype();
+        constraintModel.set('somefieldname', this.$('#input').val()); // assuming that this view constains #input element
+        // we want to return the value of input everytime RestSource requests ConstraintModel from this panel
+        return constraintModel;
     }
 });
+
+* @returns {Object} returns ConstraintModel
+*/
+Framework.AbstractConstraintPanel.prototype['getConstraintModel'] =  function() {
+    var constraintModel = new this.source['ConstraintModelPrototype']();
+    return constraintModel;
+}
+
+/**
+* @export {*} 
+* @returns {Object} returns RestSource
+*/
+Framework.AbstractConstraintPanel.prototype.getSource =  function() {
+    return this.source;
+};

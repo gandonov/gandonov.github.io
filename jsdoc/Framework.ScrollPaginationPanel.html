@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: viewSelectionPanel.js</title>
+    <title>JSDoc: Class: ScrollPaginationPanel</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,51 +17,127 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: viewSelectionPanel.js</h1>
+    <h1 class="page-title">Class: ScrollPaginationPanel</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code> /**
- * Model for ListBox
- *
- * @constructor &lt;-- add this to remove the warning
- */
-Framework.ViewSelectionPanel = Framework.BaseView.extend({
+        <h2>
+        ScrollPaginationPanel
+        </h2>
+        
+    
+</header>
 
-	initialize : function(options) {
-		Framework.BaseView.prototype.initialize.call(this, options);
-		this.sourceView = options.sourceView;
-		if(!this.sourceView){
-			throw "you must specify sourceView parameter in options."
-		}
-		this.listenTo(this.sourceView, 'sourceView:change', this.onViewerChange);
-	},
+<article>
+    <div class="container-overview">
+    
+        
 
-	onViewerChange : function(viewer){
+    
 
-	},
-	events : {
-		"click .view-toggle" : 'onViewToggle'
-	},
-	onViewToggle : function(e){
-		var $el = $(e.currentTarget);
-		var viewer = $el.data('viewer');
-		this.sourceView.setViewer(viewer);
-	},
+    <h4 class="name" id="ScrollPaginationPanel"><span class="type-signature"></span>new ScrollPaginationPanel<span class="signature">()</span><span class="type-signature"></span></h4>
 
-	render : function() {
+    
 
-	}
 
-});
-</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="paginationPanel.js.html">paginationPanel.js</a>, <a href="paginationPanel.js.html#line148">line 148</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
