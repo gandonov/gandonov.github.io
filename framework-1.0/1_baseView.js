@@ -152,6 +152,8 @@ Framework.BaseView.prototype.getJSON = function(url, success, error, options) {
 };
 
 
+/** @export {string} */
+Framework.BaseView.prototype.loadingTemplate = null;
 
 /** @export {function(string):string} */
 Framework.BaseView.prototype.getParameter = function(parameter) {
@@ -250,21 +252,21 @@ Framework.BaseView.prototype.renderView = function(callback, data) {
     if (this.loadingMessage) {
         this.$el.html(this.loadingMessage);
         this._renderView(callback, data);
-    } else if (this.loadingTemplate) {
-        if (Framework.templateCache[this.loadingTemplate]) {
-            this.$el.html(Framework.templateCache[this.loadingTemplate]);
+    } else if (this['loadingTemplate']) {
+        if (Framework.templateCache[this['loadingTemplate']]) {
+            this.$el.html(Framework.templateCache[this['loadingTemplate']]);
             this._renderView(callback, data);
         } else {
             this.$el.html("");
             $.ajax({
-                url: this.loadingTemplate,
+                url: this['loadingTemplate'],
                 method: 'GET',
                 success: function(response) {
-                    Framework.templateCache[this.loadingTemplate] = response;
+                    Framework.templateCache[this['loadingTemplate']] = response;
                     this.renderView(callback, data);
                 }.bind(this),
                 error: function(response) {
-                    Framework.templateCache[this.loadingTemplate] = 'Loading Template [' + this.loadingTemplate + '] failed to load.';
+                    Framework.templateCache[this['loadingTemplate']] = 'Loading Template [' + this['loadingTemplate'] + '] failed to load.';
                     this.renderView(callback, data);
                 }.bind(this)
             });

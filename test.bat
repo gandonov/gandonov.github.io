@@ -1,0 +1,1 @@
+java -jar %CLOSURE_HOME%/compiler.jar --compilation_level ADVANCED_OPTIMIZATIONS --js %CLOSURE_HOME%/base.js --js ../../search/js/**.js --js_output_file ../../search/script-compiled.js --externs externs/framework-extern.js --externs %CLOSURE_HOME%/js/externs/**.js --generate_exports
