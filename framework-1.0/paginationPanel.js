@@ -178,7 +178,6 @@ Framework.ScrollPaginationPanel = Framework.PaginationPanel.extend({
     _update : function(){
 			this.source.getAll(null, function(data){
 				if(this.source.getCount() <= (this.nextPage+1) * this.PAGE_SIZE ){
-					this._$done.show();
 					this.$el.hide();
 				}else {
 					this._requested = false;					
@@ -208,14 +207,9 @@ Framework.ScrollPaginationPanel = Framework.PaginationPanel.extend({
 	reset : function(){
 		this._requested = false;
 		this.nextPage = 0;
-		if(this._$done){
-			this._$done.hide();			
-		}
-
 		this.$el.show();
 	},
 	render : function(){
-			this._$done = this.$el.prev();
 			this._update();
 	},
 	PAGE_SIZE : 8,

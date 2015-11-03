@@ -189,8 +189,8 @@ Framework.RestSource = Backbone.View.extend({
                         }.bind(this);
                         if(this['parseAsync__' + this.url]){
                         	this['parse__' + this.url](data);
-                        }else if(this.parseAsync){
-                            this.parseAsync(data, function(result){
+                        }else if(this['parseAsync']){
+                            this['parseAsync'](data, function(result){
                                 postParse(result);
                             }.bind(this));
                         }else {
@@ -255,5 +255,13 @@ var errorcallback = function(data){
 source.get(callback, errorcallback);
 @export {*} */
 Framework.RestSource.prototype.get = function(callback, errorcallback){
-	this.getAll(callback, errorcallback);
+	this.getAll(null,callback, errorcallback);
+};
+/** @export */
+Framework.RestSource.prototype.setCount = function(count){
+	this.count = count;
+};
+/** @export */
+Framework.RestSource.prototype.getCount = function(){
+	return this.count;
 };

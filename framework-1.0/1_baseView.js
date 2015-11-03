@@ -49,10 +49,10 @@ Framework.BaseView = Backbone.View.extend({
         var success = function(html, preloadData) {
             
             data = data ? data : {};
-            data._this = this;
-            data._options = this._options;
-            this._preloadData = preloadData;
-            data._preloadData = preloadData;
+            data['_this'] = this;
+            data['_options'] = this._options;
+            this['_preloadData'] = preloadData;
+            data['_preloadData'] = preloadData;
             this.$el.html(_.template(html)(data));
             this.render();
             if (callback) {
@@ -333,7 +333,6 @@ Framework.BaseView.prototype.getChildren = function(){
 };
 /** 
 * Override this function to preload data asynchronously. Data will become available in this._preloadData after renderView() is called, but before render()
-* @export {*} 
 * @param {callback} callback function to be executed by base view upon completion
 
 * @example 
@@ -347,6 +346,6 @@ MyView = Framework.BaseView.extend({
 });
 
 */
-Framework.BaseView.prototype.preloadDataAsync = function(callback, error) {
+Framework.BaseView.prototype['preloadDataAsync'] = function(callback, error) {
     callback({});
 };

@@ -1,3 +1,11 @@
+/**
+ * 
+ * 
+ * @example
+TODO
+ * @constructor
+ * @export
+ */
 Framework.SourceView = Framework.BaseView.extend({
 	el : '#sourceView',
 	//viewSelectionPanelEl : '#viewSelectionPanelEl',

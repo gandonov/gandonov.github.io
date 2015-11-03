@@ -1,3 +1,11 @@
+/**
+ * 
+ * 
+ * @example
+TODO
+ * @constructor
+ * @export
+ */
 Framework.AbstractRecordSelectionPanel = Framework.BaseView.extend({
     events : {
       'click #clear' : 'onClear',

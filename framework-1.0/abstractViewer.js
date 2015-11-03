@@ -1,3 +1,11 @@
+ /**
+ * 
+ * 
+ * @example
+TODO
+ * @constructor
+ * @export
+ */
 Framework.AbstractViewer = Framework.AbstractConstraintPanel.extend({
     
     name: 'abstractViewer',
@@ -127,7 +135,7 @@ Framework.AbstractViewer = Framework.AbstractConstraintPanel.extend({
     },
     
     onMousedown: function(e) {
-        if (this.parent.selectionMethod == 'drag') {
+        if (this._parent && this._parent.selectionMethod == 'drag') {
             var $div = $('<div>');
             this._d = {x: e.clientX,y: e.clientY,$div: $div,ctrlKey: e.ctrlKey};
             
@@ -233,19 +241,6 @@ Framework.AbstractViewer = Framework.AbstractConstraintPanel.extend({
         this.overlay();
     },
     
-    afterShow: function(records) {
-    },
-    
-    beforeShow: function(records) {
-        this._records = records;
-    },
-    
-    beforeSetRecord: function(record) {
-    
-    },
-    setRecord: function() {
-    
-    },
     render: function() {
         // disable text selection
         if (this._parent.selectionMethod == 'drag') {
@@ -265,26 +260,8 @@ Framework.AbstractViewer = Framework.AbstractConstraintPanel.extend({
         Framework.AbstractConstraintPanel.prototype.initialize.call(this, options);
         this.columns = options.columns;
         this.parent = options.parent;
-        
-        _.bindAll(this, 'show', 'beforeShow', 'afterShow', 'setRecord', 'beforeSetRecord');
-        var _this = this;
-        this.show = _.wrap(this.show, function(e, b) {
-            _this.beforeShow(b);
-            e.call(_this, b);
-            _this.afterShow(b);
-            return _this;
-        });
-        
-        this.setRecord = _.wrap(this.setRecord, function(e, b) {
-            _this.beforeSetRecord(b);
-            e.call(_this, b);
-            return _this;
-        });
     },
     
-    afterRender: function() {
-    
-    },
     
     _afterShow: function() {
         if (this.parent.selectionMethod != 'checkbox') {
@@ -326,7 +303,7 @@ Framework.AbstractViewer = Framework.AbstractConstraintPanel.extend({
     },
     
     show: function(data) {
-        
+        this._records = records;
         this.renderView(this._afterShow.bind(this), {
             markedRecordsMap: this.parent.markedRecordsMap,
             data: data,
@@ -339,3 +316,30 @@ Framework.AbstractViewer = Framework.AbstractConstraintPanel.extend({
     
     }
 });
+
+ /**
+ * 
+ * 
+ * @example
+TODO
+ * @constructor
+ * @export
+ */
+Framework.Viewer = Framework.AbstractViewer.extend({
+    initialize: function(options) {
+        Framework.AbstractViewer.prototype.initialize.call(this, options);
+        this.listenTo(this.source, 'source:constraintChange', this.onConstraintChange);
+        this.listenTo(this.source, 'source:refresh', this.onConstraintChange);
+    },
+    
+    onConstraintChange : function(){
+        this.renderView();
+    }
+
+});
+
+
+Framework.Viewer.prototype['preloadDataAsync'] = function(callback, error) {
+    this.onLoading();
+    this.source.get(callback);
+};

@@ -18,10 +18,6 @@ Framework.AbstractConstraintPanel = Framework.BaseView.extend({
         this.source.subscribe(this);
     },
 
-    onConstraintChange: function() {
-        this.trigger('constraintPanel:changed', this);
-    },
-
     destroy: function() {
         this.source.unsubscribe(this);
         Framework.BaseView.prototype.destroy.call(this);
@@ -54,4 +50,11 @@ Framework.AbstractConstraintPanel.prototype['getConstraintModel'] =  function() 
 */
 Framework.AbstractConstraintPanel.prototype.getSource =  function() {
     return this.source;
+};
+
+/**
+* @export {*} 
+*/
+Framework.AbstractConstraintPanel.prototype.onConstraintChange =  function() {
+    this.trigger('constraintPanel:changed', this);
 };
