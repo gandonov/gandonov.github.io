@@ -38,6 +38,7 @@ Framework.RestSource.prototype.ConstraintModelPrototype = Framework.AbstractCons
 Framework.RestSource.prototype.get = function(callback, errorcallback){};
 Framework.RestSource.prototype.setCount = function(count){};
 Framework.RestSource.prototype.getCount = function(){};
+Framework.RestSource.prototype.parseAsync = function(data,callback){};
 
 Framework.PaginationPanel = function(){};
 Framework.ScrollPaginationPanel = function(){};

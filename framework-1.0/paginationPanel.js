@@ -1,4 +1,5 @@
  /**
+ * @extends {Framework.AbstractConstraintPanel}
  * @constructor
  * @export
  */
@@ -39,7 +40,9 @@ Framework.PaginationPanel = Framework.AbstractConstraintPanel.extend({
 			this.onConstraintChange();
 		}					
 	},
-
+	/**
+	 * @override
+	 */
 	getConstraintModel : function(){
 		this.constraintModel = new this.source['ConstraintModelPrototype']();
 		this.constraintModel.setPageSize(this.pagerOptions.items_per_page);
@@ -142,13 +145,14 @@ Framework.PaginationPanel = Framework.AbstractConstraintPanel.extend({
 
 
 /**
+ * @extends {Framework.PaginationPanel}
  * @constructor
  * @export
  */
 Framework.ScrollPaginationPanel = Framework.PaginationPanel.extend({
 
 	events : {
-		'click #more' : '_more'
+		'click #more' : 'onMore'
 	},
 	_checkVisible : function( elm ) {
 		var vpH = $(window).height(), // Viewport Height
@@ -169,12 +173,6 @@ Framework.ScrollPaginationPanel = Framework.PaginationPanel.extend({
        // noop
     },
 
-	getConstraintModel : function(){
-		this.constraintModel = new this.source['ConstraintModelPrototype']();
-		this.constraintModel.setPageSize(this.PAGE_SIZE);
-		this.constraintModel.setPageNumber(this.nextPage);
-        return this.constraintModel;
-    },
     _update : function(){
 			this.source.getAll(null, function(data){
 				if(this.source.getCount() <= (this.nextPage+1) * this.PAGE_SIZE ){
@@ -216,3 +214,15 @@ Framework.ScrollPaginationPanel = Framework.PaginationPanel.extend({
 	nextPage : 0
 
 });
+
+Framework.ScrollPaginationPanel.prototype['getConstraintModel'] = function(){
+	this.constraintModel = new this.source['ConstraintModelPrototype']();
+	this.constraintModel.setPageSize(this.PAGE_SIZE);
+	this.constraintModel.setPageNumber(this.nextPage);
+	return this.constraintModel;
+}
+
+
+Framework.ScrollPaginationPanel.prototype['onMore'] = function(){
+	this._more();
+};

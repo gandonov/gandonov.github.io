@@ -36,7 +36,7 @@ MyConstraintPanel = Framework.AbstractConstraintPanel.extend({
         return constraintModel;
     }
 });
-
+* @lends {Framework.AbstractConstraintPanel.prototype}
 * @returns {Object} returns ConstraintModel
 */
 Framework.AbstractConstraintPanel.prototype['getConstraintModel'] =  function() {

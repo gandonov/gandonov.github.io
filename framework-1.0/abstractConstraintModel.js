@@ -69,16 +69,16 @@ Framework.AbstractConstraintModel.prototype.intersection = function(other) {
         result.setSort(other.getSort().name, other.getSort().order);
     }
     if (this._psdirty) {
-        result.setPageSize(this.getPageSize());
+        result.setPageSize(this['getPageSize']());
     }
     if (this._pndirty) {
-        result.setPageNumber(this.getPageNumber());
+        result.setPageNumber(this['getPageNumber']());
     }
     if (other._psdirty) {
-        result.setPageSize(other.getPageSize());
+        result.setPageSize(other['getPageSize']());
     }
     if (other._pndirty) {
-        result.setPageNumber(other.getPageNumber());
+        result.setPageNumber(other['getPageNumber']());
     }
     if (other.getSort()) {
         result.setSort(other.getSort());
@@ -110,15 +110,10 @@ Framework.AbstractConstraintModel.prototype['getUrl'] = function() {
     return "override me";
 }
 
-/**
-* @export
-*/
-Framework.AbstractConstraintModel.prototype.getPageNumber = function() {
+Framework.AbstractConstraintModel.prototype['getPageNumber'] = function() {
     return this.pageNumber;
 };
-/**
-* @export
-*/
-Framework.AbstractConstraintModel.prototype.getPageSize = function() {
+
+Framework.AbstractConstraintModel.prototype['getPageSize'] = function() {
     return this.pageSize;
 };

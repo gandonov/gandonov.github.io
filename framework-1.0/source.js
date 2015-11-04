@@ -1,4 +1,4 @@
-/**
+ /**
  * RestSource. This is a class that will handle interaction with rest points that change the output depending on constraints passed in as parameters.<br>
    RestSource handles caching, queuing of callbacks, aborts and transfers requests as they come in.<br>
    It is assumed that each declared source will have one current state. That means that if you have two views that render data from this source and some constraintPanels,
@@ -27,105 +27,105 @@ source.get(function(data){
  * @export
  */
 Framework.RestSource = Backbone.View.extend({
-    dataType : "json",
-    url : null,
-
-
-
-    initialize : function(){
-    	this.constraintModel = new this['ConstraintModelPrototype']();
-    	this.constraintPanels = {};
-    	this.callbackQueues = {};
-    	this.cache = {};
-    	this.countcache = {};
-    	this.preParseCache = {};
-    	this._loading = {};
-    	this.noCache = false;
-    	if(!this.url){
-    		throw "this.url must be defined";
-    	}
+    dataType: "json",
+    url: null,
+    
+    
+    
+    initialize: function() {
+        this.constraintModel = new this['ConstraintModelPrototype']();
+        this.constraintPanels = {};
+        this.callbackQueues = {};
+        this.cache = {};
+        this.countcache = {};
+        this.preParseCache = {};
+        this._loading = {};
+        this.noCache = false;
+        if (!this.url) {
+            throw "this.url must be defined";
+        }
     },
-    subscribe : function(constraintPanel){
+    subscribe: function(constraintPanel) {
         this.constraintPanels[constraintPanel.cid] = constraintPanel;
-        if(constraintPanel instanceof Framework.ScrollPaginationPanel){
-        	this._contineous = true;
+        if (constraintPanel instanceof Framework.ScrollPaginationPanel) {
+            this._contineous = true;
         }
         this.listenTo(constraintPanel, 'constraintPanel:changed', this.onConstraintPanelChanged);
     },
-	unsubscribe : function(constraintPanel){
-		delete this.constraintPanels[constraintPanel.cid];
-		// I think that's all there is to it.
-	},
-	putConstraintModel : function(constraintModel){
-		this.constraintModel = constraintModel;
-		for(var i in this.constraintPanels){
-			var cp = this.constraintPanels[i];
-			cp.putConstraintModel(this.constraintModel);
-		}
-	},
-	_getConstaintModelFromPanels : function(resetPagers){
-        var constraintModel = new this['ConstraintModelPrototype']();
-        for(var i in this.constraintPanels){
+    unsubscribe: function(constraintPanel) {
+        delete this.constraintPanels[constraintPanel.cid];
+    // I think that's all there is to it.
+    },
+    putConstraintModel: function(constraintModel) {
+        this.constraintModel = constraintModel;
+        for (var i in this.constraintPanels) {
             var cp = this.constraintPanels[i];
-            if(resetPagers && cp instanceof Framework.PaginationPanel){
-				this._cwrapperdata = null;
+            cp.putConstraintModel(this.constraintModel);
+        }
+    },
+    _getConstaintModelFromPanels: function(resetPagers) {
+        var constraintModel = new this['ConstraintModelPrototype']();
+        for (var i in this.constraintPanels) {
+            var cp = this.constraintPanels[i];
+            if (resetPagers && cp instanceof Framework.PaginationPanel) {
+                this._cwrapperdata = null;
                 cp.reset();
             }
-           constraintModel = constraintModel.intersection(cp['getConstraintModel']());
-        }    
-        return constraintModel;		
-	},
-    onConstraintPanelChanged : function(constraintPanel){
+            constraintModel = constraintModel.intersection(cp['getConstraintModel']());
+        }
+        return constraintModel;
+    },
+    onConstraintPanelChanged: function(constraintPanel) {
         var resetPagers = !(constraintPanel instanceof Framework.PaginationPanel);
-        if(resetPagers){
-        	this._cwrapperdata = null;
+        if (resetPagers) {
+            this._cwrapperdata = null;
         }
         var constraintModel = this._getConstaintModelFromPanels(resetPagers);
-        this.setContstraints(constraintModel,constraintPanel);
-    },
-
-    clearCache : function(){
-    	this.cache = {};
+        this.setContstraints(constraintModel, constraintPanel);
     },
     
+    clearCache: function() {
+        this.cache = {};
+    },
+
 
     // setting constraint will make getAll doPost with payload = to constraintModel
-    setContstraints : function(constraintModel, constraintPanel)
+    setContstraints: function(constraintModel, constraintPanel) 
     {
         this.setConstraintModel(constraintModel);
         this.trigger('source:constraintChange', constraintPanel);
     },
-
-    setConstraintModel : function(constraintModel){
-        this.constraintModel = constraintModel;
-        if(this['ConstraintModelPrototype'].prototype.type == "POST"){
-        	//TODO, there is no getBody yet
-            this.payload = JSON.stringify(constraintModel.getBody());
-        }else {
-            this.constraintUrl = this.constraintModel['getUrl']();
-        }    	
-    },
-
-    getCount : function(){
-    	return this.count;
-    },
-
     
-    getAll : function(path,callback, errorcallback){
+    setConstraintModel: function(constraintModel) {
+        this.constraintModel = constraintModel;
+        if (this['ConstraintModelPrototype'].prototype.type == "POST") {
+            //TODO, there is no getBody yet
+            this.payload = JSON.stringify(constraintModel.getBody());
+        } else {
+            this.constraintUrl = this.constraintModel['getUrl']();
+        }
+    },
+    
+    getCount: function() {
+        return this.count;
+    },
+    
+    
+    getAll: function(path, callback, errorcallback) {
         var constraintUrl = "";
-		this.constraintModel = this._getConstaintModelFromPanels();
-        if(this.constraintModel && this['ConstraintModelPrototype'].prototype.type == "GET"){
+        this.constraintModel = this._getConstaintModelFromPanels();
+        if (this.constraintModel && this['ConstraintModelPrototype'].prototype.type == "GET") {
             constraintUrl = "?" + this.constraintModel['getUrl']();
         }
-
+        
         var url = this.url + constraintUrl;
-        if(this.countcache[url]){
-        	this.count = this.countcache[url];
+        if (this.countcache[url]) {
+            this.count = this.countcache[url];
         }
-        if(this.cache[url] == null || (this._lastPayload && this._lastPayload != this.payload)){
-            if(this._loading[url]){
-                if(!this.callbackQueues[url]){
-                   this.callbackQueues[url] = []; 
+        if (this.cache[url] == null || (this._lastPayload && this._lastPayload != this.payload)) {
+            if (this._loading[url]) {
+                if (!this.callbackQueues[url]) {
+                    this.callbackQueues[url] = [];
                 }
                 this.callbackQueues[url].push(callback);
                 return;
@@ -133,103 +133,88 @@ Framework.RestSource = Backbone.View.extend({
             this._loading[url] = true;
             this.callbackQueues[url] = []; // override or create new queue
             this.callbackQueues[url].push(callback); // add this callback to the queue
-        	if(this._xhr){
-        		if(this._xhr.url){
-        			this.callbackQueues[url] = this.callbackQueues[this._xhr.url].concat(this.callbackQueues[url]);
-        			delete this.callbackQueues[this._xhr.url];
-        		}
-        		this._xhr.abort();
-        	}
+            if (this._xhr) {
+                if (this._xhr.url) {
+                    this.callbackQueues[url] = this.callbackQueues[this._xhr.url].concat(this.callbackQueues[url]);
+                    delete this.callbackQueues[this._xhr.url];
+                }
+                this._xhr.abort();
+            }
             this._xhr = $.ajax({
-                    headers: {
-                        Accept: "application/json"
-                    },
-                    cache: false,
-                    contentType: "application/json",
-                    type: this.constraintType,
-                    processData : false,
-                    url: url ,	
-			        dataType: this.dataType,
-			        data:  this.payload,		
-                    success: function(data) {
-						if(!this.noCache){
-							this.preParseCache[url] = data;
-						}
-                    	if(this.setCount){
-                    		this.setCount(data);
-                    	}
-                        if(this['parse__' + this.url]){
-                        	this['parse__' + this.url](data);
-                        }else
-                        if(this.parse){
-                            data = this.parse(data);
-                        }
-                        var postParse = function(data){
-                        	this._loading[url] = false;
-                        	if(this._contineous){
-                        		if(!this._cwrapperdata){
-                        			this._cwrapperdata = [];
-                        		}
-                        		this._cwrapperdata  = this._cwrapperdata.concat(data);
-                        		data = this._cwrapperdata;
-                        	}
-
-                            this._lastPayload = this.payload;
-
-                            if(!this.noCache){
-								this.cache[url] = data;
-								this.countcache[url] = this.count;
-							}
-							
-                            for(var i = 0, l =  this.callbackQueues[url].length; i < l; i++){
-                                 this.callbackQueues[url][i](data);
+                headers: {
+                    Accept: "application/json"
+                },
+                cache: false,
+                contentType: "application/json",
+                type: this.constraintType,
+                processData: false,
+                url: url,
+                dataType: this.dataType,
+                data: this.payload,
+                success: function(data) {
+                    if (!this.noCache) {
+                        this.preParseCache[url] = data;
+                    }
+                    var postParse = function(data) {
+                        this._loading[url] = false;
+                        if (this._contineous) {
+                            if (!this._cwrapperdata) {
+                                this._cwrapperdata = [];
                             }
-                            this.callbackQueues[url] = [];
-                            
-                        }.bind(this);
-                        if(this['parseAsync__' + this.url]){
-                        	this['parse__' + this.url](data);
-                        }else if(this['parseAsync']){
-                            this['parseAsync'](data, function(result){
-                                postParse(result);
-                            }.bind(this));
-                        }else {
-                            postParse(data);
+                            this._cwrapperdata = this._cwrapperdata.concat(data);
+                            data = this._cwrapperdata;
                         }
                         
-                    }.bind(this),
-                    error : function(error){
-                    	this._loading[url] = false;
-                        if(error.statusText != "abort"){
-							 if(errorcallback){
-								errorcallback(error);
-							}else {
-								console.log('error:');
-								console.log(error);
-							}                      	
+                        this._lastPayload = this.payload;
+                        
+                        if (!this.noCache) {
+                            this.cache[url] = data;
+                            this.countcache[url] = this.count;
                         }
-
-                    }.bind(this)
+                        
+                        for (var i = 0, l = this.callbackQueues[url].length; i < l; i++) {
+                            this.callbackQueues[url][i](data);
+                        }
+                        this.callbackQueues[url] = [];
+                    
+                    }.bind(this);
+                    this['parseAsync'](data, function(result) {
+                        postParse(result);
+                    }.bind(this));
+                
+                }.bind(this),
+                error: function(error) {
+                    this._loading[url] = false;
+                    if (error.statusText != "abort") {
+                        if (errorcallback) {
+                            errorcallback(error);
+                        } else {
+                            console.log('error:');
+                            console.log(error);
+                        }
+                    }
+                
+                }.bind(this)
             });
             this._xhr.url = url;
-
-        }else {
+        
+        } else {
             callback(this.cache[url]);
         }
-
+    
     },
-    destroy : function(){
-    	console.log('destroying source');
+    destroy: function() {
+        console.log('destroying source');
     },
-    refresh : function(){
+    refresh: function() {
         this.cache = {};
         this.trigger('source:refresh');
     }
 
 });
 /** @export */
-Framework.RestSource.prototype.getConstraintModel = function(){
-	return this.constraintModel;
+Framework.RestSource.prototype.getConstraintModel = function() {
+    return this.constraintModel;
 };
 
 
@@ -254,14 +239,18 @@ var errorcallback = function(data){
 }
 source.get(callback, errorcallback);
 @export {*} */
-Framework.RestSource.prototype.get = function(callback, errorcallback){
-	this.getAll(null,callback, errorcallback);
+Framework.RestSource.prototype.get = function(callback, errorcallback) {
+    this.getAll(null, callback, errorcallback);
 };
 /** @export */
-Framework.RestSource.prototype.setCount = function(count){
-	this.count = count;
+Framework.RestSource.prototype.setCount = function(count) {
+    this.count = count;
 };
 /** @export */
-Framework.RestSource.prototype.getCount = function(){
-	return this.count;
+Framework.RestSource.prototype.getCount = function() {
+    return this.count;
+};
+
+Framework.RestSource.prototype['parseAsync'] = function(data, callback) {
+    callback(data);
 };
