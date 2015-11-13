@@ -8,9 +8,10 @@
 Framework.BaseView = Backbone.View.extend({
     /** @lends Framework.BaseView.prototype */
     template: null,
-    
     isRendered: false,
     
+    snippets: {},
+
     /** @private */
     _killChildren: function() {
         for (var i in this.viewsSack) {
@@ -22,7 +23,9 @@ Framework.BaseView = Backbone.View.extend({
         this.viewsSack = {};
         options || (options = {});
         this._options = options;
-        
+        if (this.onHashChange) {
+            $(window).on('hashchange.' + this.cid, this.onHashChange.bind(this));
+        }
         if (this.parameterSchema) {
             for (var i in this.parameterSchema) {
                 this[this.parameterSchema[i]] = this.getParameter(i);
@@ -219,6 +222,9 @@ Framework.BaseView.prototype.setParameter = function(parameter, value) {
 Framework.BaseView.prototype.destroy = function() {
     // recursive destruction of all chidlren.
     this._killChildren();
+    if (this.onHashChange) {
+        $(window).off('hashchange.' + this.cid);
+    }
     this.undelegateEvents();
     if (this._parent && this._parent.viewsSack[this.cid]) {
         delete this._parent.viewsSack[this.cid];
@@ -247,34 +253,76 @@ var myView = new MyView();
 myView.setElement($('#myElement')).renderView();
 
 @export {*} */
-
 Framework.BaseView.prototype.renderView = function(callback, data) {
-    if (this.loadingMessage) {
-        this.$el.html(this.loadingMessage);
-        this._renderView(callback, data);
-    } else if (this['loadingTemplate']) {
-        if (Framework.templateCache[this['loadingTemplate']]) {
-            this.$el.html(Framework.templateCache[this['loadingTemplate']]);
+    this._loadSnippets(function() {
+        if (this.loadingMessage) {
+            this.$el.html(this.loadingMessage);
             this._renderView(callback, data);
+        } else if (this['loadingTemplate']) {
+            if (Framework.templateCache[this['loadingTemplate']]) {
+                this.$el.html(Framework.templateCache[this['loadingTemplate']]);
+                this._renderView(callback, data);
+            } else {
+                this.$el.html("");
+                $.ajax({
+                    url: this['loadingTemplate'],
+                    method: 'GET',
+                    success: function(response) {
+                        Framework.templateCache[this['loadingTemplate']] = response;
+                        this.renderView(callback, data);
+                    }.bind(this),
+                    error: function(response) {
+                        Framework.templateCache[this['loadingTemplate']] = 'Loading Template [' + this['loadingTemplate'] + '] failed to load.';
+                        this.renderView(callback, data);
+                    }.bind(this)
+                });
+            }
         } else {
-            this.$el.html("");
+            this._renderView(callback, data);
+        }
+    }.bind(this));
+};
+Framework.BaseView.prototype.snippet = function(name,data){
+    var s = this.snippets[name];
+    if(!s){
+        throw "error: snippet " + name + " is not declared in the prototype.";
+    }else {
+        return _.template(Framework.templateCache[s])(data);
+    }
+};
+Framework.BaseView.prototype._loadSnippets = function(callback) {
+    var count = _.keys(this.snippets).length;
+    if (count == 0) {
+        callback();
+        return;
+    }
+    var cb = function() {
+        count--;
+        if (count <= 0) {
+            callback();
+        }
+    };
+    
+    for (var i in this.snippets) {
+        var s = this.snippets[i];
+        if (Framework.templateCache[s]) {
+            cb();
+        } else {
             $.ajax({
-                url: this['loadingTemplate'],
+                url: s,
                 method: 'GET',
                 success: function(response) {
-                    Framework.templateCache[this['loadingTemplate']] = response;
-                    this.renderView(callback, data);
+                    Framework.templateCache[s] = response;
+                    cb();
                 }.bind(this),
                 error: function(response) {
-                    Framework.templateCache[this['loadingTemplate']] = 'Loading Template [' + this['loadingTemplate'] + '] failed to load.';
-                    this.renderView(callback, data);
+                    Framework.templateCache[s] = 'Loading Template [' + s + '] failed to load.';
+                    cb();
                 }.bind(this)
             });
         }
-    } else {
-        this._renderView(callback, data);
     }
-};
+}, 
 
 /** @export {*}
  *  @deprecated since version 1.0 use instantiate instead.
@@ -312,7 +360,7 @@ MyView = Framework.BaseView.extend({
 });
 @export {*} */
 Framework.BaseView.prototype.instantiate = function(Constructor, options) {
-    options = options ? options : {}; 
+    options = options ? options : {};
     var view = new Constructor(options);
     this.viewsSack[view.cid] = view;
     view._parent = this;
@@ -322,7 +370,7 @@ Framework.BaseView.prototype.instantiate = function(Constructor, options) {
 /** @export {*} 
 * @returns {Object} returns parent view
 */
-Framework.BaseView.prototype.getParent = function(){
+Framework.BaseView.prototype.getParent = function() {
     return this._parent;
 }
 
@@ -330,7 +378,7 @@ Framework.BaseView.prototype.getParent = function(){
 /** @export {*} 
 * @returns {Object|Array} returns all instantiated children views within this view
 */
-Framework.BaseView.prototype.getChildren = function(){
+Framework.BaseView.prototype.getChildren = function() {
     return this.viewsSack;
 };
 /** 

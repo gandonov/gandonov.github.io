@@ -165,7 +165,7 @@ Framework.ScrollPaginationPanel = Framework.PaginationPanel.extend({
 
 	initialize : function(options){
 		Framework.AbstractConstraintPanel.prototype.initialize.call(this, options);
-		this._timer = setInterval(this._onVisible.bind(this), 500)
+		this._timer = setInterval(this._onVisible.bind(this), 500);
 
 	},
 

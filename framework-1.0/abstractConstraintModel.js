@@ -18,12 +18,13 @@ source.get(function(data){
  * @export
  */
 Framework.AbstractConstraintModel = Backbone.View.extend({
-    type : "GET",
-
+    type: "GET",
+    
     initialize: function() {
         this.constraints = {};
-    },
 
+    },
+    
     setSort: function(name, order) {
         if (!this.sort) {
             this.sort = {};
@@ -33,13 +34,6 @@ Framework.AbstractConstraintModel = Backbone.View.extend({
     },
     getSort: function() {
         return this.sort;
-    },
-    setPageNumber: function(page) {
-        this.pageNumber = page + 1;
-    },
-    
-    setPageSize: function(page) {
-        this.pageSize = page;
     }
 });
 /**
@@ -47,14 +41,14 @@ Framework.AbstractConstraintModel = Backbone.View.extend({
 * @export
 */
 Framework.PostConstraintModel = Framework.AbstractConstraintModel.extend({
-	type: 'POST'
+    type: 'POST'
 });
 
 /**
 * @export
 */
-Framework.PostConstraintModel.prototype.getBody = function(){
-	throw "must override getBody";
+Framework.PostConstraintModel.prototype.getBody = function() {
+    throw "must override getBody";
 };
 
 /**
@@ -117,3 +111,22 @@ Framework.AbstractConstraintModel.prototype['getPageNumber'] = function() {
 Framework.AbstractConstraintModel.prototype['getPageSize'] = function() {
     return this.pageSize;
 };
+
+Framework.AbstractConstraintModel.prototype['setPageNumber'] = function(page) {
+    this.pageNumber = page;
+    this._pndirty = true;
+};
+
+Framework.AbstractConstraintModel.prototype['setPageSize'] = function(page) {
+    this.pageSize = page;
+    this._psdirty = true;
+};
+
+/**
+* @export
+*/
+Framework.AbstractConstraintModel.prototype._pndirty = false;
+/**
+* @export
+*/
+Framework.AbstractConstraintModel.prototype._psdirty = false;
