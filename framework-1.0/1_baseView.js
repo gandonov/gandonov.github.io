@@ -18,13 +18,60 @@ Framework.BaseView = Backbone.View.extend({
             this.viewsSack[i].destroy();
         }
     },
+    _getParameters : function(url){
+        url = url.split('?');
+        if(url.length > 1){
+            url = url[1];
+        }else {
+            url = url[0];
+        }
+        var url = url.split('#');
+        if(url.length > 1){
+            url = url[1];
+        }else {
+            url = url[0];
+        }
+        url = url.split('&');
+        var map = {};
+        for(var i = 0, l = url.length; i < l;i++){
+            var tokens = url[i].split('=');
+            map[tokens[0]] = tokens[1];
+        }
+        return map;
+
+    },
+    _diff : function(oldMap, newMap){
+        var diff = {};
+        for(var i in newMap){
+            if(!oldMap[i] || oldMap[i] != newMap[i]){
+                diff[i] = newMap[i];
+            }
+        }
+        // if something disappeared
+        for(var i in oldMap){
+            if(!newMap[i]){
+                diff[i] = null;
+            }
+        }
+        return diff;
+    },
+
     /** @private */
     initialize: function(options) {
         this.viewsSack = {};
         options || (options = {});
         this._options = options;
         if (this.onHashChange) {
-            $(window).on('hashchange.' + this.cid, this.onHashChange.bind(this));
+            $(window).on('hashchange.' + this.cid, function(e){
+                var originalEvent = e.originalEvent;
+                var newURL = originalEvent.newURL;
+                var oldURL = originalEvent.oldURL;
+                var newParameters = this._getParameters(newURL);
+                var oldParameters = this._getParameters(oldURL);
+                var diff = this._diff(oldParameters, newParameters);
+               // console.log(diff);
+                this.onHashChange(diff);
+            }.bind(this));
         }
         if (this.parameterSchema) {
             for (var i in this.parameterSchema) {

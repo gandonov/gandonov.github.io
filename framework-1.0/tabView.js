@@ -35,22 +35,14 @@ Framework.TabView = Framework.BaseView.extend({
         Framework.BaseView.prototype.initialize.call(this, options);
         this._tabMap = {};
     },
-    
-    events: {
-        'click .fw-tab-toggle': 'otc'
-    },
-    onHashChange: function(e) {
-        if (this.persistBy) {
-            var $current = this.$('.fw-tab-toggle.active');
-            var currentId = null;
-            if ($current && $current.length > 0) {
-                
-                var hashId = this.getParameter(this.persistBy);
-                if (hashId != currentId) {
-                    this._change(hashId);
-                }
-                currentId = $current[0].id;
-            }
+    events: function(){
+        var _events = {};
+        _events['click .fw-tab-toggle[data-cid="' + this.cid + '"]'] = 'otc';
+        return _events;
+    },    
+    onHashChange: function(diff) {
+        if (this.persistBy && diff[this.persistBy]) {
+            this._change(diff[this.persistBy]);
         }
     
     },
@@ -64,16 +56,16 @@ Framework.TabView = Framework.BaseView.extend({
         this.trigger('tab:' + id);
     },
     _change: function(id) {
-        var $el = this.$('.fw-tab-toggle#' + id);
+        var $el = this.$('.fw-tab-toggle[data-cid="' + this.cid + '"]#' + id);
         var constructor = $el.data('viewconstructor');
-        var $div = this.$('.fw-tab-content[data-id="' + id + '"]');
-        var $for = this.$('.fw-tab-content[data-for="' + id + '"]');
+        var $div = this.$('.fw-tab-content[data-cid="' + this.cid + '"][data-id="' + id + '"]');
+        var $for = this.$('.fw-tab-content[data-cid="' + this.cid + '"][data-for="' + id + '"]');
         if ($div.length == 0) {
-            throw "corresponding div does not exist";
+            throw "corresponding div does not exist for id " + id;
         }
-        this.$('.fw-tab-toggle').removeClass('active');
+        this.$('.fw-tab-toggle[data-cid="' + this.cid + '"]').removeClass('active');
         $el.addClass('active');
-        this.$('.fw-tab-content').hide();
+        this.$('.fw-tab-content[data-cid="' + this.cid + '"]').hide();
         $div.show();
         $for.show();
         if (!this._tabMap[id]) {
@@ -92,11 +84,15 @@ Framework.TabView = Framework.BaseView.extend({
     
     
     render: function() {
-        this.$('.fw-tab-content').hide();
+        this.$('.fw-tab-content').attr('data-cid', this.cid);
+        this.$('.fw-tab-toggle').attr('data-cid', this.cid);
+        
+        
+        this.$('.fw-tab-content[data-cid="' + this.cid + '"]').hide();
         if (this.persistBy && this.getParameter(this.persistBy)) {
             this.setTabById(this.getParameter(this.persistBy));
         } else {
-            this.$('.fw-tab-toggle.active').click();
+            this.$('.fw-tab-toggle[data-cid="' + this.cid + '"].active').click();
             if (this._options.openTab) {
                 this.setTabById(this._options.openTab);
             }
@@ -107,6 +103,7 @@ Framework.TabView = Framework.BaseView.extend({
 
 Framework.TabView.prototype['otc'] = function(e) {
     this._tabChange(e);
+    e.stopImmediatePropagation();e.preventDefault();e.stopPropagation();
 };
 
 /** @export {} */
