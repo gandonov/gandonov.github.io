@@ -35,7 +35,7 @@ K6SortByConstraintPanel = Framework.AbstractConstraintPanel.extend({
 
 
 
-K6ConstraintModel = Framework.AbstractConstraintModel.extend({
+GPOConstraintModel = Framework.AbstractConstraintModel.extend({
 
 
     initialize : function(options) {
@@ -79,7 +79,7 @@ K6ConstraintModel = Framework.AbstractConstraintModel.extend({
 
 
     intersection : function(other){
-        var result = new K6ConstraintModel();
+        var result = new GPOConstraintModel();
         if(this.getSort()){
             result.setSort(this.getSort());
         }
@@ -246,7 +246,7 @@ K6SourceView = Framework.SourceView.extend({
     columnHeaders : {},
 
     K6Source : Framework.RestSource.extend({
-        ConstraintModelPrototype : K6ConstraintModel,
+        ConstraintModelPrototype : GPOConstraintModel,
         constraintType : 'GET',
         parseAsync : function(data, callback){
             if(data && data.page){

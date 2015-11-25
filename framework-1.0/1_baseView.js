@@ -7,71 +7,76 @@
  */
 Framework.BaseView = Backbone.View.extend({
     /** @lends Framework.BaseView.prototype */
-    template: null,
+    template: null ,
     isRendered: false,
     
     snippets: {},
 
-    /** @private */
     _killChildren: function() {
         for (var i in this.viewsSack) {
             this.viewsSack[i].destroy();
         }
     },
-    _getParameters : function(url){
+    _getParameters: function(url) {
         url = url.split('?');
-        if(url.length > 1){
+        if (url.length > 1) {
             url = url[1];
-        }else {
+        } else {
             url = url[0];
         }
         var url = url.split('#');
-        if(url.length > 1){
+        if (url.length > 1) {
             url = url[1];
-        }else {
+        } else {
             url = url[0];
         }
         url = url.split('&');
         var map = {};
-        for(var i = 0, l = url.length; i < l;i++){
+        for (var i = 0, l = url.length; i < l; i++) {
             var tokens = url[i].split('=');
             map[tokens[0]] = tokens[1];
         }
         return map;
-
+    
     },
-    _diff : function(oldMap, newMap){
+    _diff: function(oldMap, newMap) {
         var diff = {};
-        for(var i in newMap){
-            if(!oldMap[i] || oldMap[i] != newMap[i]){
-                diff[i] = newMap[i];
+        for (var i in newMap) {
+            if (!oldMap[i] || oldMap[i] != newMap[i]) {
+                try{
+                    diff[i] = decodeURI(newMap[i]);
+                }catch(e){
+                    diff[i] = newMap[i];
+                }
+                
             }
         }
         // if something disappeared
-        for(var i in oldMap){
-            if(!newMap[i]){
-                diff[i] = null;
+        for (var i in oldMap) {
+            if (!newMap[i]) {
+                diff[i] = null ;
             }
         }
         return diff;
     },
-
+    
     /** @private */
     initialize: function(options) {
         this.viewsSack = {};
         options || (options = {});
         this._options = options;
         if (this.onHashChange) {
-            $(window).on('hashchange.' + this.cid, function(e){
+            $(window).on('hashchange.' + this.cid, function(e) {
                 var originalEvent = e.originalEvent;
                 var newURL = originalEvent.newURL;
                 var oldURL = originalEvent.oldURL;
                 var newParameters = this._getParameters(newURL);
                 var oldParameters = this._getParameters(oldURL);
                 var diff = this._diff(oldParameters, newParameters);
-               // console.log(diff);
+                // console.log(diff);
                 this.onHashChange(diff);
-            }.bind(this));
+            }
+            .bind(this));
         }
         if (this.parameterSchema) {
             for (var i in this.parameterSchema) {
@@ -87,12 +92,14 @@ Framework.BaseView = Backbone.View.extend({
             render(b);
             _this.afterRender();
             return _this;
-        });
+        }
+        );
         this.destroy = _.wrap(this.destroy, function(destroy, b, c, d) {
             _this._beforeDestroy();
             destroy(b, c, d);
             return _this;
-        });
+        }
+        );
     },
     /** @private */
     _renderView: function(callback, data) {
@@ -108,14 +115,17 @@ Framework.BaseView = Backbone.View.extend({
             if (callback) {
                 callback();
             }
-        }.bind(this);
-        if (this.template != null) {
+        }
+        .bind(this);
+        if (this.template != null ) {
             if (Framework.templateCache[this.template]) {
                 this['preloadDataAsync'](function(data) {
                     success(Framework.templateCache[this.template], data);
-                }, function() {
+                }
+                , function() {
                     success("ERROR in preloadDataAsync", {});
-                });
+                }
+                );
             
             } else {
                 var ajaxSuccess = function(response) {
@@ -124,26 +134,32 @@ Framework.BaseView = Backbone.View.extend({
                     }
                     this['preloadDataAsync'](function(data) {
                         success(response, data);
-                    }, function() {
+                    }
+                    , function() {
                         success("ERROR in preloadDataAsync", {});
-                    });
-                }.bind(this);
+                    }
+                    );
+                }
+                .bind(this);
                 $.ajax({
                     url: this.template,
                     method: 'GET',
                     success: ajaxSuccess,
                     error: function(response) {
                         this.$el.html('template [' + this.template + '] failed to load.');
-                    }.bind(this)
+                    }
+                    .bind(this)
                 });
             }
         } else {
             
             this['preloadDataAsync'](function(data) {
                 this.render();
-            }.bind(this), function() {
+            }
+            .bind(this), function() {
                 this.$el.html("ERROR in preloadDataAsync");
-            }.bind(this));
+            }
+            .bind(this));
             
             if (callback) {
                 callback();
@@ -199,28 +215,35 @@ Framework.BaseView.prototype.getJSON = function(url, success, error, options) {
         error: error
     });
     this._xhrs.push(xhr);
-};
+}
+;
 
 
 /** @export {string} */
-Framework.BaseView.prototype.loadingTemplate = null;
+Framework.BaseView.prototype.loadingTemplate = null ;
 
 /** @export {function(string):string} */
 Framework.BaseView.prototype.getParameter = function(parameter) {
     var hash = location.hash;
     if (hash.length == 0) {
-        return null;
+        return null ;
     }
     ;
     var params = hash.substr(1).split('&');
     for (var i = 0, l = params.length; i < l; i++) {
         var tokens = params[i].split('=');
         if (tokens[0] == parameter) {
-            return tokens[1];
+            try {
+                return decodeURI(tokens[1]);
+            } catch (e) {
+                return tokens[1];
+            }
+        
         }
     }
-    return null;
-};
+    return null ;
+}
+;
 
 /**
  * You can Use this method to set Url parameter
@@ -230,6 +253,12 @@ Framework.BaseView.prototype.getParameter = function(parameter) {
 */
 Framework.BaseView.prototype.setParameter = function(parameter, value) {
     var hash = location.hash;
+    location.hash = this._getNewHash(hash, parameter, value);
+}
+;
+
+Framework.BaseView.prototype._getNewHash = function(hash, parameter, value) {
+    value = encodeURI(value);
     if (hash.length == 0) {
         hash = '#';
     }
@@ -259,8 +288,9 @@ Framework.BaseView.prototype.setParameter = function(parameter, value) {
             noEmpty.push(params[i]);
         }
     }
-    location.hash = '#' + noEmpty.join('&');
-};
+    var result = '#' + noEmpty.join('&');
+    return result;
+}
 /** Destroys view. Removes all handles from parent, removes all rendered DOM elements (including this.$el)
 * If there any xhr in progress created by this.getJSON, they will be aborted. Backbone events are undelegated.
 * @todo Option not to remove parent div
@@ -284,7 +314,8 @@ Framework.BaseView.prototype.destroy = function() {
         this.remove();
     }
     this.trigger('destroy', this);
-};
+}
+;
 
 /** 
 * Renders View into desired DOM element (provided it is set prior with backbone's setElement(el) )
@@ -305,7 +336,11 @@ Framework.BaseView.prototype.renderView = function(callback, data) {
         if (this.loadingMessage) {
             this.$el.html(this.loadingMessage);
             this._renderView(callback, data);
-        } else if (this['loadingTemplate']) {
+        }else if(this['overlayClass']){
+            this.$('.'+ this['overlayClass']).remove();
+            this.$el.append('<div class="' + this['overlayClass'] + '"></div>'); 
+            this._renderView(callback, data); 
+        }else if (this['loadingTemplate']) {
             if (Framework.templateCache[this['loadingTemplate']]) {
                 this.$el.html(Framework.templateCache[this['loadingTemplate']]);
                 this._renderView(callback, data);
@@ -317,26 +352,31 @@ Framework.BaseView.prototype.renderView = function(callback, data) {
                     success: function(response) {
                         Framework.templateCache[this['loadingTemplate']] = response;
                         this.renderView(callback, data);
-                    }.bind(this),
+                    }
+                    .bind(this),
                     error: function(response) {
                         Framework.templateCache[this['loadingTemplate']] = 'Loading Template [' + this['loadingTemplate'] + '] failed to load.';
                         this.renderView(callback, data);
-                    }.bind(this)
+                    }
+                    .bind(this)
                 });
             }
         } else {
             this._renderView(callback, data);
         }
-    }.bind(this));
-};
-Framework.BaseView.prototype.snippet = function(name,data){
+    }
+    .bind(this));
+}
+;
+Framework.BaseView.prototype.snippet = function(name, data) {
     var s = this.snippets[name];
-    if(!s){
+    if (!s) {
         throw "error: snippet " + name + " is not declared in the prototype.";
-    }else {
+    } else {
         return _.template(Framework.templateCache[s])(data);
     }
-};
+}
+;
 Framework.BaseView.prototype._loadSnippets = function(callback) {
     var count = _.keys(this.snippets).length;
     if (count == 0) {
@@ -348,7 +388,8 @@ Framework.BaseView.prototype._loadSnippets = function(callback) {
         if (count <= 0) {
             callback();
         }
-    };
+    }
+    ;
     
     for (var i in this.snippets) {
         var s = this.snippets[i];
@@ -361,15 +402,18 @@ Framework.BaseView.prototype._loadSnippets = function(callback) {
                 success: function(response) {
                     Framework.templateCache[s] = response;
                     cb();
-                }.bind(this),
+                }
+                .bind(this),
                 error: function(response) {
                     Framework.templateCache[s] = 'Loading Template [' + s + '] failed to load.';
                     cb();
-                }.bind(this)
+                }
+                .bind(this)
             });
         }
     }
-}, 
+}
+,
 
 /** @export {*}
  *  @deprecated since version 1.0 use instantiate instead.
@@ -381,7 +425,8 @@ Framework.BaseView.prototype.instantiateView = function(variableName, Constructo
     this[variableName]._parent = this;
     this[variableName]._varname = variableName;
     return this[variableName];
-};
+}
+;
 
 
 
@@ -412,7 +457,8 @@ Framework.BaseView.prototype.instantiate = function(Constructor, options) {
     this.viewsSack[view.cid] = view;
     view._parent = this;
     return view;
-};
+}
+;
 
 /** @export {*} 
 * @returns {Object} returns parent view
@@ -427,7 +473,8 @@ Framework.BaseView.prototype.getParent = function() {
 */
 Framework.BaseView.prototype.getChildren = function() {
     return this.viewsSack;
-};
+}
+;
 /** 
 * Override this function to preload data asynchronously. Data will become available in this._preloadData after renderView() is called, but before render()
 * @param {callback} callback function to be executed by base view upon completion
@@ -445,4 +492,5 @@ MyView = Framework.BaseView.extend({
 */
 Framework.BaseView.prototype['preloadDataAsync'] = function(callback, error) {
     callback({});
-};
+}
+;
