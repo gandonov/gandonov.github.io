@@ -17,6 +17,15 @@ Framework.BaseView = Backbone.View.extend({
             this.viewsSack[i].destroy();
         }
     },
+    // calls on renderView or destroy
+    _terminateAllActiveXHRs : function(){
+        if (this._xhrs) {
+            for(var i =0, l = this._xhrs.length; i < l; i++){
+                this._xhrs[i].abort();
+            }
+            this._xhrs = null;
+        }
+    },
     _getParameters: function(url) {
         url = url.split('?');
         if (url.length > 1) {
@@ -103,6 +112,7 @@ Framework.BaseView = Backbone.View.extend({
     },
     /** @private */
     _renderView: function(callback, data) {
+        this._terminateAllActiveXHRs();
         var success = function(html, preloadData) {
             
             data = data ? data : {};
@@ -119,6 +129,7 @@ Framework.BaseView = Backbone.View.extend({
         .bind(this);
         if (this.template != null ) {
             if (Framework.templateCache[this.template]) {
+                
                 this['preloadDataAsync'](function(data) {
                     success(Framework.templateCache[this.template], data);
                 }
@@ -243,8 +254,6 @@ Framework.BaseView.prototype.getParameter = function(parameter) {
     }
     return null ;
 }
-;
-
 /**
  * You can Use this method to set Url parameter
  * @example this.setParameter('q', 'name="test"');
@@ -254,8 +263,23 @@ Framework.BaseView.prototype.getParameter = function(parameter) {
 Framework.BaseView.prototype.setParameter = function(parameter, value) {
     var hash = location.hash;
     location.hash = this._getNewHash(hash, parameter, value);
-}
-;
+};
+
+
+/**
+ * You can Use this method to set parameter map to url, useful if you want to set multiple while setting url just once.
+ * @example this.setParameters({ a : 'a', b : 'b'});
+ * @export {function(Object)} 
+
+*/
+Framework.BaseView.prototype.setParameters = function(map) {
+    var result = location.hash;
+    for(var parameter in map){
+        result = this._getNewHash(result, parameter, map[parameter]);
+    }
+    location.hash = result;
+};
+
 
 Framework.BaseView.prototype._getNewHash = function(hash, parameter, value) {
     value = encodeURI(value);
@@ -297,6 +321,8 @@ Framework.BaseView.prototype._getNewHash = function(hash, parameter, value) {
 * @fires Framework.BaseView#destroy
 * @export {function()} */
 Framework.BaseView.prototype.destroy = function() {
+    // kill off all registered xhrs to prevent side effects
+    this._terminateAllActiveXHRs();
     // recursive destruction of all chidlren.
     this._killChildren();
     if (this.onHashChange) {
