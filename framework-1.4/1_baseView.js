@@ -393,7 +393,7 @@ Framework.BaseView.prototype.renderView = function(callback, data) {
     }
     .bind(this));
 }
-;
+
 Framework.BaseView.prototype.snippet = function(name, data) {
     var s = this.snippets[name];
     if (!s) {
@@ -402,7 +402,7 @@ Framework.BaseView.prototype.snippet = function(name, data) {
         return _.template(Framework.templateCache[s])(data);
     }
 }
-;
+
 Framework.BaseView.prototype._loadSnippets = function(callback) {
     var count = _.keys(this.snippets).length;
     if (count == 0) {
@@ -415,8 +415,6 @@ Framework.BaseView.prototype._loadSnippets = function(callback) {
             callback();
         }
     }
-    ;
-    
     for (var i in this.snippets) {
         var s = this.snippets[i];
         if (Framework.templateCache[s]) {
@@ -439,7 +437,6 @@ Framework.BaseView.prototype._loadSnippets = function(callback) {
         }
     }
 }
-,
 
 /** @export {*}
  *  @deprecated since version 1.0 use instantiate instead.
@@ -452,7 +449,6 @@ Framework.BaseView.prototype.instantiateView = function(variableName, Constructo
     this[variableName]._varname = variableName;
     return this[variableName];
 }
-;
 
 
 
@@ -519,4 +515,3 @@ MyView = Framework.BaseView.extend({
 Framework.BaseView.prototype['preloadDataAsync'] = function(callback, error) {
     callback({});
 }
-;

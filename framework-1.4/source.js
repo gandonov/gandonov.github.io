@@ -1,4 +1,4 @@
- /**
+/**
  * RestSource. This is a class that will handle interaction with rest points that change the output depending on constraints passed in as parameters.<br>
    RestSource handles caching, queuing of callbacks, aborts and transfers requests as they come in.<br>
    It is assumed that each declared source will have one current state. That means that if you have two views that render data from this source and some constraintPanels,
@@ -26,13 +26,14 @@ source.get(function(data){
  * @constructor
  * @export
  */
-Framework.RestSource = Backbone.View.extend({
+Framework.RestSource = Framework.BaseView.extend({
     dataType: "json",
-    url: null,
+    url: null ,
     
     
     
-    initialize: function() {
+    initialize: function(options) {
+        Framework.BaseView.prototype.initialize.call(this, options);
         this.constraintModel = new this['ConstraintModelPrototype']();
         this.constraintPanels = {};
         this.callbackQueues = {};
@@ -47,14 +48,35 @@ Framework.RestSource = Backbone.View.extend({
     },
     subscribe: function(constraintPanel) {
         this.constraintPanels[constraintPanel.cid] = constraintPanel;
-        if (constraintPanel instanceof Framework.ScrollPaginationPanel) {
-            this._contineous = true;
-        }
+//         if (constraintPanel instanceof Framework.ScrollPaginationPanel) {
+//             this._contineous = true;
+//         }
+        this.listenTo(constraintPanel, 'constraint:append', function(constraintModel){
+            this.onConstraintAppend(constraintModel, constraintPanel, false);
+        }.bind(this));
+        this.listenTo(constraintPanel, 'constraint:replace', function(constraintModel){
+            this.onConstraintAppend(constraintModel, constraintPanel, true);
+        }.bind(this));
+
         this.listenTo(constraintPanel, 'constraintPanel:changed', this.onConstraintPanelChanged);
+    },
+    
+    onConstraintAppend: function(toAppend, constraintPanel, replace) {
+        var constraintModel = null;
+        if(replace){
+            constraintModel = toAppend;
+        }else{
+            constraintModel = this.getConstraintModel();
+            constraintModel = constraintModel.union(toAppend);
+        }
+        if(!(constraintPanel instanceof Framework.PaginationPanel)){
+            constraintModel.setPageNumber(null);
+        }       
+        this.setConstraintModel(constraintModel);
     },
     unsubscribe: function(constraintPanel) {
         delete this.constraintPanels[constraintPanel.cid];
-    // I think that's all there is to it.
+        // I think that's all there is to it.
     },
     putConstraintModel: function(constraintModel) {
         this.constraintModel = constraintModel;
@@ -68,17 +90,17 @@ Framework.RestSource = Backbone.View.extend({
         for (var i in this.constraintPanels) {
             var cp = this.constraintPanels[i];
             if (resetPagers && cp instanceof Framework.PaginationPanel) {
-                this._cwrapperdata = null;
+                this._cwrapperdata = null ;
                 cp.reset();
             }
-            constraintModel = constraintModel.intersection(cp['getConstraintModel']());
+            constraintModel = constraintModel.union(cp['getConstraintModel']());
         }
         return constraintModel;
     },
     onConstraintPanelChanged: function(constraintPanel) {
         var resetPagers = !(constraintPanel instanceof Framework.PaginationPanel);
         if (resetPagers) {
-            this._cwrapperdata = null;
+            this._cwrapperdata = null ;
         }
         var constraintModel = this._getConstaintModelFromPanels(resetPagers);
         this.setContstraints(constraintModel, constraintPanel);
@@ -87,23 +109,36 @@ Framework.RestSource = Backbone.View.extend({
     clearCache: function() {
         this.cache = {};
     },
-
-
+    
+    
     // setting constraint will make getAll doPost with payload = to constraintModel
     setContstraints: function(constraintModel, constraintPanel) 
     {
         this.setConstraintModel(constraintModel);
         this.trigger('source:constraintChange', constraintPanel);
     },
+
+    onHashChange: function(map) {
+        if(this.persistBy && map[this.persistBy]){
+            this.trigger('source:change');
+        }
+    },
     
     setConstraintModel: function(constraintModel) {
-        this.constraintModel = constraintModel;
-        if (this['ConstraintModelPrototype'].prototype.type == "POST") {
-            //TODO, there is no getBody yet
-            this.payload = JSON.stringify(constraintModel.getBody());
+        if (this.persistBy) {
+            this.setParameter('cm', constraintModel.getJSONString());
         } else {
-            this.constraintUrl = this.constraintModel['getUrl']();
+            // TODO -- redo.
+            this.constraintModel = constraintModel;
+            if (this['ConstraintModelPrototype'].prototype.type == "POST") {
+                //TODO, there is no getBody yet
+                this.payload = JSON.stringify(constraintModel.getBody());
+            } else {
+                this.constraintUrl = this.constraintModel['getUrl']();
+            }
+        
         }
+    
     },
     
     getCount: function() {
@@ -113,7 +148,7 @@ Framework.RestSource = Backbone.View.extend({
     
     getAll: function(path, callback, errorcallback) {
         var constraintUrl = "";
-        this.constraintModel = this._getConstaintModelFromPanels();
+        this.constraintModel = this.getConstraintModel();
         if (this.constraintModel && this['ConstraintModelPrototype'].prototype.type == "GET") {
             constraintUrl = "?" + this.constraintModel['getUrl']();
         }
@@ -122,7 +157,7 @@ Framework.RestSource = Backbone.View.extend({
         if (this.countcache[url]) {
             this.count = this.countcache[url];
         }
-        if (this.cache[url] == null || (this._lastPayload && this._lastPayload != this.payload)) {
+        if (this.cache[url] == null  || (this._lastPayload && this._lastPayload != this.payload)) {
             if (this._loading[url]) {
                 if (!this.callbackQueues[url]) {
                     this.callbackQueues[url] = [];
@@ -131,8 +166,10 @@ Framework.RestSource = Backbone.View.extend({
                 return;
             }
             this._loading[url] = true;
-            this.callbackQueues[url] = []; // override or create new queue
-            this.callbackQueues[url].push(callback); // add this callback to the queue
+            this.callbackQueues[url] = [];
+            // override or create new queue
+            this.callbackQueues[url].push(callback);
+            // add this callback to the queue
             if (this._xhr) {
                 if (this._xhr.url) {
                     this.callbackQueues[url] = this.callbackQueues[this._xhr.url].concat(this.callbackQueues[url]);
@@ -177,12 +214,15 @@ Framework.RestSource = Backbone.View.extend({
                         }
                         this.callbackQueues[url] = [];
                     
-                    }.bind(this);
+                    }
+                    .bind(this);
                     this['parseAsync'](data, function(result) {
                         postParse(result);
-                    }.bind(this));
+                    }
+                    .bind(this));
                 
-                }.bind(this),
+                }
+                .bind(this),
                 error: function(error) {
                     this._loading[url] = false;
                     if (error.statusText != "abort") {
@@ -194,7 +234,8 @@ Framework.RestSource = Backbone.View.extend({
                         }
                     }
                 
-                }.bind(this)
+                }
+                .bind(this)
             });
             this._xhr.url = url;
         
@@ -214,8 +255,17 @@ Framework.RestSource = Backbone.View.extend({
 });
 /** @export */
 Framework.RestSource.prototype.getConstraintModel = function() {
-    return this.constraintModel;
-};
+    if (this.persistBy) {
+        var cmStr = this.getParameter('cm');
+        var constraintModel = new this.ConstraintModelPrototype();
+        constraintModel.setFromJSONString(cmStr);
+        return constraintModel;
+    } else {
+        return this.constraintModel;
+    }
+
+}
+;
 
 
 Framework.RestSource.prototype['ConstraintModelPrototype'] = Framework.AbstractConstraintModel;
@@ -240,17 +290,21 @@ var errorcallback = function(data){
 source.get(callback, errorcallback);
 @export {*} */
 Framework.RestSource.prototype.get = function(callback, errorcallback) {
-    this.getAll(null, callback, errorcallback);
-};
+    this.getAll(null , callback, errorcallback);
+}
+;
 /** @export */
 Framework.RestSource.prototype.setCount = function(count) {
     this.count = count;
-};
+}
+;
 /** @export */
 Framework.RestSource.prototype.getCount = function() {
     return this.count;
-};
+}
+;
 
 Framework.RestSource.prototype['parseAsync'] = function(data, callback) {
     callback(data);
-};
+}
+;

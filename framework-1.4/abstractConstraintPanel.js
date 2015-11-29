@@ -10,19 +10,30 @@ DataSource = new Framework.RestSource.extend({
  * @export
  */
 Framework.AbstractConstraintPanel = Framework.BaseView.extend({
-        
+
+    //    this.trigger('constraint:append', constraintModel);
+    //    this.trigger('constraint:replace', constraintModel);
+
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
         // subscribe to source
         this.source = options.source;
         this.source.subscribe(this);
-    },
 
+        this.listenTo(this.source, 'source:change', this.renderView);
+    },
     destroy: function() {
         this.source.unsubscribe(this);
         Framework.BaseView.prototype.destroy.call(this);
     }
 });
+
+
+Framework.AbstractConstraintPanel.prototype['preloadDataAsync'] =  function(callback) {
+    var source = this.source;
+    var constraintModel = this.source.getConstraintModel();
+    callback(constraintModel);
+}
 
 
 /** Override this method to return constraintModel with explicit constraint values depending on state of this constraintPanel 
