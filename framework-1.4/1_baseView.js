@@ -438,20 +438,6 @@ Framework.BaseView.prototype._loadSnippets = function(callback) {
     }
 }
 
-/** @export {*}
- *  @deprecated since version 1.0 use instantiate instead.
-*/
-Framework.BaseView.prototype.instantiateView = function(variableName, Constructor, options) {
-    options = options ? options : {};
-    this[variableName] = new Constructor(options);
-    this.viewsSack[this[variableName].cid] = this[variableName];
-    this[variableName]._parent = this;
-    this[variableName]._varname = variableName;
-    return this[variableName];
-}
-
-
-
 /** 
 @param {Object} Constructor constructor of the class (must extend from Framework.BaseView);
 @param {Object} options pass in additional options, they can be accessed immediately via this._options

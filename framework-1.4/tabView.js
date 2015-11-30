@@ -76,19 +76,16 @@ Framework.TabView = Framework.BaseView.extend({
             } else {
                 throw "constructor " + constructor + " does not exist";
             }
-            this.instantiateView('content_' + id, Constructor, {});
+            this['content_' + id] = this.instantiate(Constructor, {});
             this['content_' + id].setElement($div).renderView();
         }
     },
     
-    
-    
     render: function() {
         this.$('.fw-tab-content').attr('data-cid', this.cid);
-        this.$('.fw-tab-toggle').attr('data-cid', this.cid);
-        
-        
+        this.$('.fw-tab-toggle').attr('data-cid', this.cid);      
         this.$('.fw-tab-content[data-cid="' + this.cid + '"]').hide();
+        
         if (this.persistBy && this.getParameter(this.persistBy)) {
             this.setTabById(this.getParameter(this.persistBy));
         } else {

@@ -4,9 +4,6 @@
  * @export
  */
 
-//left, middle, right, selected, hasNext, hasPrevious, beginStr, endStr, count
-//markup:  fw-pagination-btn  attr: data-page
-
 Framework.PaginationPanel = Framework.AbstractConstraintPanel.extend({
     
     middleEntries: 4,
@@ -37,8 +34,12 @@ Framework.PaginationPanel = Framework.AbstractConstraintPanel.extend({
 })
 
 Framework.PaginationPanel.prototype['preloadDataAsync'] = function(callback) {
+
+//left, middle, right, selected, hasNext, hasPrevious, beginStr, endStr, count
+//markup:  fw-pagination-btn  attr: data-page
     
-    this.source.get(function() {        
+    this.source.get(function() {      
+
         var constraintModel = this.source.getConstraintModel();       
         var data = {};
         
@@ -93,3 +94,5 @@ Framework.PaginationPanel.prototype['preloadDataAsync'] = function(callback) {
         callback(data);
     }.bind(this));
 }
+
+Framework.ScrollPaginationPanel = Framework.PaginationPanel.extend({});

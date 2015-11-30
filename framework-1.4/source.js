@@ -30,8 +30,6 @@ Framework.RestSource = Framework.BaseView.extend({
     dataType: "json",
     url: null ,
     
-    
-    
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
         this.constraintModel = new this['ConstraintModelPrototype']();
@@ -39,7 +37,6 @@ Framework.RestSource = Framework.BaseView.extend({
         this.callbackQueues = {};
         this.cache = {};
         this.countcache = {};
-        this.preParseCache = {};
         this._loading = {};
         this.noCache = false;
         if (!this.url) {
@@ -48,79 +45,54 @@ Framework.RestSource = Framework.BaseView.extend({
     },
     subscribe: function(constraintPanel) {
         this.constraintPanels[constraintPanel.cid] = constraintPanel;
-//         if (constraintPanel instanceof Framework.ScrollPaginationPanel) {
-//             this._contineous = true;
-//         }
-        this.listenTo(constraintPanel, 'constraint:append', function(constraintModel){
+        if (constraintPanel instanceof Framework.ScrollPaginationPanel) {
+            this._contineous = true;
+        }
+        this.listenTo(constraintPanel, 'constraint:append', function(constraintModel) {
             this.onConstraintAppend(constraintModel, constraintPanel, false);
-        }.bind(this));
-        this.listenTo(constraintPanel, 'constraint:replace', function(constraintModel){
+        }
+        .bind(this));
+        this.listenTo(constraintPanel, 'constraint:replace', function(constraintModel) {
             this.onConstraintAppend(constraintModel, constraintPanel, true);
-        }.bind(this));
-
-        this.listenTo(constraintPanel, 'constraintPanel:changed', this.onConstraintPanelChanged);
+        }
+        .bind(this));
     },
     
     onConstraintAppend: function(toAppend, constraintPanel, replace) {
-        var constraintModel = null;
-        if(replace){
+        var constraintModel = null ;
+        if (replace) {
             constraintModel = toAppend;
-        }else{
+        } else {
             constraintModel = this.getConstraintModel();
             constraintModel = constraintModel.union(toAppend);
         }
-        if(!(constraintPanel instanceof Framework.PaginationPanel)){
-            constraintModel.setPageNumber(null);
-        }       
+        if (!(constraintPanel instanceof Framework.PaginationPanel)) {
+            constraintModel.setPageNumber(null );
+            this._cwrapperdata = null ;
+        }
         this.setConstraintModel(constraintModel);
     },
     unsubscribe: function(constraintPanel) {
         delete this.constraintPanels[constraintPanel.cid];
         // I think that's all there is to it.
     },
-    putConstraintModel: function(constraintModel) {
-        this.constraintModel = constraintModel;
-        for (var i in this.constraintPanels) {
-            var cp = this.constraintPanels[i];
-            cp.putConstraintModel(this.constraintModel);
-        }
-    },
-    _getConstaintModelFromPanels: function(resetPagers) {
-        var constraintModel = new this['ConstraintModelPrototype']();
-        for (var i in this.constraintPanels) {
-            var cp = this.constraintPanels[i];
-            if (resetPagers && cp instanceof Framework.PaginationPanel) {
-                this._cwrapperdata = null ;
-                cp.reset();
-            }
-            constraintModel = constraintModel.union(cp['getConstraintModel']());
-        }
-        return constraintModel;
-    },
-    onConstraintPanelChanged: function(constraintPanel) {
-        var resetPagers = !(constraintPanel instanceof Framework.PaginationPanel);
-        if (resetPagers) {
-            this._cwrapperdata = null ;
-        }
-        var constraintModel = this._getConstaintModelFromPanels(resetPagers);
-        this.setContstraints(constraintModel, constraintPanel);
-    },
     
     clearCache: function() {
         this.cache = {};
     },
     
-    
-    // setting constraint will make getAll doPost with payload = to constraintModel
-    setContstraints: function(constraintModel, constraintPanel) 
-    {
-        this.setConstraintModel(constraintModel);
-        this.trigger('source:constraintChange', constraintPanel);
+    _triggerChange: function() {
+        var constraintModel = this.getConstraintModel();
+        var pageNumber = constraintModel.getPageNumber();
+        if (!pageNumber) {
+            this._cwrapperdata = null ;
+        }
+        this.trigger('source:change');
     },
-
+    
     onHashChange: function(map) {
-        if(this.persistBy && map[this.persistBy]){
-            this.trigger('source:change');
+        if (this.persistBy && map[this.persistBy]) {
+            this._triggerChange();
         }
     },
     
@@ -128,17 +100,8 @@ Framework.RestSource = Framework.BaseView.extend({
         if (this.persistBy) {
             this.setParameter('cm', constraintModel.getJSONString());
         } else {
-            // TODO -- redo.
-            this.constraintModel = constraintModel;
-            if (this['ConstraintModelPrototype'].prototype.type == "POST") {
-                //TODO, there is no getBody yet
-                this.payload = JSON.stringify(constraintModel.getBody());
-            } else {
-                this.constraintUrl = this.constraintModel['getUrl']();
-            }
-        
+        // TODO -- redo.
         }
-    
     },
     
     getCount: function() {
@@ -189,9 +152,6 @@ Framework.RestSource = Framework.BaseView.extend({
                 dataType: this.dataType,
                 data: this.payload,
                 success: function(data) {
-                    if (!this.noCache) {
-                        this.preParseCache[url] = data;
-                    }
                     var postParse = function(data) {
                         this._loading[url] = false;
                         if (this._contineous) {
@@ -225,15 +185,9 @@ Framework.RestSource = Framework.BaseView.extend({
                 .bind(this),
                 error: function(error) {
                     this._loading[url] = false;
-                    if (error.statusText != "abort") {
-                        if (errorcallback) {
-                            errorcallback(error);
-                        } else {
-                            console.log('error:');
-                            console.log(error);
-                        }
+                    if (error.statusText != "abort" && errorcallback) {
+                        errorcallback(error);
                     }
-                
                 }
                 .bind(this)
             });
@@ -244,12 +198,9 @@ Framework.RestSource = Framework.BaseView.extend({
         }
     
     },
-    destroy: function() {
-        console.log('destroying source');
-    },
     refresh: function() {
         this.cache = {};
-        this.trigger('source:refresh');
+        this.trigger('source:change');
     }
 
 });
@@ -265,8 +216,6 @@ Framework.RestSource.prototype.getConstraintModel = function() {
     }
 
 }
-;
-
 
 Framework.RestSource.prototype['ConstraintModelPrototype'] = Framework.AbstractConstraintModel;
 
@@ -292,19 +241,14 @@ source.get(callback, errorcallback);
 Framework.RestSource.prototype.get = function(callback, errorcallback) {
     this.getAll(null , callback, errorcallback);
 }
-;
 /** @export */
 Framework.RestSource.prototype.setCount = function(count) {
     this.count = count;
 }
-;
 /** @export */
 Framework.RestSource.prototype.getCount = function() {
     return this.count;
 }
-;
-
 Framework.RestSource.prototype['parseAsync'] = function(data, callback) {
     callback(data);
 }
-;
