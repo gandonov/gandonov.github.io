@@ -91,7 +91,7 @@ Framework.RestSource = Framework.BaseView.extend({
     },
     
     onHashChange: function(map) {
-        if (this.persistBy && map[this.persistBy]) {
+        if (this.persistBy && map.hasOwnProperty(this.persistBy)) {
             this._triggerChange();
         }
     },
@@ -117,7 +117,7 @@ Framework.RestSource = Framework.BaseView.extend({
         }
         
         var url = this.url + constraintUrl;
-        if (this.countcache[url]) {
+        if (this.countcache.hasOwnProperty(url)) {
             this.count = this.countcache[url];
         }
         if (this.cache[url] == null  || (this._lastPayload && this._lastPayload != this.payload)) {
@@ -207,12 +207,17 @@ Framework.RestSource = Framework.BaseView.extend({
 /** @export */
 Framework.RestSource.prototype.getConstraintModel = function() {
     if (this.persistBy) {
-        var cmStr = this.getParameter('cm');
-        var constraintModel = new this.ConstraintModelPrototype();
-        constraintModel.setFromJSONString(cmStr);
-        return constraintModel;
+        var cmStr = this.getParameter(this.persistBy);
+        if (cmStr) {
+            var constraintModel = new this.ConstraintModelPrototype();
+            constraintModel.setFromJSONString(cmStr);
+            return constraintModel;
+        } else {
+            return new this.ConstraintModelPrototype();
+        }
+    
     } else {
-        return this.constraintModel;
+        throw "only persistBy implemented in 1.4";
     }
 
 }

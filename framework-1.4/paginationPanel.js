@@ -84,9 +84,12 @@ Framework.PaginationPanel.prototype['preloadDataAsync'] = function(callback) {
         data.left = left;
         data.right = right;
         data.middle = middle;
-        data.hasNext = data.pageNumber < data.totalPages;
+        data.hasNext = data.pageNumber < data.totalPages-1;
         data.next = data.pageNumber + 1;
         data.hasPrevious = data.pageNumber > 0;
+        if(!data.hasNext && !data.hasPrevious){
+            data.left = data.right = data.middle = [];
+        }
         data.previous = data.pageNumber -1;
         data.beginStr = (data.pageNumber * data.pageSize + 1);
         data.endStr = data.beginStr + data.pageSize -1;

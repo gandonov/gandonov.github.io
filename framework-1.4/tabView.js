@@ -7,7 +7,7 @@ Template:
 <div><p>Here are your toggles</p></div>
 
 <ul class="nav nav-tabs">
-  <li id='a' class="fw-tab-toggle active" data-viewconstructor='sampleClassA'><a>Home</a></li>
+  <li id='a' class="fw-tab-toggle fw-tab-default" data-viewconstructor='sampleClassA'><a>Home</a></li>
   <li id='b' class="fw-tab-toggle" data-viewconstructor='sampleClassB'><a>Profile</a></li>
   <li id='c' class="fw-tab-toggle" data-viewconstructor='sampleClassC'><a>Messages</a></li>
 </ul>
@@ -30,6 +30,10 @@ Js:
  * @constructor
  * @export
  */
+
+ // markup: .fw-tab-default -- add this for the tab to be open on default if no other indicators are present  
+ // .fw-tab-toggle #id clickable button that will take you to the tab
+ // .fw-tab-content attr[data-id] containter where you would like the corresponding tab to be rendered. 
 Framework.TabView = Framework.BaseView.extend({
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
@@ -37,11 +41,11 @@ Framework.TabView = Framework.BaseView.extend({
     },
     events: function(){
         var _events = {};
-        _events['click .fw-tab-toggle[data-cid="' + this.cid + '"]'] = 'otc';
+        _events['click .fw-tab-toggle[data-cid="' + this.cid + '"]'] = this._tabChange;
         return _events;
     },    
     onHashChange: function(diff) {
-        if (this.persistBy && diff[this.persistBy]) {
+        if (this.persistBy && diff.hasOwnProperty(this.persistBy)) {
             this._change(diff[this.persistBy]);
         }
     
@@ -56,6 +60,21 @@ Framework.TabView = Framework.BaseView.extend({
         this.trigger('tab:' + id);
     },
     _change: function(id) {
+        if(id == null){
+            var $group = $('.fw-tab-toggle[data-cid="' + this.cid + '"]');
+            if($group.length == 0){
+                throw "malformed markup, no .fw-tab-toggle found. Please refer to API";
+            }else {
+                id = $group[0].id;
+                for(var i = 0, l = $group.length; i < l;i++){
+                    if($($group[i]).hasClass('fw-tab-default')){
+                        id = $group[i].id;
+                    }
+                }
+                
+            }
+        }
+
         var $el = this.$('.fw-tab-toggle[data-cid="' + this.cid + '"]#' + id);
         var constructor = $el.data('viewconstructor');
         var $div = this.$('.fw-tab-content[data-cid="' + this.cid + '"][data-id="' + id + '"]');
@@ -89,19 +108,13 @@ Framework.TabView = Framework.BaseView.extend({
         if (this.persistBy && this.getParameter(this.persistBy)) {
             this.setTabById(this.getParameter(this.persistBy));
         } else {
-            this.$('.fw-tab-toggle[data-cid="' + this.cid + '"].active').click();
-            if (this._options.openTab) {
-                this.setTabById(this._options.openTab);
-            }
+
+            this._change(null);
+           
         }
     
     }
 });
-
-Framework.TabView.prototype['otc'] = function(e) {
-    this._tabChange(e);
-    e.stopImmediatePropagation();e.preventDefault();e.stopPropagation();
-};
 
 /** @export {} */
 Framework.TabView.prototype.setTabByIndex = function(index) {

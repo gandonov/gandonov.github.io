@@ -120,7 +120,9 @@ Framework.BaseView = Backbone.View.extend({
             data['_options'] = this._options;
             this['_preloadData'] = preloadData;
             data['_preloadData'] = preloadData;
+            
             this.$el.html(_.template(html)(data));
+            
             this.render();
             if (callback) {
                 callback();
