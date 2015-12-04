@@ -211,11 +211,11 @@ Framework.BaseView = Backbone.View.extend({
     }); 
 });
 */
-Framework.BaseView.prototype.getJSON = function(url, success, error, options) {
+Framework.BaseView.prototype.getJSON = function(url, success, error, data) {
     if (!this._xhrs) {
         this._xhrs = [];
     }
-    var xhr = $.ajax({
+    var options = {
         headers: {
             Accept: "application/json"
         },
@@ -226,11 +226,20 @@ Framework.BaseView.prototype.getJSON = function(url, success, error, options) {
         url: url,
         success: success,
         error: error
-    });
+    };
+    if(data){
+        options.type = "POST";
+        options.data = JSON.stringify(data);
+        options.dataType = "json";
+        delete options.processData;
+    }
+    var xhr = $.ajax(options);
     this._xhrs.push(xhr);
-}
-;
-
+};
+/** @export {string} */
+Framework.BaseView.prototype.postJSON = function(url, success, error, data) {
+    this.getJSON(url, success, error, data);
+};
 
 /** @export {string} */
 Framework.BaseView.prototype.loadingTemplate = null ;

@@ -4,44 +4,25 @@ ModalView = Framework.BaseView.extend({
     dismissible: true,
     in_duration : 200,
     out_duration : 200,
-    returnOnComplete : function(){
-        // modal is about to close,
-        // you can collect all your feedback here.
-        return { status : this._ok, something : 'test'};
-    },
-    beforeComplete : function(){
-      // noop  
-    },
-    initialize : function(options){
-        options = options ? options : {};
-        Framework.BaseView.prototype.initialize.call(this, options);
-        if(options.onComplete){
-            this.onComplete = options.onComplete;
-        }
-        if(options.title){
-            this.title = options.title;
-        }
-        if(options.beforeComplete)
-        {
-            this.beforeComplete = options.beforeComplete;
-        }
-        this._ok = false;
-
-    },
     fixedFooter : false,
     
-    onComplete : function(data){
-        console.log('override this client side.');
-        console.log(data);
+    validateAsync : function(callback, error){
+        callback(null);
     },
-    validate : function(){
-        return true;
-    },
+    
 	_beforeDestroy : function(){
 	    if(this.$trigger){
 	       this.$trigger.remove();
 	    }
 	    this.setElement(this.$modalHolder);
+	},
+
+	onError : function(error){
+	  console.log(error);  
+	},
+
+	onSuccess : function(result){
+	  console.log(result);  
 	},
 
     onOkay : function(e){
@@ -59,18 +40,21 @@ ModalView = Framework.BaseView.extend({
                 $("#" + this.id).closeModal();
                 this.destroy();                    
             }.bind(this);
-            if(this.validateAsync){
-                this.$asyncProgress.show();
-                this.validateAsync(callback.bind(this), function(e){
-                    this.$asyncProgress.hide();
-                    Materialize.toast(e, 2000);
-                }.bind(this));
-            }else if(this.validate()){
-                callback();
-            }
+
+            this.$asyncProgress.show();
+            this.validateAsync(function(result){
+                this.$asyncProgress.hide();
+                this.onSuccess(result);
+                $("#" + this.id).closeModal();
+                this.destroy();
+                                 
+            }.bind(this), function(error){
+                this.$asyncProgress.hide();
+                this.onError(error);
+            }.bind(this));
         }catch(e){
             this.$asyncProgress.hide();
-            Materialize.toast(e, 2000);
+            console.log(e);
         }
         return false;
     },
