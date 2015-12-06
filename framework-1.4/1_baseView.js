@@ -388,12 +388,12 @@ Framework.BaseView.prototype.renderView = function(callback, data) {
                     method: 'GET',
                     success: function(response) {
                         Framework.templateCache[this['loadingTemplate']] = response;
-                        this.renderView(callback, data);
+                        this._renderView(callback, data);
                     }
                     .bind(this),
                     error: function(response) {
                         Framework.templateCache[this['loadingTemplate']] = 'Loading Template [' + this['loadingTemplate'] + '] failed to load.';
-                        this.renderView(callback, data);
+                        this._renderView(callback, data);
                     }
                     .bind(this)
                 });
