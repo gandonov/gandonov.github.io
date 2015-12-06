@@ -134,7 +134,7 @@ Framework.RestSource = Framework.BaseView.extend({
             this.callbackQueues[url].push(callback);
             // add this callback to the queue
             if (this._xhr) {
-                if (this._xhr.url) {
+                if (this._xhr.url != url) {
                     this.callbackQueues[url] = this.callbackQueues[this._xhr.url].concat(this.callbackQueues[url]);
                     delete this.callbackQueues[this._xhr.url];
                 }

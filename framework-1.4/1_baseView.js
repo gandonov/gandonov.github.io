@@ -12,6 +12,28 @@ Framework.BaseView = Backbone.View.extend({
     
     snippets: {},
 
+    validateView : function(callback, error){
+       var $temp = null;
+       if(this.loadingTemplate && Framework.templateCache[this.loadingTemplate]){
+           $temp = $(Framework.templateCache[this.loadingTemplate])
+       }else {
+           $temp = $('<div>Validate Async In Progress (this.loadingTemplate == null)</div>');
+       }
+       this.$el.children().hide();
+       this.$el.append($temp);
+       this.validateAsync(function(data){
+           callback(data);
+       },function(data){
+           error(data);
+       });
+
+    },
+
+    validateAsync : function(callback, error){
+      console.log('validateAsync is empty, override me');
+      callback({});  
+    },
+
     _killChildren: function() {
         for (var i in this.viewsSack) {
             this.viewsSack[i].destroy();
