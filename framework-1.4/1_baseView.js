@@ -12,6 +12,28 @@ Framework.BaseView = Backbone.View.extend({
     
     snippets: {},
 
+    validateView : function(callback, error){
+       var $temp = null;
+       if(this.loadingTemplate && Framework.templateCache[this.loadingTemplate]){
+           $temp = $(Framework.templateCache[this.loadingTemplate])
+       }else {
+           $temp = $('<div>Validate Async In Progress (this.loadingTemplate == null)</div>');
+       }
+       this.$el.children().hide();
+       this.$el.append($temp);
+       this.validateAsync(function(data){
+           callback(data);
+       },function(data){
+           error(data);
+       });
+
+    },
+
+    validateAsync : function(callback, error){
+      console.log('validateAsync is empty, override me');
+      callback({});  
+    },
+
     _killChildren: function() {
         for (var i in this.viewsSack) {
             this.viewsSack[i].destroy();
@@ -211,11 +233,11 @@ Framework.BaseView = Backbone.View.extend({
     }); 
 });
 */
-Framework.BaseView.prototype.getJSON = function(url, success, error, options) {
+Framework.BaseView.prototype.getJSON = function(url, success, error, data) {
     if (!this._xhrs) {
         this._xhrs = [];
     }
-    var xhr = $.ajax({
+    var options = {
         headers: {
             Accept: "application/json"
         },
@@ -226,11 +248,20 @@ Framework.BaseView.prototype.getJSON = function(url, success, error, options) {
         url: url,
         success: success,
         error: error
-    });
+    };
+    if(data){
+        options.type = "POST";
+        options.data = JSON.stringify(data);
+        options.dataType = "json";
+        delete options.processData;
+    }
+    var xhr = $.ajax(options);
     this._xhrs.push(xhr);
-}
-;
-
+};
+/** @export {string} */
+Framework.BaseView.prototype.postJSON = function(url, success, error, data) {
+    this.getJSON(url, success, error, data);
+};
 
 /** @export {string} */
 Framework.BaseView.prototype.loadingTemplate = null ;
@@ -379,12 +410,12 @@ Framework.BaseView.prototype.renderView = function(callback, data) {
                     method: 'GET',
                     success: function(response) {
                         Framework.templateCache[this['loadingTemplate']] = response;
-                        this.renderView(callback, data);
+                        this._renderView(callback, data);
                     }
                     .bind(this),
                     error: function(response) {
                         Framework.templateCache[this['loadingTemplate']] = 'Loading Template [' + this['loadingTemplate'] + '] failed to load.';
-                        this.renderView(callback, data);
+                        this._renderView(callback, data);
                     }
                     .bind(this)
                 });

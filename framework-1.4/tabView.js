@@ -32,7 +32,7 @@ Js:
  */
 
  // markup: .fw-tab-default -- add this for the tab to be open on default if no other indicators are present  
- // .fw-tab-toggle #id clickable button that will take you to the tab
+ // .fw-tab-toggle attr[data-viewconstructor] #id clickable button that will take you to the tab
  // .fw-tab-content attr[data-id] containter where you would like the corresponding tab to be rendered. 
 Framework.TabView = Framework.BaseView.extend({
     initialize: function(options) {
@@ -57,11 +57,11 @@ Framework.TabView = Framework.BaseView.extend({
             this.setParameter(this.persistBy, id);
         }
         this._change(id);
-        this.trigger('tab:' + id);
+        this.trigger('tab',id);
     },
     _change: function(id) {
         if(id == null){
-            var $group = $('.fw-tab-toggle[data-cid="' + this.cid + '"]');
+            var $group = this.$('.fw-tab-toggle[data-cid="' + this.cid + '"]');
             if($group.length == 0){
                 throw "malformed markup, no .fw-tab-toggle found. Please refer to API";
             }else {
