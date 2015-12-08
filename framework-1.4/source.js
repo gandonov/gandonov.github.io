@@ -121,6 +121,7 @@ Framework.RestSource = Framework.BaseView.extend({
             this.count = this.countcache[url];
         }
         if (this.cache[url] == null  || (this._lastPayload && this._lastPayload != this.payload)) {
+
             if (this._loading[url]) {
                 if (!this.callbackQueues[url]) {
                     this.callbackQueues[url] = [];
@@ -194,6 +195,7 @@ Framework.RestSource = Framework.BaseView.extend({
             this._xhr.url = url;
         
         } else {
+            this._xhr.abort();
             callback(this.cache[url]);
         }
     
