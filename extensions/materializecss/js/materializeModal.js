@@ -4,8 +4,12 @@ MaterializeModal = Framework.AbstractModal.extend({
     in_duration : 200,
     out_duration : 200,
     fixedFooter : false,
-    render : function(){
-        Framework.AbstractModal.prototype.render.call(this);
+    close : function(){
+        this.$el.find('.modal').closeModal();
+        this.destroy();
+    },
+    render : function(callback){
+        Framework.AbstractModal.prototype.render.call(this, callback);
         $('body').append(this.$el);
         this.$el.find('.modal').openModal({
               dismissible: this.dismissible, // Modal can be dismissed by clicking outside of the modal
@@ -19,3 +23,5 @@ MaterializeModal = Framework.AbstractModal.extend({
     }
 
 });
+
+

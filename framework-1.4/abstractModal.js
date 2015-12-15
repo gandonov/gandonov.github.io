@@ -11,7 +11,7 @@ Framework.AbstractModal = Framework.BaseView.extend({
         this.contentView = this.instantiate(options.ContentView, options.contentOptions);
     },
 
-    render : function(){
-        this.contentView.setElement($(this.$('.fw-modal-content')[0])).renderView();
+    render : function(callback){
+        this.contentView.setElement($(this.$('.fw-modal-content')[0])).renderView(callback);
     }
 });
