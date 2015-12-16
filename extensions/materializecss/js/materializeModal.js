@@ -30,12 +30,44 @@ MaterializeModal = Framework.AbstractModal.extend({
 });
 
 TransparentModal = MaterializeModal.extend({
-    render : function(callback){
+    render: function(callback) {
         MaterializeModal.prototype.render.call(this, callback);
         this.$el.find('.modal').css({
-            'box-shadow' : 'none',
-            'background' : 'transparent'
+            'box-shadow': 'none',
+            'background': 'transparent'
         });
-
+    
     }
+});
+
+
+InfoModal = MaterializeModal.extend({
+    InfoModalView: Framework.BaseView.extend({
+        template: TemplatePaths.common + 'templates/InfoModal.html',
+        initialize: function(options) {
+            if (options.preloadDataAsync) {
+                this.preloadDataAsync = options.preloadDataAsync;
+            }
+            if (options.refreshable) {
+                this.refreshable = options.refreshable;
+            }
+            
+            Framework.BaseView.prototype.initialize.call(this, options);
+            if (this.refreshable) {
+                this.buttons = this.buttons + '<a id="refreshInfo" class="waves-effect waves-green btn-flat">refresh</a>';
+            }
+        }
+    }),
+    
+    initialize: function(options) {
+        options = options ? options : {};
+        options.ContentView = this.InfoModalView;
+        options.contentOptions = options;
+        MaterializeModal.prototype.initialize.call(this, options);
+    },
+    //     render: function() {
+    //         MaterializeModal.prototype.render.call(this, function(){
+    //              this.contentView.process(this.onSuccess.bind(this), this.onError.bind(this));
+    //         }.bind(this));
+    //     }
 });

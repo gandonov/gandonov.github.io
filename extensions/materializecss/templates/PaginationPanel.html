@@ -1,10 +1,11 @@
+<% var data = _preloadData; %> 
 <div class='row'></div>
 <div class='center'>
-    <a class="waves-effect lighten-1 waves-light btn-flat" id='previousPage'>
+    <a class="waves-effect lighten-1 waves-light btn-flat fw-pagination-btn" data-page='<%=data.previous%>' style='visibility:<%=data.hasPrevious ? "visible" : "hidden" %>'>
         <i class='material-icons'>keyboard_arrow_left</i>
     </a>
-    <a class='btn-flat' id='paginationCount'></a>
-    <a class="waves-effect lighten-1 waves-light btn-flat" id='nextPage'>
+    <a class='btn-flat'><%=data.beginStr%> - <%=data.endStr%> of <%=data.count%></a>
+    <a class="waves-effect lighten-1 waves-light btn-flat fw-pagination-btn" data-page='<%=data.next%>' style='visibility:<%=data.hasNext ? "visible" : "hidden" %>'>
         <i class='material-icons'>keyboard_arrow_right</i>
     </a>
 </div>

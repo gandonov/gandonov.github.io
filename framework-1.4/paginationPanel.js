@@ -12,6 +12,10 @@ Framework.PaginationPanel = Framework.AbstractConstraintPanel.extend({
     events: {
         'click .fw-pagination-btn': 'onPaginationBtn'
     },
+
+    initialize : function(options){
+        Framework.AbstractConstraintPanel.prototype.initialize.call(this, options);
+    },
     
     getInterval: function(current_page, np) {
         var ne_half = Math.ceil(this.middleEntries / 2);
