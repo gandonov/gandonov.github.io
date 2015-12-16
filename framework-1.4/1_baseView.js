@@ -19,13 +19,18 @@ Framework.BaseView = Backbone.View.extend({
        }else {
            $temp = $('<div>Validate Async In Progress (this.loadingTemplate == null)</div>');
        }
-       this.$el.children().hide();
+       var $children = this.$el.children();
+       $children.remove();
        this.$el.append($temp);
        this.validateAsync(function(data){
+           this.$el.append($children);
+           $temp.remove();
            callback(data);
-       },function(data){
+       }.bind(this),function(data){
+           this.$el.append($children);
+           $temp.remove();
            error(data);
-       });
+       }.bind(this));
 
     },
 
