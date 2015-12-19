@@ -3,6 +3,7 @@ MaterializeModal = Framework.AbstractModal.extend({
     dismissible: true,
     in_duration: 200,
     out_duration: 200,
+    opacity: .5,
     fixedFooter: false,
     close: function() {
         this.$el.find('.modal').closeModal();
@@ -14,7 +15,7 @@ MaterializeModal = Framework.AbstractModal.extend({
         this.$el.find('.modal').openModal({
             dismissible: this.dismissible,
             // Modal can be dismissed by clicking outside of the modal
-            opacity: .5,
+            opacity: this.opacity,
             // Opacity of modal background
             in_duration: this.in_duration,
             // Transition in duration
@@ -30,12 +31,16 @@ MaterializeModal = Framework.AbstractModal.extend({
 });
 
 TransparentModal = MaterializeModal.extend({
-    render : function(callback){
+    
+    opacity: .85,
+    
+    render: function(callback) {
         MaterializeModal.prototype.render.call(this, callback);
         this.$el.find('.modal').css({
-            'box-shadow' : 'none',
-            'background' : 'transparent'
+            'box-shadow': 'none',
+            'background': 'transparent',
+            'overflow' : 'hidden'            
         });
-
+        this.$el.find('.modal').width('100%');
     }
 });

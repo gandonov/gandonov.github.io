@@ -11,46 +11,55 @@ Framework.BaseView = Backbone.View.extend({
     isRendered: false,
     
     snippets: {},
-
-    validateView : function(callback, error){
-       var $temp = null;
-       if(this.loadingTemplate && Framework.templateCache[this.loadingTemplate]){
-           $temp = $(Framework.templateCache[this.loadingTemplate])
-       }else {
-           $temp = $('<div>Validate Async In Progress (this.loadingTemplate == null)</div>');
-       }
-       var $children = this.$el.children();
-       $children.remove();
-       this.$el.append($temp);
-       this.validateAsync(function(data){
-           this.$el.append($children);
-           $temp.remove();
-           callback(data);
-       }.bind(this),function(data){
-           this.$el.append($children);
-           $temp.remove();
-           error(data);
-       }.bind(this));
-
+    
+    setOverlay: function() {
+        this.__$temp = null ;
+        if (this.loadingTemplate && Framework.templateCache[this.loadingTemplate]) {
+            this.__$temp = $(Framework.templateCache[this.loadingTemplate])
+        } else {
+            this.__$temp = $('<div>Validate Async In Progress (this.loadingTemplate == null)</div>');
+        }
+        this.__$children = this.$el.children();
+        this.__$children.detach();
+        this.$el.append(this.__$temp);
     },
-
-    validateAsync : function(callback, error){
-      console.log('validateAsync is empty, override me');
-      callback({});  
+    removeOverlay: function() {
+        this.$el.append(this.__$children);
+        this.__$temp.remove();
+        this.__$temp = null;
     },
-
+    
+    validateView: function(callback, error) {
+        this.setOverlay();
+        this.validateAsync(function(data) {
+            this.removeOverlay();
+            callback(data);
+        }
+        .bind(this), function(data) {
+            this.removeOverlay();
+            error(data);
+        }
+        .bind(this));
+    
+    },
+    
+    validateAsync: function(callback, error) {
+        console.log('validateAsync is empty, override me');
+        callback({});
+    },
+    
     _killChildren: function() {
         for (var i in this.viewsSack) {
             this.viewsSack[i].destroy();
         }
     },
     // calls on renderView or destroy
-    _terminateAllActiveXHRs : function(){
+    _terminateAllActiveXHRs: function() {
         if (this._xhrs) {
-            for(var i =0, l = this._xhrs.length; i < l; i++){
+            for (var i = 0, l = this._xhrs.length; i < l; i++) {
                 this._xhrs[i].abort();
             }
-            this._xhrs = null;
+            this._xhrs = null ;
         }
     },
     _getParameters: function(url) {
@@ -79,12 +88,12 @@ Framework.BaseView = Backbone.View.extend({
         var diff = {};
         for (var i in newMap) {
             if (!oldMap[i] || oldMap[i] != newMap[i]) {
-                try{
+                try {
                     diff[i] = decodeURI(newMap[i]);
-                }catch(e){
+                } catch (e) {
                     diff[i] = newMap[i];
                 }
-                
+            
             }
         }
         // if something disappeared
@@ -254,7 +263,7 @@ Framework.BaseView.prototype.getJSON = function(url, success, error, data) {
         success: success,
         error: error
     };
-    if(data){
+    if (data) {
         options.type = "POST";
         options.data = JSON.stringify(data);
         options.dataType = "json";
@@ -262,11 +271,13 @@ Framework.BaseView.prototype.getJSON = function(url, success, error, data) {
     }
     var xhr = $.ajax(options);
     this._xhrs.push(xhr);
-};
+}
+;
 /** @export {string} */
 Framework.BaseView.prototype.postJSON = function(url, success, error, data) {
     this.getJSON(url, success, error, data);
-};
+}
+;
 
 /** @export {string} */
 Framework.BaseView.prototype.loadingTemplate = null ;
@@ -301,7 +312,8 @@ Framework.BaseView.prototype.getParameter = function(parameter) {
 Framework.BaseView.prototype.setParameter = function(parameter, value) {
     var hash = location.hash;
     location.hash = this._getNewHash(hash, parameter, value);
-};
+}
+;
 
 
 /**
@@ -312,11 +324,12 @@ Framework.BaseView.prototype.setParameter = function(parameter, value) {
 */
 Framework.BaseView.prototype.setParameters = function(map) {
     var result = location.hash;
-    for(var parameter in map){
+    for (var parameter in map) {
         result = this._getNewHash(result, parameter, map[parameter]);
     }
     location.hash = result;
-};
+}
+;
 
 
 Framework.BaseView.prototype._getNewHash = function(hash, parameter, value) {
@@ -400,11 +413,11 @@ Framework.BaseView.prototype.renderView = function(callback, data) {
         if (this.loadingMessage) {
             this.$el.html(this.loadingMessage);
             this._renderView(callback, data);
-        }else if(this['overlayClass']){
-            this.$('.'+ this['overlayClass']).remove();
-            this.$el.append('<div class="' + this['overlayClass'] + '"></div>'); 
-            this._renderView(callback, data); 
-        }else if (this['loadingTemplate']) {
+        } else if (this['overlayClass']) {
+            this.$('.' + this['overlayClass']).remove();
+            this.$el.append('<div class="' + this['overlayClass'] + '"></div>');
+            this._renderView(callback, data);
+        } else if (this['loadingTemplate']) {
             if (Framework.templateCache[this['loadingTemplate']]) {
                 this.$el.html(Framework.templateCache[this['loadingTemplate']]);
                 this._renderView(callback, data);
