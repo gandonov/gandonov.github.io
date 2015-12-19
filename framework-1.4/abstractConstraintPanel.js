@@ -17,10 +17,21 @@ Framework.AbstractConstraintPanel = Framework.BaseView.extend({
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
         // subscribe to source
-        this.source = options.source;
-        this.source.subscribe(this);
+        this.setSource(options.source);
 
-        this.listenTo(this.source, 'source:change', this.renderView);
+    },
+    setSource: function(source){
+        if(!source || this.source == source){
+            return;
+        }else {
+            if(this.source){
+                this.source.unsubscribe(this);
+                this.stopListening(this.source, 'source:change', this.renderView);
+            }  
+            this.source = source;
+            this.source.subscribe(this);
+            this.listenTo(this.source, 'source:change', this.renderView);
+        }
     },
     destroy: function() {
         this.source.unsubscribe(this);

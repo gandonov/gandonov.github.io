@@ -31,7 +31,20 @@ Framework.RestSource = Framework.BaseView.extend({
     url: null ,
     
     initialize: function(options) {
+        options = options ? options : {};
         Framework.BaseView.prototype.initialize.call(this, options);
+        if(options.persistBy){
+            this.persistBy = options.persistBy;
+        }
+        if(options.url){
+            this.url = options.url;
+        }
+        if(options.ConstraintModelPrototype){
+            this['ConstraintModelPrototype'] = options.ConstraintModelPrototype;
+        }
+        if(options.parseAsync){
+            this['parseAsync'] = options.parseAsync;
+        }
         this.constraintModel = new this['ConstraintModelPrototype']();
         this.constraintPanels = {};
         this.callbackQueues = {};
@@ -98,9 +111,10 @@ Framework.RestSource = Framework.BaseView.extend({
     
     setConstraintModel: function(constraintModel) {
         if (this.persistBy) {
-            this.setParameter('cm', constraintModel.getJSONString());
+            this.setParameter(this.persistBy, constraintModel.getJSONString());
         } else {
-        // TODO -- redo.
+            this.cmStr = constraintModel.getJSONString();
+            this._triggerChange();
         }
     },
     
@@ -208,20 +222,20 @@ Framework.RestSource = Framework.BaseView.extend({
 });
 /** @export */
 Framework.RestSource.prototype.getConstraintModel = function() {
+    var cmStr = null;
     if (this.persistBy) {
         var cmStr = this.getParameter(this.persistBy);
-        if (cmStr) {
-            var constraintModel = new this.ConstraintModelPrototype();
-            constraintModel.setFromJSONString(cmStr);
-            return constraintModel;
-        } else {
-            return new this.ConstraintModelPrototype();
-        }
-    
     } else {
-        throw "only persistBy implemented in 1.4";
+        cmStr = this.cmStr;
+        //throw "only persistBy implemented in 1.4";
     }
-
+    if (cmStr) {
+        var constraintModel = new this.ConstraintModelPrototype();
+        constraintModel.setFromJSONString(cmStr);
+        return constraintModel;
+    } else {
+        return new this.ConstraintModelPrototype();
+    }
 }
 
 Framework.RestSource.prototype['ConstraintModelPrototype'] = Framework.AbstractConstraintModel;

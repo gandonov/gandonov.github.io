@@ -10,9 +10,7 @@ InfoModal = ModalView.extend({
     	if(options.refreshable){
     		this.refreshable = options.refreshable;
     	}
-//     	if(options.refresh){
-//     	    this.buttons = '<a id="OKButton" class="waves-effect waves-green btn-flat">ok</a><a id="refresh" class="waves-effect waves-green btn-flat">refresh</a>';
-//     	}
+
     	ModalView.prototype.initialize.call(this, options);
     	if(this.refreshable){
     	    this.buttons = this.buttons + '<a id="refreshInfo" class="waves-effect waves-green btn-flat">refresh</a>' ;
@@ -27,9 +25,6 @@ InfoModal = ModalView.extend({
                 this.renderContent();
             }.bind(this));            
         }
-        
-//         $refresh.on('click', function(){
-//             this.renderView();
-//         }.bind(this));
+
     }
 });
