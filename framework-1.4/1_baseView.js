@@ -16,6 +16,10 @@ Framework.BaseView = Backbone.View.extend({
         this.__$temp = null ;
         if (this.loadingTemplate && Framework.templateCache[this.loadingTemplate]) {
             this.__$temp = $(Framework.templateCache[this.loadingTemplate])
+        } else if (this['overlayClass']) {
+            this.$('.' + this['overlayClass']).remove();
+            this.$el.append('<div class="' + this['overlayClass'] + '"></div>');
+            return;
         } else {
             this.__$temp = $('<div>Validate Async In Progress (this.loadingTemplate == null)</div>');
         }
@@ -24,9 +28,14 @@ Framework.BaseView = Backbone.View.extend({
         this.$el.append(this.__$temp);
     },
     removeOverlay: function() {
-        this.$el.append(this.__$children);
-        this.__$temp.remove();
-        this.__$temp = null;
+        if(this['overlayClass']){
+            this.$('.' + this['overlayClass']).remove();
+        }else {
+            this.$el.append(this.__$children);
+            this.__$temp.remove();
+            this.__$temp = null;            
+        }
+
     },
     
     validateView: function(callback, error) {
