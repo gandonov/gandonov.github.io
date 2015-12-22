@@ -480,20 +480,21 @@ Framework.BaseView.prototype._loadSnippets = function(callback) {
         if (Framework.templateCache[s]) {
             cb();
         } else {
-            $.ajax({
+            var xhr = $.ajax({
                 url: s,
                 method: 'GET',
-                success: function(response) {
-                    Framework.templateCache[s] = response;
+                success: function(response, c,d,e) {
+                    Framework.templateCache[d.dirtyClosureHack] = response;
                     cb();
                 }
                 .bind(this),
-                error: function(response) {
-                    Framework.templateCache[s] = 'Loading Template [' + s + '] failed to load.';
+                error: function(response, c,d,e) {
+                    Framework.templateCache[d.dirtyClosureHack] = 'Loading Template [' + d.dirtyClosureHack + '] failed to load.';
                     cb();
                 }
                 .bind(this)
             });
+            xhr.dirtyClosureHack = s;
         }
     }
 }
