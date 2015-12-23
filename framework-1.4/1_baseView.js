@@ -435,6 +435,7 @@ Framework.BaseView.prototype.renderView = function(callback, data) {
                 $.ajax({
                     url: this['loadingTemplate'],
                     method: 'GET',
+                    cache: Framework.CACHE_TEMPLATES,
                     success: function(response) {
                         Framework.templateCache[this['loadingTemplate']] = response;
                         this._renderView(callback, data);
@@ -483,6 +484,7 @@ Framework.BaseView.prototype._loadSnippets = function(callback) {
             var xhr = $.ajax({
                 url: s,
                 method: 'GET',
+                cache: Framework.CACHE_TEMPLATES,
                 success: function(response, c,d,e) {
                     Framework.templateCache[d.dirtyClosureHack] = response;
                     cb();

@@ -866,7 +866,7 @@ label.fw-myware-filter-folder.fw-myware-filter-folder-label {
   padding-top:0px !important;
 }
 .fw-row-selected {
-  background-color: rgba(255, 143, 0, 0.17);
+  background-color: rgba(255, 143, 0, 0.17) !important;
 }
 
 #toast-container {
@@ -1065,9 +1065,9 @@ input.header-search-input:focus {
 }
 
 body {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
+  /* display: flex; */
+  /* min-height: 100vh; */
+  /* flex-direction: column; */
 }
 
 main {
