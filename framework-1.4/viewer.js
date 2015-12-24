@@ -20,22 +20,58 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
         'mousemove': 'onMousemove',
         'mouseleave': 'onMouseup'
     },
-    _$select: function($e, record, ctrlKey) {
-        if(!ctrlKey){
-            this.$('.fw-record').removeClass('fw-row-selected');
+
+    id : 'id',
+    
+    initialize: function(options) {
+        Framework.AbstractConstraintPanel.prototype.initialize.call(this, options);
+        this.markedRecordsMap = {};
+    },
+    getRecord: function(id) {
+        return true;
+        // override for your own needs. Implement your logic of caching/retrieving record values.   
+    },
+    toggleCheckbox: function(event) {
+        event.originalEvent.preventDefault();
+        event.preventDefault();
+        var $el = $(event.currentTarget);
+        var id = $el.data('id');
+        var $e = $('.fw-record[data-id="' + id + '"]');
+        this._$select($e, true);
+        return false;
+    },
+    clearSelection : function(){
+        this.$('.fw-checkbox').prop('checked', false);
+        this.$('.fw-record').removeClass('fw-row-selected');
+        this.markedRecordsMap = {};       
+    },
+    _$select: function($e, ctrlKey) {
+        var id = $e.data('id');
+        var $cb = $e.find('.fw-checkbox');
+        if (!ctrlKey) {
+            this.clearSelection();
+            $cb.prop('checked', true);
             $e.addClass('fw-row-selected');
-        }else if($e.hasClass('fw-row-selected')){
-            $e.removeClass('fw-row-selected');        
-        }else {
+            this.markedRecordsMap[id] = this.getRecord(id);
+        } else if ($e.hasClass('fw-row-selected')) {
+            $cb.prop('checked', false);
+            $e.removeClass('fw-row-selected');
+            delete this.markedRecordsMap[id];
+        } else {
+            $cb.prop('checked', true);
             $e.addClass('fw-row-selected');
+            this.markedRecordsMap[id] = this.getRecord(id);
         }
         this.trigger('change');
     },
-
-    getSelection : function(){
-        var ids = $.map(this.$('.fw-row-selected'), function(el) {
-            return $(el).data('id'); 
-        });
+    
+    getSelection: function() {
+        var ids = [];
+        for(var prop in this.markedRecordsMap){
+            ids.push(prop);
+        }
+        var data = {};
+        data.ids = ids;
         return ids;
     },
     
@@ -56,13 +92,13 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
                 record: record,
                 time: time
             };
-            this._$select($e, id, e.ctrlKey);
+            this._$select($e, e.ctrlKey);
             this.trigger('click', id);
         } else if (this._lc.id == id && (time - this._lc.time) < 400) {
             this.trigger('dblclick', id);
             this._lc = null ;
         } else {
-            this._$select($e, id, e.ctrlKey);
+            this._$select($e, e.ctrlKey);
             this.trigger('click', id);
             this._lc = {
                 id: id,
@@ -104,9 +140,9 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
 
 //markup .fw-switcher-toggle attr[data-index]
 Framework.ViewerSwitcher = Framework.BaseView.extend({
-
-    events : {
-        'click .fw-switcher-toggle' : 'switch'
+    
+    events: {
+        'click .fw-switcher-toggle': 'switch'
     },
     
     initialize: function(options) {
@@ -116,24 +152,24 @@ Framework.ViewerSwitcher = Framework.BaseView.extend({
             throw "viewer must be defined.";
         }
     },
-
-    switch : function(e){
+    
+    switch: function(e) {
         var index = $(e.currentTarget).data('index');
         this.viewer.switchView(index);
-
+    
     }
 
 });
 
 Framework.ViewerActionPanel = Framework.BaseView.extend({
-
+    
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
         this.viewer = options.viewer;
         this.listenTo(this.viewer, 'change', this.renderView.bind(this));
     },
-
-    preloadDataAsync : function(callback){
+    
+    preloadDataAsync: function(callback) {
         var ids = this.viewer.getSelection();
         var data = {};
         data.ids = ids;

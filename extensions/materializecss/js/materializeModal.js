@@ -36,11 +36,5 @@ TransparentModal = MaterializeModal.extend({
     
     render: function(callback) {
         MaterializeModal.prototype.render.call(this, callback);
-        this.$el.find('.modal').css({
-            'box-shadow': 'none',
-            'background': 'transparent',
-            'overflow' : 'hidden'            
-        });
-        this.$el.find('.modal').width('100%');
     }
 });
