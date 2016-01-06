@@ -342,7 +342,9 @@ Framework.BaseView.prototype.setParameters = function(map) {
 
 
 Framework.BaseView.prototype._getNewHash = function(hash, parameter, value) {
-    value = encodeURI(value);
+    if(value){
+        value = encodeURI(value);
+    }
     if (hash.length == 0) {
         hash = '#';
     }

@@ -31,7 +31,7 @@ MaterializeModal = Framework.AbstractModal.extend({
 });
 
 TransparentModal = MaterializeModal.extend({
-    
+    template: TemplatePaths.common + 'templates/modals/MaterializeModalTransparent.html',
     opacity: .85,
     
     render: function(callback) {
