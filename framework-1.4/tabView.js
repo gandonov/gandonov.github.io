@@ -47,6 +47,7 @@ Framework.TabView = Framework.BaseView.extend({
     onHashChange: function(diff) {
         if (this.persistBy && diff.hasOwnProperty(this.persistBy)) {
             this._change(diff[this.persistBy]);
+            this.trigger('tab', diff[this.persistBy]);
         }
     
     },
