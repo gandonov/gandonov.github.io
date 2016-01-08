@@ -3,9 +3,10 @@ InfoPanel = Framework.BaseView.extend({
     
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
-        this.listenTo(this._options.viewer, 'selected', function(recordId){
-            this.recordId = recordId;
+        this.listenTo(this._options.viewer, 'change', function(markedRecordsMap) {
+            this.markedRecordsMap = markedRecordsMap;
             this.renderView();
-        }.bind(this));
+        }
+        .bind(this));
     }
 });

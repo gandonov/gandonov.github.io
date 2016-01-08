@@ -1,4 +1,4 @@
-InfoModal = ModalView.extend({
+InfoModalView = Framework.BaseView.extend({
     template : TemplatePaths.common + 'templates/InfoModal.html',
     buttons : '<a id="OKButton" class="waves-effect waves-green btn-flat">ok</a>',
     
@@ -11,7 +11,7 @@ InfoModal = ModalView.extend({
     		this.refreshable = options.refreshable;
     	}
 
-    	ModalView.prototype.initialize.call(this, options);
+    	Framework.BaseView.prototype.initialize.call(this, options);
     	if(this.refreshable){
     	    this.buttons = this.buttons + '<a id="refreshInfo" class="waves-effect waves-green btn-flat">refresh</a>' ;
     	}

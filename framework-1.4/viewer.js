@@ -36,7 +36,7 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
         event.preventDefault();
         var $el = $(event.currentTarget);
         var id = $el.data('id');
-        var $e = $('.fw-record[data-id="' + id + '"]');
+        var $e = this.$('.fw-record[data-id="' + id + '"]');
         this._$select($e, true);
         return false;
     },
@@ -62,7 +62,7 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
             $e.addClass('fw-row-selected');
             this.markedRecordsMap[id] = this.getRecord(id);
         }
-        this.trigger('change');
+        this.trigger('change', this.markedRecordsMap);
     },
     
     getSelection: function() {
