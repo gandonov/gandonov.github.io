@@ -55,6 +55,9 @@ Framework.RestSource = Framework.BaseView.extend({
         if (!this.url) {
             throw "this.url must be defined";
         }
+        if(options.initialConstraintModel){
+            this.setConstraintModel(options.initialConstraintModel);
+        }
     },
     subscribe: function(constraintPanel) {
         this.constraintPanels[constraintPanel.cid] = constraintPanel;
