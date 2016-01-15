@@ -33,7 +33,8 @@ Js:
 
  // markup: .fw-tab-default -- add this for the tab to be open on default if no other indicators are present  
  // .fw-tab-toggle attr[data-viewconstructor] #id clickable button that will take you to the tab
- // .fw-tab-content attr[data-id] containter where you would like the corresponding tab to be rendered. 
+ // .fw-tab-content attr[data-id] containter where you would like the corresponding tab to be rendered.
+ // .fw-tab-content[data-for] container where you would like to put supplemental views (i.e. action panel, external menu, etc...)
 Framework.TabView = Framework.BaseView.extend({
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);

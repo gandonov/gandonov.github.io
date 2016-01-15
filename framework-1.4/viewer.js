@@ -166,7 +166,11 @@ Framework.ViewerActionPanel = Framework.BaseView.extend({
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
         this.viewer = options.viewer;
-        this.listenTo(this.viewer, 'change', this.renderView.bind(this));
+        this.listenTo(this.viewer, 'change', function(){
+
+            this.renderView();
+
+        }.bind(this));
     },
     
     preloadDataAsync: function(callback) {
