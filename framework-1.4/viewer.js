@@ -18,7 +18,30 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
         'mousedown .fw-record': 'onClick',
         "change .fw-checkbox": "toggleCheckbox",
         'mousemove': 'onMousemove',
-        'mouseleave': 'onMouseup'
+        'mouseleave': 'onMouseup',
+        'change .fw-checkbox-select-all' : 'onSelectAllToggle'
+    },
+
+    onSelectAllToggle : function(e){
+        var state = $(e.currentTarget).prop('checked');
+        if(!state){
+            var $toUncheck = this.$('.fw-checkbox:checked');
+            for(var i = 0, l = $toUncheck.length; i < l;i++){
+                var id = $($toUncheck[i]).data('id');
+                delete this.markedRecordsMap[id];
+            }
+            $toUncheck.prop('checked', false);
+            this.$('.fw-record').removeClass('fw-row-selected');
+        }else {
+            var $toCheck = this.$('.fw-checkbox');
+            for(var i = 0, l = $toCheck.length; i < l;i++){
+                var id = $($toCheck[i]).data('id');
+                this.markedRecordsMap[id] = true;
+            }
+            $toCheck.prop('checked', true);            
+            this.$('.fw-record').addClass('fw-row-selected');
+        }
+        this.trigger('change');
     },
 
     id : 'id',
@@ -45,6 +68,21 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
         this.$('.fw-record').removeClass('fw-row-selected');
         this.markedRecordsMap = {};       
     },
+    _setSelectAll : function(){
+        var $checked = this.$('.fw-checkbox:checked');
+        var $unchecked = this.$('.fw-checkbox:not(:checked)');
+        if($checked.length > 0 && $unchecked.length > 0){
+            this.$('.fw-checkbox-select-all').prop("indeterminate", true);
+        }else if($checked.length > 0){
+            this.$('.fw-checkbox-select-all').prop("indeterminate", false);
+            this.$('.fw-checkbox-select-all').prop("checked", true);
+        }else {
+            this.$('.fw-checkbox-select-all').prop("indeterminate", false);
+            this.$('.fw-checkbox-select-all').prop("checked", false);
+        }
+    },
+
+
     _$select: function($e, ctrlKey) {
         var id = $e.data('id');
         var $cb = $e.find('.fw-checkbox');
@@ -62,6 +100,7 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
             $e.addClass('fw-row-selected');
             this.markedRecordsMap[id] = this.getRecord(id);
         }
+        this._setSelectAll();
         this.trigger('change', this.markedRecordsMap);
     },
     
@@ -119,6 +158,10 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
             this.renderView();
         }
     
+    },
+
+    render : function(){
+        this._setSelectAll();
     },
     
     renderView: function(callback) {

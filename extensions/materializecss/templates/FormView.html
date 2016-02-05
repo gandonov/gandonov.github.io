@@ -14,7 +14,8 @@ if(_options.mappings){
 <div class="row col s12"></div>
 <% for(var i =0, l = data.length; i<l; i++){ var d = data[i]; var type = d[mappings['type']];%>
     <% if(type == "BOOLEAN" || type == "SERVICE_ON_OFF") { %>
-<div class="row col s12">
+<div class="row ">
+<div class='col s12'>
 
 <span><%=d[mappings['name']]%></span>
       <% var boolVal = true; %>
@@ -27,6 +28,7 @@ if(_options.mappings){
           On
         </label>
       </div>
+   </div>
 </div>
     <% } else {  %>
         <% if(d['validValues']){ %>

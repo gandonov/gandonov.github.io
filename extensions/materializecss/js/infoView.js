@@ -22,9 +22,11 @@ InfoView = Framework.BaseView.extend({
                     "Error": "Info is not implemented for this service"
                 })
             });
+        } else if (this._options.record) {
+            callback(this._options.record);
         } else {
             callback({
-                "usage": " pass in URL in options { url : 'yoururl'}"
+                "usage": " pass in URL in options { url : 'yoururl'} or RECORD in options { record : record }"
             });
         }
     }

@@ -12,6 +12,8 @@ Framework.BaseView = Backbone.View.extend({
     
     snippets: {},
     
+    doNotKillDiv : true,
+    
     setOverlay: function() {
         this.__$temp = null ;
         if (this.loadingTemplate && Framework.templateCache[this.loadingTemplate]) {
@@ -256,24 +258,24 @@ Framework.BaseView = Backbone.View.extend({
     }); 
 });
 */
-Framework.BaseView.prototype.getJSON = function(url, success, error, data) {
+Framework.BaseView.prototype.getJSON = function(url, success, error, data, type) {
     if (!this._xhrs) {
         this._xhrs = [];
     }
     var options = {
         headers: {
-            Accept: "application/json"
+            Accept: "application/json, text/javascript, */*; q=0.01"
         },
         cache: false,
         contentType: "application/json",
-        type: "GET",
+        type: type ? type : "GET",
         processData: false,
         url: url,
         success: success,
         error: error
     };
     if (data) {
-        options.type = "POST";
+        options.type = type ? type : "POST";
         options.data = JSON.stringify(data);
         options.dataType = "json";
         delete options.processData;
@@ -283,8 +285,8 @@ Framework.BaseView.prototype.getJSON = function(url, success, error, data) {
 }
 ;
 /** @export {string} */
-Framework.BaseView.prototype.postJSON = function(url, success, error, data) {
-    this.getJSON(url, success, error, data);
+Framework.BaseView.prototype.postJSON = function(url, success, error, data, type) {
+    this.getJSON(url, success, error, data, type);
 }
 ;
 
