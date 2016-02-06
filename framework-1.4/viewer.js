@@ -84,6 +84,9 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
 
 
     _$select: function($e, ctrlKey) {
+        if(this._options.noCtrl){
+            ctrlKey = false;
+        }
         var id = $e.data('id');
         var $cb = $e.find('.fw-checkbox');
         if (!ctrlKey) {
