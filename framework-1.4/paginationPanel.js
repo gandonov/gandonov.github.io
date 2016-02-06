@@ -30,6 +30,12 @@ Framework.PaginationPanel = Framework.AbstractConstraintPanel.extend({
         var page = $el.data('page');
         var constraintModel = new this.source.ConstraintModelPrototype();
         constraintModel.setPageNumber(page);
+        if(this.pageSize){
+            constraintModel.setPageSize(this.pageSize);
+        };
+        if(this._options.pageSize){
+            constraintModel.setPageSize(this._options.pageSize);
+        };
         this.trigger('constraint:append', constraintModel);
     },
     
