@@ -121,6 +121,7 @@ Framework.BaseView = Backbone.View.extend({
         this.viewsSack = {};
         options || (options = {});
         this._options = options;
+		this._parent = options._parent;
         if (this.onHashChange) {
             $(window).on('hashchange.' + this.cid, function(e) {
                 var originalEvent = e.originalEvent;
@@ -181,10 +182,10 @@ Framework.BaseView = Backbone.View.extend({
                 
                 this['preloadDataAsync'](function(data) {
                     success(Framework.templateCache[this.template], data);
-                }
+                }.bind(this)
                 , function() {
                     success("ERROR in preloadDataAsync", {});
-                }
+                }.bind(this)
                 );
             
             } else {
@@ -194,10 +195,10 @@ Framework.BaseView = Backbone.View.extend({
                     }
                     this['preloadDataAsync'](function(data) {
                         success(response, data);
-                    }
+                    }.bind(this)
                     , function() {
                         success("ERROR in preloadDataAsync", {});
-                    }
+                    }.bind(this)
                     );
                 }
                 .bind(this);
@@ -528,9 +529,9 @@ MyView = Framework.BaseView.extend({
 @export {*} */
 Framework.BaseView.prototype.instantiate = function(Constructor, options) {
     options = options ? options : {};
+	options._parent = this;
     var view = new Constructor(options);
     this.viewsSack[view.cid] = view;
-    view._parent = this;
     return view;
 }
 ;

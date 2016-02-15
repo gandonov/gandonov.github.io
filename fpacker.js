@@ -12,7 +12,7 @@ var rootFolder = null;
 var templatesFolder = null;
 var filePath = "fp1911.html";
 if(!process.argv[2]){
-    console.log('usage: fudgepacker.js [index.html root folder] [templates folder] [optional: output path]');
+    console.log('usage: fpacker.js [index.html root folder] [templates folder] [optional: output path]');
     process.exit(1);
 }else {
     rootFolder = process.argv[2];
