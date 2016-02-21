@@ -12,7 +12,7 @@ Framework.BaseView = Backbone.View.extend({
     
     snippets: {},
     
-    doNotKillDiv : true,
+    doNotKillDiv: true,
     
     setOverlay: function() {
         this.__$temp = null ;
@@ -30,14 +30,14 @@ Framework.BaseView = Backbone.View.extend({
         this.$el.append(this.__$temp);
     },
     removeOverlay: function() {
-        if(this['overlayClass']){
+        if (this['overlayClass']) {
             this.$('.' + this['overlayClass']).remove();
-        }else {
+        } else {
             this.$el.append(this.__$children);
             this.__$temp.remove();
-            this.__$temp = null;            
+            this.__$temp = null ;
         }
-
+    
     },
     
     validateView: function(callback, error) {
@@ -121,7 +121,7 @@ Framework.BaseView = Backbone.View.extend({
         this.viewsSack = {};
         options || (options = {});
         this._options = options;
-		this._parent = options._parent;
+        this._parent = options._parent;
         if (this.onHashChange) {
             $(window).on('hashchange.' + this.cid, function(e) {
                 var originalEvent = e.originalEvent;
@@ -182,10 +182,13 @@ Framework.BaseView = Backbone.View.extend({
                 
                 this['preloadDataAsync'](function(data) {
                     success(Framework.templateCache[this.template], data);
-                }.bind(this)
+                }
+                .bind(this)
                 , function() {
-                    success("ERROR in preloadDataAsync", {});
-                }.bind(this)
+                    var str = (this.errorTemplate && Framework.templateCache[this.errorTemplate]) ? Framework.templateCache[this.errorTemplate] : "ERROR in preloadDataAsync";
+                    success(str, data);
+                }
+                .bind(this)
                 );
             
             } else {
@@ -195,10 +198,13 @@ Framework.BaseView = Backbone.View.extend({
                     }
                     this['preloadDataAsync'](function(data) {
                         success(response, data);
-                    }.bind(this)
+                    }
+                    .bind(this)
                     , function() {
-                        success("ERROR in preloadDataAsync", {});
-                    }.bind(this)
+                        var str = (this.errorTemplate && Framework.templateCache[this.errorTemplate]) ? Framework.templateCache[this.errorTemplate] : "ERROR in preloadDataAsync";
+                        success(str, data);
+                    }
+                    .bind(this)
                     );
                 }
                 .bind(this);
@@ -290,6 +296,8 @@ Framework.BaseView.prototype.postJSON = function(url, success, error, data, type
     this.getJSON(url, success, error, data, type);
 }
 ;
+/** @export {string} */
+Framework.BaseView.prototype.errorTemplate = null ;
 
 /** @export {string} */
 Framework.BaseView.prototype.loadingTemplate = null ;
@@ -345,7 +353,7 @@ Framework.BaseView.prototype.setParameters = function(map) {
 
 
 Framework.BaseView.prototype._getNewHash = function(hash, parameter, value) {
-    if(value){
+    if (value) {
         value = encodeURI(value);
     }
     if (hash.length == 0) {
@@ -470,6 +478,9 @@ Framework.BaseView.prototype.snippet = function(name, data) {
 }
 
 Framework.BaseView.prototype._loadSnippets = function(callback) {
+    if(this.errorTemplate){
+        this.snippets['__errorTemplate'] = this.errorTemplate;
+    }
     var count = _.keys(this.snippets).length;
     if (count == 0) {
         callback();
@@ -490,12 +501,12 @@ Framework.BaseView.prototype._loadSnippets = function(callback) {
                 url: s,
                 method: 'GET',
                 cache: Framework.CACHE_TEMPLATES,
-                success: function(response, c,d,e) {
+                success: function(response, c, d, e) {
                     Framework.templateCache[d.dirtyClosureHack] = response;
                     cb();
                 }
                 .bind(this),
-                error: function(response, c,d,e) {
+                error: function(response, c, d, e) {
                     Framework.templateCache[d.dirtyClosureHack] = 'Loading Template [' + d.dirtyClosureHack + '] failed to load.';
                     cb();
                 }
@@ -529,7 +540,7 @@ MyView = Framework.BaseView.extend({
 @export {*} */
 Framework.BaseView.prototype.instantiate = function(Constructor, options) {
     options = options ? options : {};
-	options._parent = this;
+    options._parent = this;
     var view = new Constructor(options);
     this.viewsSack[view.cid] = view;
     return view;
