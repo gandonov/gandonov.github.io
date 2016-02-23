@@ -10,7 +10,6 @@ Framework = {
             this.templateCache[tokens[i + 1]] = str.substring(prev, tokens[i]);
             prev = tokens[i];
         }
-        console.log(this.templateCache);
         
     }
 }
