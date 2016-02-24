@@ -1,4 +1,4 @@
-InfoPanel = Framework.BaseView.extend({
+Materialize.InfoPanel = Framework.BaseView.extend({
     loadingTemplate: Framework.Ext.TemplatePath + 'templates/Loading.html',
     
     initialize: function(options) {
