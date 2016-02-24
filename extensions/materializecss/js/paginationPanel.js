@@ -1,3 +1,3 @@
 PaginationPanel = Framework.PaginationPanel.extend({
-    template : TemplatePaths.common + 'templates/PaginationPanel.html',
+    template : Framework.Ext.TemplatePath + 'templates/PaginationPanel.html',
 });

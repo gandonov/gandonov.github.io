@@ -22,7 +22,6 @@ DynamoDbConstraintModel = Framework.AbstractConstraintModel.extend({
         }
         ;
 
-
         return url;
     }
 });
