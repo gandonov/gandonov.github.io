@@ -1,0 +1,21 @@
+<div class='content'>
+    <div class='col s12 center'><h5><%=_this._options.title ? _this._options.title : _this.title%></h5></div>
+        <div class='row'></div>
+        <div class='container'>
+            <p>
+                <%=_this._options.description ? _this._options.description : _this.description%>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+<%
+var buttons = _this.buttons;
+if(_this._options.buttons){
+    buttons = _this._options.buttons;
+}
+%>
+    <a id='yes' class="waves-effect waves-green btn-flat "><%=buttons.yes%></a>
+    <a id='no' class="waves-effect waves-red btn-flat "><%=buttons.no%></a>
+
+</div>

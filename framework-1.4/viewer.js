@@ -41,7 +41,7 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
             $toCheck.prop('checked', true);            
             this.$('.fw-record').addClass('fw-row-selected');
         }
-        this.trigger('change');
+        this.trigger('change', this.markedRecordsMap);
     },
 
     id : 'id',
@@ -66,7 +66,8 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
     clearSelection : function(){
         this.$('.fw-checkbox').prop('checked', false);
         this.$('.fw-record').removeClass('fw-row-selected');
-        this.markedRecordsMap = {};       
+        this.markedRecordsMap = {};
+        this.trigger('change', this.markedRecordsMap);
     },
     _setSelectAll : function(){
         var $checked = this.$('.fw-checkbox:checked');
