@@ -265,7 +265,7 @@ Framework.BaseView = Backbone.View.extend({
     }); 
 });
 */
-Framework.BaseView.prototype.getJSON = function(url, success, error, data, type) {
+Framework.BaseView.prototype.getJSON = function(url, success, error, data, type,  extra) {
     if (!this._xhrs) {
         this._xhrs = [];
     }
@@ -285,6 +285,7 @@ Framework.BaseView.prototype.getJSON = function(url, success, error, data, type)
         options.type = type ? type : "POST";
         options.data = JSON.stringify(data);
         options.dataType = "json";
+        options.headers = extra && extra.headers ? extra.headers : options.headers;
         delete options.processData;
     }
     var xhr = $.ajax(options);
