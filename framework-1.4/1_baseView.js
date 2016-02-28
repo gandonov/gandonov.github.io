@@ -285,8 +285,11 @@ Framework.BaseView.prototype.getJSON = function(url, success, error, data, type,
         options.type = type ? type : "POST";
         options.data = JSON.stringify(data);
         options.dataType = "json";
-        options.headers = extra && extra.headers ? extra.headers : options.headers;
+        
         delete options.processData;
+    }
+    if(extra){
+        options.headers = extra && extra.headers ? extra.headers : options.headers;
     }
     var xhr = $.ajax(options);
     this._xhrs.push(xhr);
