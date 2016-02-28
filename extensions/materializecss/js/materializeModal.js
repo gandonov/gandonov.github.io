@@ -1,5 +1,5 @@
 MaterializeModal = Framework.AbstractModal.extend({
-    template: TemplatePaths.common + 'templates/modals/MaterializeModal.html',
+    template: Framework.Ext.TemplatePath + 'templates/modals/MaterializeModal.html',
     dismissible: true,
     in_duration: 200,
     out_duration: 200,
@@ -29,9 +29,38 @@ MaterializeModal = Framework.AbstractModal.extend({
     }
 
 });
+// message
+// onYes
+// onCancel
+
+Materialize.AreYouSureView = Framework.BaseView.extend({
+    title : "Are you sure?",
+    description : "Performing this action cause some regrets in future.",
+    buttons : {
+        "yes" : "Do it",
+        "no" : "Cancel"
+    },
+    events : {
+        'click #yes' : 'onYesBtn',
+        'click #no' : 'onNoBtn'
+    },
+
+    onNoBtn : function(){
+        this.getParent().close();
+    },
+
+    onYesBtn : function(){
+        
+        this._options.callback ? this._options.callback() : (function(){ console.log('callback not defined')})();
+        this.getParent().close();
+    },
+    template : Framework.Ext.TemplatePath + 'templates/AreYouSureView.html'
+
+});
+
 
 TransparentModal = MaterializeModal.extend({
-    template: TemplatePaths.common + 'templates/modals/MaterializeModalTransparent.html',
+    template: Framework.Ext.TemplatePath + 'templates/modals/MaterializeModalTransparent.html',
     opacity: .85,
     
     render: function(callback) {
