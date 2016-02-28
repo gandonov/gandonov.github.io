@@ -1,5 +1,5 @@
 ProcessView = Framework.BaseView.extend({
-    template: TemplatePaths.common + 'templates/ProcessView.html',
+    template: Framework.Ext.TemplatePath + 'templates/ProcessView.html',
     
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);

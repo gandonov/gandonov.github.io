@@ -1,4 +1,4 @@
-MassActionSelectionPanel = Framework.ViewerActionPanel.extend({
+Framework.Ext.MassActionSelectionPanel = Framework.ViewerActionPanel.extend({
     
     events: {
         'click .fw-mass-action': 'onMassAction'

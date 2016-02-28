@@ -1,0 +1,29 @@
+<%
+var data = _preloadData; console.log(data); 
+
+%>
+    <div class="uploader-body z-depth-1">
+  <div class="uploader-panel blue lighten-2 white-text"><span class="uploader-panel-label">Uploading...</span></div>
+        <div class="row">
+        <% if(data.files){ 
+            for(var i = 0 , l = data.files.length; i < l; i++){ var file = data.files[i];
+        %>
+  	<div class="uploader-entry col s12">
+  	<div class="col m6">
+      <span class="uploader-entry-title truncate"><%=file.name%></span>
+  </div>
+    	<div class="col m6">
+      <div id="loginProgress" class="progress">
+                <div class="indeterminate"></div>
+            </div>
+  	</div>
+  </div>
+  
+  <% } } %>
+  <div class=" col s12 uploader-more">
+  <div class="col s12">
+    <label class="right">52 more...</label>
+  </div>
+</div>
+        </div>
+    </div>
