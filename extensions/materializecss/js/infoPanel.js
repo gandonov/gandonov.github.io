@@ -6,7 +6,6 @@ Materialize.InfoPanel = Framework.BaseView.extend({
         this.listenTo(this._options.viewer, 'change', function(markedRecordsMap) {
             this.markedRecordsMap = markedRecordsMap;
             this.renderView();
-        }
-        .bind(this));
+        }.bind(this));
     }
 });

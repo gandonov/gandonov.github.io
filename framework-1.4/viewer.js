@@ -63,11 +63,14 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
         this._$select($e, true);
         return false;
     },
-    clearSelection : function(){
+    clearSelection : function(triggerChange){
         this.$('.fw-checkbox').prop('checked', false);
         this.$('.fw-record').removeClass('fw-row-selected');
         this.markedRecordsMap = {};
-        this.trigger('change', this.markedRecordsMap);
+        if(triggerChange){
+            this.trigger('change', this.markedRecordsMap);
+        }
+        
     },
     _setSelectAll : function(){
         var $checked = this.$('.fw-checkbox:checked');
