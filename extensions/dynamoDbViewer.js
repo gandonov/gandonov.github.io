@@ -17,10 +17,14 @@ DynamoDbConstraintModel = Framework.AbstractConstraintModel.extend({
     getUrl: function () {
         var url = "";
         var lastkey = this.getField('lastkey');
+        var prev = false;
         if (lastkey) {
             url += "lastkey=" + lastkey;
         }
         ;
+        if(this.constraints){
+            url += (prev ? "&" : "") +  "query=" + encodeURIComponent(JSON.stringify(this.constraints));
+        }
 
         return url;
     }
