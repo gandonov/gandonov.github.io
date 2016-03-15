@@ -1,3 +1,0 @@
-TemplatePaths = {
-    common : ''
-}
