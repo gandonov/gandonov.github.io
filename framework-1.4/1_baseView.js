@@ -346,7 +346,7 @@ Framework.BaseView.prototype.setParameter = function(parameter, value) {
  * @export {function(Object)} 
 
 */
-Framework.BaseView.prototype.setParameters = function(map, replaceState) {
+Framework.BaseView.prototype.setParameters = function(map, replaceState, triggerChange) {
     var result = location.hash;
     for (var parameter in map) {
         result = this._getNewHash(result, parameter, map[parameter]);
@@ -354,7 +354,11 @@ Framework.BaseView.prototype.setParameters = function(map, replaceState) {
     if(!replaceState){
         location.hash = result;
     }else {
+
         history.replaceState(null, null, result);   
+        if(triggerChange){
+            $(window).trigger('hashchange');
+        }
     }
     
 }
