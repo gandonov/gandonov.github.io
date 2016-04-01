@@ -40,6 +40,13 @@ Framework.TabView = Framework.BaseView.extend({
         Framework.BaseView.prototype.initialize.call(this, options);
         this._tabMap = {};
     },
+    // destroys tabViews, resets tabMap, and renderView
+    refresh : function(){
+        this._killChildren();
+        this._tabMap = {};
+        this.renderView();
+    },
+
     events: function(){
         var _events = {};
         _events['click .fw-tab-toggle[data-cid="' + this.cid + '"]'] = this._tabChange;
