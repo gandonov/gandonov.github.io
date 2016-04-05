@@ -1,5 +1,5 @@
 Materialize.InfoPanel = Framework.BaseView.extend({
-    loadingTemplate: Framework.Ext.TemplatePath + 'templates/Loading.html',
+    loadingTemplate: Framework.Ext.TemplatePath + 'materializecss/templates/Loading.html',
     
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);

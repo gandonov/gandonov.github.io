@@ -1,5 +1,5 @@
 InfoView = Framework.BaseView.extend({
-    template: Framework.Ext.TemplatePath + 'templates/InfoView.html',
+    template: Framework.Ext.TemplatePath + 'materializecss/templates/InfoView.html',
     
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
