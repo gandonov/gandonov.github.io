@@ -8,7 +8,7 @@ FormView = Framework.BaseView.extend({
 	onInputChange : function(e){
 		this.trigger('form:inputChange');	
 	},
-    template : Framework.Ext.TemplatePath + 'templates/FormView.html',
+    template : Framework.Ext.TemplatePath + 'materializecss/templates/FormView.html',
 
     initialize : function(options){
         Framework.BaseView.prototype.initialize.call(this,options);

@@ -109,7 +109,7 @@ GPOConstraintModel = Framework.AbstractConstraintModel.extend({
 });    
 
 K6Viewer = Framework.AbstractViewer.extend({
-    template : Framework.Ext.TemplatePath + 'templates/viewers/K6Viewer.html',
+    template : Framework.Ext.TemplatePath + 'materializecss/templates/viewers/K6Viewer.html',
     name : 'k6viewer',
 
     events: _.extend({
@@ -220,7 +220,7 @@ K6Viewer = Framework.AbstractViewer.extend({
     }
 });
 K6ViewerList = K6Viewer.extend({
-    template : Framework.Ext.TemplatePath + 'templates/viewers/K6ViewerList.html',
+    template : Framework.Ext.TemplatePath + 'materializecss/templates/viewers/K6ViewerList.html',
     name : 'k6viewerList',   
 });
 
@@ -272,7 +272,7 @@ K6SourceView = Framework.SourceView.extend({
     }),
     PaginationPanel : Framework.PaginationPanel.extend({
             DEFAULT_ITEMS_PER_PAGE : 10,
-            template : Framework.Ext.TemplatePath + 'templates/PaginationPanel.html'
+            template : Framework.Ext.TemplatePath + 'materializecss/templates/PaginationPanel.html'
     }),
     pageSize : 10,
 

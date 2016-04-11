@@ -1,5 +1,5 @@
 MaterializeModal = Framework.AbstractModal.extend({
-    template: Framework.Ext.TemplatePath + 'templates/modals/MaterializeModal.html',
+    template: Framework.Ext.TemplatePath + 'materializecss/templates/modals/MaterializeModal.html',
     dismissible: true,
     in_duration: 200,
     out_duration: 200,
@@ -54,13 +54,13 @@ Materialize.AreYouSureView = Framework.BaseView.extend({
         this._options.callback ? this._options.callback() : (function(){ console.log('callback not defined')})();
         this.getParent().close();
     },
-    template : Framework.Ext.TemplatePath + 'templates/AreYouSureView.html'
+    template : Framework.Ext.TemplatePath + 'materializecss/templates/AreYouSureView.html'
 
 });
 
 
 TransparentModal = MaterializeModal.extend({
-    template: Framework.Ext.TemplatePath + 'templates/modals/MaterializeModalTransparent.html',
+    template: Framework.Ext.TemplatePath + 'materializecss/templates/modals/MaterializeModalTransparent.html',
     opacity: .85,
     
     render: function(callback) {

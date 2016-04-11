@@ -1,5 +1,5 @@
-InfoModalView = Framework.BaseView.extend({
-    template : TemplatePaths.common + 'templates/InfoModal.html',
+Framework.Ext.InfoModalView = Framework.BaseView.extend({
+    template : "this is an absract view",
     buttons : '<a id="OKButton" class="waves-effect waves-green btn-flat">ok</a>',
     
     refreshable : false,
