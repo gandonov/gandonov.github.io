@@ -19,9 +19,8 @@ DynamoDbConstraintModel = Framework.AbstractConstraintModel.extend({
         var lastkey = this.getField('lastkey');
         var prev = false;
         if (lastkey) {
-            url += "lastkey=" + lastkey;
+            url += "lastkey=" + encodeURIComponent(JSON.stringify(lastkey)) + "&";
         }
-        ;
         if(this.constraints){
             url += (prev ? "&" : "") +  "query=" + encodeURIComponent(JSON.stringify(this.constraints));
         }
@@ -91,10 +90,10 @@ DynamoDbViewer = Framework.Viewer.extend({
 
         var lastkey = this.$('#chunkLoader').data('lastkey');
         if (lastkey) {
+
             this._requesting = true;
             var cm = this.source.getConstraintModel();
-            cm.setField('lastkey', lastkey);
-            this.getJSON(this.source.url + '?' + cm.getUrl(), function (data) {
+            this.getJSON(this.source.url + '?' + cm.getUrl() + '&lastEvaluatedKey=' + JSON.stringify(lastkey) , function (data) {
                 this._requesting = false;
                 var chunk = this.snippet('viewerChunk', {
                     data: data.Items,
@@ -104,7 +103,7 @@ DynamoDbViewer = Framework.Viewer.extend({
 
                 this.$('#chunkLoader').before(chunk);
                 if (data.LastEvaluatedKey) {
-                    this.$('#chunkLoader').data('lastkey', data.LastEvaluatedKey.id);
+                    this.$('#chunkLoader').data('lastkey', data.LastEvaluatedKey);
                 } else {
                     this.$('#chunkLoader').remove();
                     this.$('#loading').remove();

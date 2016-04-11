@@ -562,7 +562,7 @@ background-color: rgba(110, 204, 57, 0.6);
   width: calc(100% - 3rem);
 }
 .fullviewer-viewer {
-  height: calc(100vh - 11rem);
+  height: calc(100vh - 20rem);
 }
 
 .fullviewer-right {
