@@ -184,9 +184,9 @@ Framework.BaseView = Backbone.View.extend({
                     success(Framework.templateCache[this.template], data);
                 }
                 .bind(this)
-                , function() {
+                , function(errorResp) {
                     var str = (this.errorTemplate && Framework.templateCache[this.errorTemplate]) ? Framework.templateCache[this.errorTemplate] : "ERROR in preloadDataAsync";
-                    success(str, data);
+                    success(str, errorResp);
                 }
                 .bind(this)
                 );
@@ -200,9 +200,9 @@ Framework.BaseView = Backbone.View.extend({
                         success(response, data);
                     }
                     .bind(this)
-                    , function() {
+                    , function(errorResp) {
                         var str = (this.errorTemplate && Framework.templateCache[this.errorTemplate]) ? Framework.templateCache[this.errorTemplate] : "ERROR in preloadDataAsync";
-                        success(str, data);
+                        success(str, errorResp);
                     }
                     .bind(this)
                     );
