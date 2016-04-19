@@ -1,4 +1,4 @@
-FormView = Framework.BaseView.extend({
+Framework.Ext.FormView = Framework.BaseView.extend({
 
 	events : {
 		'change input' : 'onInputChange',
