@@ -19,6 +19,8 @@ Framework.Ext.FormView = Framework.BaseView.extend({
         }
         if(msg){
             $input.next().attr('data-error', msg);
+            // makes the message small and fit
+            $input.next().addClass('active');
         }
         $input.addClass('invalid');
     },
