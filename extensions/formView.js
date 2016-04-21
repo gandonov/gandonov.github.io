@@ -12,9 +12,11 @@ Framework.Ext.FormView = Framework.BaseView.extend({
     initialize : function(options){
         Framework.BaseView.prototype.initialize.call(this,options);
     },
-    errorField : function(name, msg){
+    errorField : function(name, msg, noTrigger){
         var $input = this.$('#' + name);
-        $input.focus();
+        if(!noTrigger){
+        	$input.focus();
+        }
         if(msg){
             $input.next().attr('data-error', msg);
         }
