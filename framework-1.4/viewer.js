@@ -36,7 +36,7 @@ Framework.Viewer = Framework.AbstractConstraintPanel.extend({
             var $toCheck = this.$('.fw-checkbox');
             for(var i = 0, l = $toCheck.length; i < l;i++){
                 var id = $($toCheck[i]).data('id');
-                this.markedRecordsMap[id] = true;
+                this.markedRecordsMap[id] = this.getRecord(id);
             }
             $toCheck.prop('checked', true);            
             this.$('.fw-record').addClass('fw-row-selected');

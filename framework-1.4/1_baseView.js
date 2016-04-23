@@ -121,6 +121,7 @@ Framework.BaseView = Backbone.View.extend({
         this.viewsSack = {};
         options || (options = {});
         this._options = options;
+
         this._parent = options._parent;
         if (this.onHashChange) {
             $(window).on('hashchange.' + this.cid, function(e) {
@@ -135,11 +136,7 @@ Framework.BaseView = Backbone.View.extend({
             }
             .bind(this));
         }
-        if (this.parameterSchema) {
-            for (var i in this.parameterSchema) {
-                this[this.parameterSchema[i]] = this.getParameter(i);
-            }
-        }
+
         
         _.bindAll(this, 'render', 'destroy');
         
