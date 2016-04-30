@@ -80,8 +80,12 @@ Framework.TabView = Framework.BaseView.extend({
                         id = $group[i].id;
                     }
                 }
-                
             }
+        }
+
+        if(this.destroyViewsOnExit){
+            this._killChildren();
+            this._tabMap = {};
         }
 
         var $el = this.$('.fw-tab-toggle[data-cid="' + this.cid + '"]#' + id);
