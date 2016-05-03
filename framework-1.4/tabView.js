@@ -83,10 +83,7 @@ Framework.TabView = Framework.BaseView.extend({
             }
         }
 
-        if(this.destroyViewsOnExit){
-            this._killChildren();
-            this._tabMap = {};
-        }
+
 
         var $el = this.$('.fw-tab-toggle[data-cid="' + this.cid + '"]#' + id);
         var constructor = $el.data('viewconstructor');
@@ -101,6 +98,10 @@ Framework.TabView = Framework.BaseView.extend({
         $div.show();
         $for.show();
         if (!this._tabMap[id]) {
+            if(this.destroyViewsOnExit){
+                this._killChildren();
+                this._tabMap = {};
+            }
             this._tabMap[id] = true;
             var Constructor = null;
             if (constructor && window[constructor]) {
