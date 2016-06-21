@@ -288,13 +288,16 @@ Framework.BaseView.prototype.getJSON = function(url, success, error, data, type,
     if(extra){
         options.headers = extra && extra.headers ? extra.headers : options.headers;
     }
+	if(extra && extra.timeout){
+        options.timeout = extra.timeout;
+    }
     var xhr = $.ajax(options);
     this._xhrs.push(xhr);
 }
 ;
 /** @export {string} */
-Framework.BaseView.prototype.postJSON = function(url, success, error, data, type) {
-    this.getJSON(url, success, error, data, type);
+Framework.BaseView.prototype.postJSON = function(url, success, error, data, type, extra) {
+    this.getJSON(url, success, error, data, type, extra);
 }
 ;
 /** @export {string} */
