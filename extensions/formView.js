@@ -30,7 +30,7 @@ Framework.Ext.FormView = Framework.BaseView.extend({
 
     getForm : function(){
         var form = {};
-        var $array = this.$('input, select');
+        var $array = this.$('input, select, textarea');
 
         for(var i =0, l = $array.length; i < l ; i++){
             var $el = $($array[i]);

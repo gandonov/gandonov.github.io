@@ -40,7 +40,7 @@ Framework.AbstractConstraintModel = Backbone.View.extend({
             } else {
                 if (e instanceof Array) {
                     if (result[prop]) {
-                        result[prop] = result[prop].concat(e);
+                        result[prop] = _.union(result[prop], e);
                     } else {
                         result[prop] = e;
                     }
