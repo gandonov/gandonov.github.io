@@ -124,6 +124,10 @@ Framework.RestSource = Framework.BaseView.extend({
     getCount: function() {
         return this.count;
     },
+
+    getAllUrl : function(constraintUrl){
+        return this.url + constraintUrl;         
+    },
     
     
     getAll: function(path, callback, errorcallback) {
@@ -133,7 +137,7 @@ Framework.RestSource = Framework.BaseView.extend({
             constraintUrl = "?" + this.constraintModel['getUrl']();
         }
         
-        var url = this.url + constraintUrl;
+        var url = this.getAllUrl(constraintUrl);
         if (this.countcache.hasOwnProperty(url)) {
             this.count = this.countcache[url];
         }
