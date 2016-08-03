@@ -36,6 +36,9 @@ Js:
  // .fw-tab-content attr[data-id] containter where you would like the corresponding tab to be rendered.
  // .fw-tab-content[data-for] container where you would like to put supplemental views (i.e. action panel, external menu, etc...)
 Framework.TabView = Framework.BaseView.extend({
+	
+	noHistoryTrail : false,
+	
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
         this._tabMap = {};
@@ -63,10 +66,10 @@ Framework.TabView = Framework.BaseView.extend({
         var $el = $(e.currentTarget);
         var id = $el[0].id;
         if (this.persistBy) {
-            this.setParameter(this.persistBy, id);
+            this.setParameter(this.persistBy, id, this.noHistoryTrail);
         }
         this._change(id);
-        this.trigger('tab',id);
+        this.trigger('tab',id, leaveHistoryTrail);
     },
     _change: function(id) {
         if(id == null){
