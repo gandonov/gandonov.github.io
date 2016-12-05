@@ -13,6 +13,11 @@ Framework.BaseView = Backbone.View.extend({
     snippets: {},
     
     doNotKillDiv: true,
+	
+    oldURL: "",
+    newURL: location.href,
+
+
     
     setOverlay: function() {
         this.__$temp = null ;
@@ -125,9 +130,14 @@ Framework.BaseView = Backbone.View.extend({
         this._parent = options._parent;
         if (this.onHashChange) {
             $(window).on('hashchange.' + this.cid, function(e) {
-                var originalEvent = e.originalEvent;
-                var newURL = originalEvent.newURL;
-                var oldURL = originalEvent.oldURL;
+                // var originalEvent = e.originalEvent;
+                // var newURL = originalEvent.newURL;
+                // var oldURL = originalEvent.oldURL;
+                //i.e doesn't seem to pass old/new URL in originalEvent obj...
+                this.oldURL = this.newURL;
+                this.newURL = location.href;
+                var oldURL = this.oldURL;
+                var newURL = this.newURL;
                 var newParameters = this._getParameters(newURL);
                 var oldParameters = this._getParameters(oldURL);
                 var diff = this._diff(oldParameters, newParameters);
