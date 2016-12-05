@@ -38,6 +38,7 @@ Js:
 Framework.TabView = Framework.BaseView.extend({
 	
 	noHistoryTrail : false,
+	leaveHistoryTrail: false,
 	
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
@@ -69,7 +70,7 @@ Framework.TabView = Framework.BaseView.extend({
             this.setParameter(this.persistBy, id, this.noHistoryTrail);
         }
         this._change(id);
-        this.trigger('tab',id, leaveHistoryTrail);
+        this.trigger('tab',id, this.leaveHistoryTrail);
     },
     _change: function(id) {
         if(id == null){
