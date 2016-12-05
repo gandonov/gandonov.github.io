@@ -38,6 +38,7 @@ Js:
 Framework.TabView = Framework.BaseView.extend({
 	
 	noHistoryTrail : false,
+	leaveHistoryTrail: false,
 	
     initialize: function(options) {
         Framework.BaseView.prototype.initialize.call(this, options);
