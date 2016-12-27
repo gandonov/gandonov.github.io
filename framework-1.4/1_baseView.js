@@ -229,12 +229,13 @@ Framework.BaseView = Backbone.View.extend({
             
             this['preloadDataAsync'](function(data) {
                 this.render();
-            }
-            .bind(this), function() {
-                this.$el.html("ERROR in preloadDataAsync");
 		if (callback) {
                 	callback();
             	}
+            }
+            .bind(this), function() {
+                this.$el.html("ERROR in preloadDataAsync");
+
             }
             .bind(this));
             
