@@ -228,7 +228,9 @@ Framework.BaseView = Backbone.View.extend({
         } else {
             
             this['preloadDataAsync'](function(data) {
-                this.render();
+               	    this._preloadData = data;
+		    this.render();
+		    
 		if (callback) {
                 	callback();
             	}
