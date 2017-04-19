@@ -1000,3 +1000,239 @@
     "id": 99
   }
 ]
+
+
+
+
+var lm = function(history, move) {
+                    var rows = [];
+                    rows[0] = "rhbkqbhr";
+                    rows[1] = "pppppppp";
+                    rows[2] = "________";
+                    rows[3] = "________";
+                    rows[4] = "________";
+                    rows[5] = "________";
+                    rows[6] = "PPPPPPPP";
+                    rows[7] = "RHBKQBHR";
+                    var wkm = false;
+                    var bkm = false;
+                    var m = true;
+
+                    var applyHistoryMove = function(history, index) {
+                        m = !m;
+                        var rep = function(x, y, c) {
+                            rows[y] = rows[y].substr(0, x) + c + rows[y].substr(x + 1);
+                        }
+                        if (!history[index]) {
+                            return;
+                        }
+                        var px = history[index + 0].charCodeAt(0) - 97;
+                        var py = Number(history[index + 1]) - 1;
+                        var dx = history[index + 2].charCodeAt(0) - 97;
+                        var dy = Number(history[index + 3]) - 1;
+                        var p = rows[py][px];
+                        var d = rows[dy][dx];
+                        index += 4;
+                        p == "k" && (bkm = true);
+                        p == "K" && (wkm = true);
+                        rep(px, py, "_");
+                        if (p.toUpperCase() == "K" && Math.abs(px - dx) > 1) {// check for castle
+
+                        } else if (p.toUpperCase() == "P" && (dy == 0 || dy == 7)) {
+                            // check for transformation, if yes there will be extra letter in move.
+                            console.log('transform');
+                            var np = history[index];
+                            index++;
+                            rep(dx, dy, !m ? np : np.toUpperCase());
+
+                        } else if (p.toUpperCase() == "P" && px != dx && d == "_") {
+                            // check for en passant
+                            console.log('en passant');
+                            rep(dx, py, "_");
+                            rep(dx, dy, p);
+                        } else {
+                            rep(dx, dy, p);
+
+                        }
+                        applyHistoryMove(history, index);
+                        //  .... e2e4
+                        //  .... e7e5
+                        //  .... a2a4
+                    }
+
+                    applyHistoryMove(history, 0);
+                    console.log('%c  ABCDEFGH', 'background: #fff; color: #ff0000');
+                    console.log('1 ' + rows[0] + '\n2 ' + rows[1] + '\n3 ' + rows[2] + '\n4 ' + rows[3] + '\n5 ' + rows[4] + '\n6 ' + rows[5] + '\n7 ' + rows[6] + '\n8 ' + rows[7] + '\n');
+
+                    if (!move) {
+                        return;
+                    }
+                    var px = move[0].charCodeAt(0) - 97;
+                    var py = Number(move[1]) - 1;
+                    var dx = move[2].charCodeAt(0) - 97;
+                    var dy = Number(move[3]) - 1;
+                    var p = rows[py][px];
+                    var d = rows[dy][dx];
+
+                    if (py == dy && px == dx)
+                        throw " cannot remain in place.";
+                    if (p == "_")
+                        throw "no p";
+                    if (!m && p.charCodeAt(0) < 97)
+                        throw "w turn";
+                    if (m && p.charCodeAt(0) >= 97)
+                        throw "b turn";
+                    if (d != '_' && (p.charCodeAt(0) < 97 && d.charCodeAt(0) < 97) || (p.charCodeAt(0) >= 97 && d.charCodeAt(0) >= 97)) {
+                        throw "p cannot consume own"
+                    }
+                    this._p = function() {
+
+                        if (px == dx) {
+
+                            if (d != '_') {
+                                throw "another figure blocking";
+                            }
+                            var diff = dy - py;
+                            var adiff = Math.abs(diff);
+                            if (m && diff > 0)
+                                throw "w p negative direction not allowed";
+                            if (!m && diff < 0)
+                                throw "b p negative direction not allowed";
+                            var adiff = Math.abs(adiff);
+                            if ((py == 1 || py == 6) && adiff <= 2) {
+                                console.log('ok');
+                            } else if (adiff == 1) {} else {
+                                throw "white p went too far.";
+                            }
+                            if (dy == 0 || dy == 6) {
+                                switch (move[4]) {
+                                case 'q':
+                                case 'r':
+                                case 'h':
+                                case 'b':
+                                    break;
+                                default:
+                                    throw 'must become q r h or b'
+                                }
+                            }
+                        } else {
+                            var lx = px - 1;
+                            var rx = px + 1;
+                            var y = py + (!m ? 1 : -1);
+                            if (dy == y && (dx == lx || dx == rx)) {
+                                if (d == '_') {
+                                    if ((dy == 2 || dy == 5) && (py > 2 && py < 5)) {
+                                        var pmx = history[history.length - 2].charCodeAt(0) - 97;
+                                        var pmy = Number(history[history.length - 1]) - 1;
+                                        var pp = rows[pmy][pmx].toLowerCase();
+                                        if (pmx == dx && pmy == py && pp == 'p') {
+                                            console.log('el passant occured!');
+                                        } else {
+                                            throw "p cannot move diagonal (not enpassant)";
+                                        }
+                                        // check for en passant, otherwise illegal.
+                                    } else {
+                                        throw "p cannot move diagonal";
+                                    }
+
+                                } else {}
+                            } else {
+                                throw "p illegal diagonal move";
+                            }
+                        }
+
+                    }
+                    var ray = function(map, dx, dy, rx, ry, l) {
+                        if (l < 0 || rx < 0 || rx > 7 || ry < 0 || ry > 7) {
+                            return;
+                            // out of bounds.
+                        }
+                        if (rx == px && ry == py) {
+                            ray(map, dx, dy, rx + dx, ry + dy, --l);
+                        } else {
+                            if (rows[ry][rx] == '_') {
+                                map[rx + '_' + ry] = true;
+                                ray(map, dx, dy, rx + dx, ry + dy, --l);
+                            } else {
+                                var rp = rows[ry][rx].charCodeAt(0);
+                                if ((p.charCodeAt(0) < 97 && rp < 97) || (p.charCodeAt(0) >= 97 && rp >= 97)) {} else {
+                                    map[rx + '_' + ry] = true;
+                                }
+                                return;
+                            }
+                        }
+                    };
+                    this._r = function() {
+                        var lmoves = {};
+                        ray(lmoves, 1, 0, px, py, 8);
+                        ray(lmoves, -1, 0, px, py, 8);
+                        ray(lmoves, 0, 1, px, py, 8);
+                        ray(lmoves, 0, -1, px, py, 8);
+                        if (!lmoves[dx + '_' + dy]) {
+                            throw "r illegal move";
+                        }
+                    }
+                    this._h = function() {
+                        var lmoves = {};
+                        ray(lmoves, 2, -1, px, py, 1);
+                        ray(lmoves, 2, 1, px, py, 1);
+                        ray(lmoves, -2, 1, px, py, 1);
+                        ray(lmoves, -2, -1, px, py, 1);
+                        ray(lmoves, -1, -2, px, py, 1);
+                        ray(lmoves, 1, 2, px, py, 1);
+                        ray(lmoves, -1, 2, px, py, 1);
+                        ray(lmoves, -1, -2, px, py, 1);
+                        if (!lmoves[dx + '_' + dy]) {
+                            throw "h illegal move";
+                        }
+                    }
+                    this._b = function() {
+                        var lmoves = {};
+                        ray(lmoves, 1, 1, px, py, 8);
+                        ray(lmoves, -1, -1, px, py, 8);
+                        ray(lmoves, 1, -1, px, py, 8);
+                        ray(lmoves, -1, 1, px, py, 8);
+                        if (!lmoves[dx + '_' + dy]) {
+                            throw "b illegal move";
+                        }
+                    }
+                    this._k = function() {
+                        var lmoves = {};
+                        ray(lmoves, 1, 0, px, py, 1);
+                        ray(lmoves, -1, 0, px, py, 1);
+                        ray(lmoves, 0, 1, px, py, 1);
+                        ray(lmoves, 0, -1, px, py, 1);
+                        ray(lmoves, 1, 1, px, py, 1);
+                        ray(lmoves, -1, -1, px, py, 1);
+                        ray(lmoves, 1, -1, px, py, 1);
+                        ray(lmoves, -1, 1, px, py, 1);
+                        if (!lmoves[dx + '_' + dy]) {
+                            throw "k illegal move";
+                        }
+                    }
+                    this._q = function() {
+                        var lmoves = {};
+                        ray(lmoves, 1, 0, px, py, 8);
+                        ray(lmoves, -1, 0, px, py, 8);
+                        ray(lmoves, 0, 1, px, py, 8);
+                        ray(lmoves, 0, -1, px, py, 8);
+                        ray(lmoves, 1, 1, px, py, 8);
+                        ray(lmoves, -1, -1, px, py, 8);
+                        ray(lmoves, 1, -1, px, py, 8);
+                        ray(lmoves, -1, 1, px, py, 8);
+                        if (!lmoves[dx + '_' + dy]) {
+                            throw "q illegal move";
+                        }
+                    }
+                    this["_" + p.toLowerCase()]();
+
+                    console.log("cm - " + m ? 'w' : 'b');
+                }
+                
+                var g = ["e2e4e7e5b1c3a7a5a2a3a5a4f2f4g7g5f4g5c7c5h2h3c5c4b2b4c4b3h3h4b3b2h4h5b2b1qh1h3f8c5e1e3d8c7", "c3a4"];
+                lm(g[0], g[1]);
+                console.log('---');
+                lm(g.join(""));
+
+                return;
+            }
