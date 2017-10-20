@@ -1,4 +1,4 @@
-async function ListFiles(bucket){
+async function listFiles(bucket){
     return new Promise((resove, reject) => {
 
         s3.listObjects({
@@ -20,7 +20,7 @@ async function ListFiles(bucket){
 
 lambdaRouter.get('/', async (req, res, next) => {
     let bucket = 'bonitabytes-temp';
-    let files = await ListFiles(bucket);
+    let files = await listFiles(bucket);
     let i = 0;
     let pumpFile = function(removeHeader){
         let rh = removeHeader;
