@@ -1,0 +1,20 @@
+let files = await ListFiles(bucket);
+    let i = 0;
+    let pumpFile = function(){
+        var params = {
+            Bucket: bucket,
+            Key: files[i++]
+        };
+        var stream = s3.getObject(params).createReadStream();
+        stream.on('data', (chunk) => {
+            res.write(chunk);
+        });
+        stream.on('end', () => {
+            if(i < files.length){
+                pumpFile();
+            }else {
+                res.end();
+            }
+        });
+    };
+    pumpFile();
