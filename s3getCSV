@@ -1,20 +1,57 @@
-let files = await ListFiles(bucket);
+async function ListFiles(bucket){
+    return new Promise((resove, reject) => {
+
+        s3.listObjects({
+            Bucket: bucket,
+            Delimiter: '',
+            Prefix: 'test/'
+        }, function(err, data){
+            if(err){
+                reject(err);
+            }else {
+                let list = [];
+                data["Contents"].forEach(c => c.Size > 0 && (list.push(c.Key)));
+                resove(list);
+            }
+        });
+    })
+
+}
+
+lambdaRouter.get('/', async (req, res, next) => {
+    let bucket = 'bonitabytes-temp';
+    let files = await ListFiles(bucket);
     let i = 0;
-    let pumpFile = function(){
-        var params = {
+    let pumpFile = function(removeHeader){
+        let rh = removeHeader;
+        let params = {
             Bucket: bucket,
             Key: files[i++]
         };
-        var stream = s3.getObject(params).createReadStream();
+        let stream = s3.getObject(params).createReadStream();
         stream.on('data', (chunk) => {
-            res.write(chunk);
+            let result = chunk;
+            if(rh){
+                for(let j = 0; j < chunk.length; j++){
+                    if(chunk[j] == 13){ // \r integer value
+                        result = chunk.toString().substr(j);
+                        console.log(`first time ${i} position ${j}`);
+                        rh = false;
+                        break;
+                    }
+                }
+
+
+            }
+            res.write(result);
         });
         stream.on('end', () => {
             if(i < files.length){
-                pumpFile();
+                pumpFile(true);
             }else {
                 res.end();
             }
         });
     };
-    pumpFile();
+    pumpFile(false);
+});
